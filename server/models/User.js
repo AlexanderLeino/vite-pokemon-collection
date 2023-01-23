@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 
 const validateEmail = (string) => {
-    console.log("Validating this eamil string", string)
     const regex = new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
     let result = regex.test(string)
     return result

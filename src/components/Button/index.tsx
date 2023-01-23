@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 interface Props {
   children?: ReactNode
-  onClick: any,
+  onClick?: any,
   backgroundColor?: string,
   margin?: string,
 }

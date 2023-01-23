@@ -1,31 +1,44 @@
-import React from 'react'
 import Flex from '../Flex'
 import { Tab } from '../Tab'
-import {Link} from 'react-router-dom'
-import {AiFillTwitterCircle, AiFillGithub} from 'react-icons/ai'
+import { useAuthContext } from '../../context/AuthCtx'
+import { Button } from '../Button'
+import AuthService from '../../utlis/Auth'
 export const NavBar = () => {
+  const { currentUser, setCurrentUser } = useAuthContext()
   return (
-    <Flex justifyContent='justify-between' width='w-full' alignItems='align-center' backgroundColor='bg-orange-900' paddingY='py-2'>
-    <Flex alignItems='items-center' marginLeft='ml-5'><div className='font-bold text-orange-100'>Pokemon Portfolio</div></Flex>
-    <Flex alignItems='items-center' marginRight='mr-5' justifyContent='justify-end'>
-      <Flex justifyContent='justify-around' grow='grow' flexWrap='flex-nowrap'>
-        <Link to='/about'>
-          <Tab >About</Tab>
-        </Link>
-        <Link to='/about'>
-          <Tab>Card Vault</Tab>
-        </Link>
-        <Link to='/about'>
-          <Tab>Portfolio</Tab>
-        </Link>
+    <Flex justifyContent='justify-between' width='w-full' alignItems='align-center' backgroundColor='bg-orange-50' paddingY='py-4' borderWidth='border-b-4' borderColor='border-orange-500' >
+      <Flex justifyContent='space-around' width='w-full'>
+        <Flex alignItems='items-center'>
+          <div className='font-bold text-orange-500 text-3xl ml-4'>Pokemon Portfolio</div>
+        </Flex>
+        <Flex alignItems='items-center' justifyContent='justify-end'>
+
+          <Tab to='about'>About</Tab>
+          {currentUser.userId
+            ?
+            <>
+            <Tab to={`profile/${currentUser.userId}`}>Profile</Tab>
+            <Tab to='/signup'>
+            <Button onClick={() => {
+              AuthService.logout()
+              setCurrentUser({userId: '', userName: '', email: '', iat: 0, exp: 0})
+             }}>Logout</Button>
+            </Tab>
+            </>
+            :
+            <>
+              <Tab to='login'>Login</Tab>
+
+              <Tab to='signup'><Button>
+                Sign Up </Button></Tab>
+
+            </>
+
+          }
+        </Flex>
+
       </Flex>
-        <a href='https://twitter.com/AlexDotDev' target='_blank'>
-          <AiFillTwitterCircle fontSize='35px' color='#FFEDD5' style={{marginRight: '25px'}}/>
-        </a>
-        <a href='https://github.com/AlexanderLeino?tab=repositories' target='_blank'>
-          <AiFillGithub fontSize='35px' color='#FFEDD5'/>
-        </a>
     </Flex>
-    </Flex>
+
   )
 }

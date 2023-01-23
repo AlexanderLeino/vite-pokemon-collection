@@ -3,34 +3,34 @@ import { CreateAccount } from './components/Form/AccountCreation/createAccount'
 import { LoginForm } from './components/Form/Login/loginAccount'
 import { NavBar } from './components/Navbar'
 import { useAuthContext } from './context/AuthCtx'
+import {Footer} from './components/Footer'
+import { Profile } from './pages/Profile'
 import { Login } from './pages/Login'
 import AuthService from './utlis/Auth'
+import { Layout } from './components/Layout'
 import {
   Routes,
   Route,
-  Link,
-  useNavigate,
-  useLocation,
-  Navigate,
-  Outlet,
+
 } from "react-router-dom";
+import { Signup } from './pages/Signup'
 
 function App() {
   const {currentUser, setCurrentUser} = useAuthContext()
- 
+  
   
   return (
     <>
     <NavBar />
-    <CreateAccount />
-    <LoginForm />
-    <Button onClick={() => {
-      AuthService.logout()
-      setCurrentUser({userId: '', userName: '', email: '', iat: 0, exp: 0})
-      console.log('Logging out')}}>Logout</Button>
-      <Routes>
-        <Route path='/about' element={<Login />} />
-      </Routes>
+     <Layout >
+        <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/profile/:id' element={<Profile />}/>
+          <Route path='/signup' element={<Signup />}/>
+        </Routes>
+ 
+     <Footer />
+     </Layout>
     </>
   )
 }
