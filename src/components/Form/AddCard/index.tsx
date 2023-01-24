@@ -7,10 +7,12 @@ import CardSets from "../../../data/CardSetData"
 import CardTypeArray from "../../../data/CardType"
 import SubTypeArray from "../../../data/TrainerTypes"
 import ElementTypesArray from "../../../data/ElementTypes"
+import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 const AddCardForm = () => {
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', CardNumber: '', cardType: 'Pokemon', cardSet: '' })
-
+    const {currentUser} = useAuthContext()
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', CardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId })
+   
     const handleChange = (e: any) => {
         let value = e.target.value
         let name = e.target.name
