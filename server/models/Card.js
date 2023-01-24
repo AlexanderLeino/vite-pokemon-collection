@@ -1,10 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const CardSet = require('./CardSet')
-
 
 const CardSchema = new Schema({
-
     name: {
         type: String,
         required: true,
@@ -19,64 +16,65 @@ const CardSchema = new Schema({
         type: String,
         trim: true,
     }, 
-    type: {
+    cardType: {
         type: String,
+        enum: ['Stadium', 'Trainer', 'Pokemon', 'Energy'],
         required: true,
+    },
+    trainerType: {
+        type: String,
+        enum: ["Item", "Supporter"],
+        require: this.cardType === 'Trainer'
     },
     move1: {
         type: String,
-        
         trim: true,
     },
     damage1:{
         type: String,
-       
         trim: true,
     },
 
     move1Description: {
         type: String,
         maxlength: 150,
-      
         trim: true,
     },
     move2: {
         type: String,
-      
         trim: true,
     },
     damage2: {
         type: String,
-       
         trim: true,
     },
-
     move2Description: {
         type: String,
         maxlength: 150,
-    
     },
-
     artist: {
         type: String,
         required: true,
         trim: true,
     },
-
-    cardType: {
+    elementType: {
         type: String,
-        required: true,
+        enum: ['Fire', 'Fighting', 'Dragon', 'Lighting', 'Grass', 'Water', 'Fairy', 'Psychic', 'Metal', 'Colorless'],
+        required: this.cardType === 'Pokemon',
     },
-
-    originalCardSet: [{
+    cardSet: [{
         type: Schema.Types.ObjectId, ref: 'CardSet'
     }],
         
     rarity: {
         type: String,
-        default: 'common'
     }, 
-
+    price: {
+        type: Number,
+    },
+    picture: {
+        type: String,
+    },
     quantity: {
         type: Number,
         default: 1

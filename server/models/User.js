@@ -32,7 +32,10 @@ const UserSchema = new Schema({
     email: {
         type: String,
         validate: custom,
-    }
+    },
+    cards: [{
+        type: Schema.Types.ObjectId, ref: 'Card'
+    }]
 })
 
 UserSchema.pre('save', function(next) {
@@ -41,7 +44,6 @@ UserSchema.pre('save', function(next) {
     if(!user.isModified('password')) return next()
 
     bcrypt.hash(user.password, saltRounds, function(err, result){
-        console.log('Result ===>>', result)
         if(err) return next(err)
         user.password = result
         next()

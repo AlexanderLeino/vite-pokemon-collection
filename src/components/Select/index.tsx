@@ -1,22 +1,20 @@
-import React from 'react'
-
-interface CardSet {
-  name: string,
-  year: number,
-  totalNumberOfCardsInSet: number,
-}
-
 interface Props {
-  cardSets: CardSet[]
+  data: any[],
+  name: string,
+  handleChange: any,
+  label: string
 }
 
+export const Select = ({ data, name, handleChange, label }: Props) => {
 
-export const Select = ({cardSets}: Props) => {
   return (
-    <select>
-       {cardSets?.map((cardSet) => {
-       return <option>{cardSet?.name}</option>
-       })}
-    </select>
+    <>
+      <label>{label}</label>
+      <select className="border-solid border-2 border-slate-500 hover:border-orange-500 p-1 outline-none focus-visible:outline-none focus-visible:border-orange-500 " name={name} onChange={handleChange} style={{height: '32px'}}>
+        {data?.map((value) => {
+          return <option>{value?.name}</option>
+        })}
+      </select>
+    </>
   )
 }

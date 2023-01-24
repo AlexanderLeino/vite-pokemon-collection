@@ -17,7 +17,7 @@ const CardSetSchema = new Schema({
         type: Number,
         maxlength: 3,
         required: true,
-    }
+    },
 }, {collection: 'CardSet'}) 
 
 const CardSet = mongoose.model('CardSet', CardSetSchema)

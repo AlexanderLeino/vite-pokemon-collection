@@ -14,11 +14,13 @@ export const NavBar = () => {
         <Flex alignItems='items-center' justifyContent='justify-end'>
 
           <Tab to='about'>About</Tab>
-          {currentUser.userId
+          {currentUser?.userId
             ?
             <>
-            <Tab to={`profile/${currentUser.userId}`}>Profile</Tab>
-            <Tab to='/signup'>
+            <Tab to={`profile/${currentUser?.userId}`}>Profile</Tab>
+            <Tab to={'card-vault'}>Card Vault</Tab>
+            <Tab to='signup'>
+            
             <Button onClick={() => {
               AuthService.logout()
               setCurrentUser({userId: '', userName: '', email: '', iat: 0, exp: 0})
@@ -29,8 +31,9 @@ export const NavBar = () => {
             <>
               <Tab to='login'>Login</Tab>
 
-              <Tab to='signup'><Button>
-                Sign Up </Button></Tab>
+              <Tab to='signup'>
+                <Button>Sign Up </Button>
+              </Tab>
 
             </>
 

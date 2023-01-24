@@ -1,42 +1,51 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 require('dotenv').config()
-const slug = require('slug')
+const { default: slugify } = require('slugify')
+const CardSet = require('../models/CardSet')
+const Card = require('../models/Card')
 let baseURL ="https://www.pricecharting.com/game/pokemon-"
+
 module.exports = {
-    findCard: async (req, res) => {
-        let response = await axios.get(`${baseURL}-evolving-skies/umbreon-vmax-215`)
-        let data = response?.data
-        const $ = cheerio.load(data)
-        let price = $('td[id="used_price"] > span[class="price js-price"]').text().trim()
-        let picture = $('div[class="cover"] > img').attr('src')
-        let TCGPlayerId = $('td[class="details"] > a[id="js-tcg-id-link"]').text().trim()
-        console.log('Player ID', TCGPlayerId)
-        console.log('Picture', picture)
-        console.log(price)
+    findCard: async ({body}, res) => {
+        try {
+
+            let { name, prefix, suffix, cardNumber, cardSet } = body.data
+            console.log('WO', name, suffix, cardNumber, cardSet)
+            let cardSetSlug = slugify(cardSet).toLowerCase()
+            let slugArray = []
+            
+            for (const cardProperty in body.data){
+                if(body.data[cardProperty] && cardProperty != 'cardSet'){
+                    slugArray.push(body.data[cardProperty])
+                }
+                
+            }
+            let slugifiedString = slugify(slugArray.join(" ").toLowerCase())
+            let response = await axios.get(`${baseURL}${cardSetSlug}/${slugifiedString}`)
+
+            let data = response?.data
+
+            const $ = cheerio.load(data)
+            //Using the slice method to remove the $ from the returned value for the price
+            let price = parseInt($('td[id="used_price"] > span[class="price js-price"]').text().trim().slice(1))
+            let picture = $('div[class="cover"] > img').attr('src')
+            
+            if(!!price && !!picture){
+                let {_id} = await CardSet.findOne({name: cardSet})
+                console.log(typeof price)
+                await Card.create({name, suffix, prefix, cardNumber, cardSet, price, picture})
+                
+                
+            }
+            res.send({price, picture}).status(200)
+
+        } catch(e){
+            res.send(e).status(500)
+        }
 
        
-        
-        
-    //     try {
-    //         const options = {
-    //             method: 'GET',
-    //             url: 'https://unogsng.p.rapidapi.com/search',
-    //             params: {genrelist: '1694', type: 'movie', limit: 5},
-    //             headers: {
-    //               'X-RapidAPI-Key': process.env.API_KEY,
-    //               'X-RapidAPI-Host': 'unogsng.p.rapidapi.com'
-    //             }
-    //           };
-    //         let response = await axios.request(options)
-    //         console.log(response.data)
-           
-    //         res.status(200).send(response.data)
-    //     } catch(e) {
-    //         console.log(e)
-    //     }
-    // }
-    res.send({price, picture}).status(200)
+    
     },
     getCardSetSlug: async (req, res) => {
         

@@ -14,6 +14,7 @@ import {
 
 } from "react-router-dom";
 import { Signup } from './pages/Signup'
+import { CardVault } from './pages/CardVault'
 
 function App() {
   const {currentUser, setCurrentUser} = useAuthContext()
@@ -27,9 +28,9 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/profile/:id' element={<Profile />}/>
           <Route path='/signup' element={<Signup />}/>
+          <Route path='/card-vault' element={<CardVault />} />
         </Routes>
- 
-     <Footer />
+      <Footer />
      </Layout>
     </>
   )
