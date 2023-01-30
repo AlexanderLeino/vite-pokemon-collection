@@ -87,7 +87,7 @@ const CardSchema = new Schema({
 },{collection: 'Card'})
 
 CardSchema.virtual("fullName").get(function(){
-    return `${this?.prefix} ${this.name} ${this?.suffix}`
+    return `${this?.prefix} ${this.name} ${this?.suffix}`.trim()
 })
 const Card = mongoose.model('Card', CardSchema)
 

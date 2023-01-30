@@ -1,0 +1,8 @@
+.modal {
+    background-color: #fff7ed;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    width: 225px;
+    padding-left: 10px;
+}

@@ -79,8 +79,8 @@ module.exports = {
         let {name, cardNumber} = body.data
         let results = await Card.findOne({name, cardNumber})
        
-        console.log("Results", results.fullName.trim())
-        res.send(results).status(200)
+        let allResults = {...results, fullName: results.fullName}
+        res.send(allResults).status(200)
     } 
     catch(e) {
      

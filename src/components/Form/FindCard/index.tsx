@@ -22,9 +22,10 @@ export const FindCard = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        await axios.post('http://localhost:3001/api/card/findCard', {
+        let results = await axios.post('http://localhost:3001/api/card/findCard', {
             data: card
         })
+        console.log(results.data.fullName)
     }
 
     return (
