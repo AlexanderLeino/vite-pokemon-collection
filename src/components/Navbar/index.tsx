@@ -18,6 +18,7 @@ export const NavBar = () => {
             ?
             <>
             <Tab to={`profile/${currentUser?.userId}`}>Profile</Tab>
+            <Tab to='card-finder'>Card Finder</Tab>
             <Tab to={'card-vault'}>Card Vault</Tab>
             <Tab to='signup'>
             
@@ -29,8 +30,8 @@ export const NavBar = () => {
             </>
             :
             <>
+              <Tab to='card-finder'>Card Finder</Tab>
               <Tab to='login'>Login</Tab>
-
               <Tab to='signup'>
                 <Button>Sign Up </Button>
               </Tab>

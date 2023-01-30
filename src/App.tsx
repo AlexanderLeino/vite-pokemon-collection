@@ -8,6 +8,7 @@ import { Profile } from './pages/Profile'
 import { Login } from './pages/Login'
 import AuthService from './utlis/Auth'
 import { Layout } from './components/Layout'
+import CardFinder from './pages/CardFinder'
 import {
   Routes,
   Route,
@@ -17,9 +18,6 @@ import { Signup } from './pages/Signup'
 import { CardVault } from './pages/CardVault'
 
 function App() {
-  const {currentUser, setCurrentUser} = useAuthContext()
-  
-  
   return (
     <>
     <NavBar />
@@ -29,6 +27,7 @@ function App() {
           <Route path='/profile/:id' element={<Profile />}/>
           <Route path='/signup' element={<Signup />}/>
           <Route path='/card-vault' element={<CardVault />} />
+          <Route path='/card-finder' element={<CardFinder />} />
         </Routes>
       <Footer />
      </Layout>

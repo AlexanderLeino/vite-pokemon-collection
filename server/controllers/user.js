@@ -34,5 +34,13 @@ module.exports = {
     }
 
   },
+  updateCardList: async ({body}, res) => {
+    await User.updateOne({_id: userId}, {
+      $push: {
+          cards: cardId
+      }
+  })
+ 
+  }
   
 };

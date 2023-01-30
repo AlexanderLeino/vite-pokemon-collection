@@ -11,17 +11,18 @@ import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', CardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId })
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId })
    
     const handleChange = (e: any) => {
         let value = e.target.value
         let name = e.target.name
+        console.log(name, value)
         setCard({ ...card, [name]: value })
     }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        await axios.post('http://localhost:3001/api/card/findCard', {
+        await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
     }

@@ -79,9 +79,16 @@ const CardSchema = new Schema({
         type: Number,
         default: 1
     },
+    cardNumber: {
+        type: String,
+        required: true
+    }
     
 },{collection: 'Card'})
 
+CardSchema.virtual("fullName").get(function(){
+    return `${this?.prefix} ${this.name} ${this?.suffix}`
+})
 const Card = mongoose.model('Card', CardSchema)
 
 module.exports = Card

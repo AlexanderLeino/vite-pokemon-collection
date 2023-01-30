@@ -9,7 +9,6 @@ const signToken = (user) => {
         userName: user.userName,
         email: user.email 
     }, secret, {expiresIn: '1h'})
-    console.log('created Token before return', token)
     return token
 }
 const verifyToken = (token) => {
