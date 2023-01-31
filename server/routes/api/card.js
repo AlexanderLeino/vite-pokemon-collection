@@ -8,4 +8,7 @@ router.route('/createCard')
 router.route('/findCard')
     .post(CardController.findCard)
 
+router.route('/validateCard')
+    .post(CardController.cardExistInDb)
+
 module.exports = router

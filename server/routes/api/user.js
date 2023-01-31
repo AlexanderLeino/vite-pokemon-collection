@@ -8,4 +8,9 @@ router.route('/createUser')
 router.route('/signIn')
     .post(UserController.signIn)
 
+//matches api/user/updatedCardList   
+router.route('/updateCardList')
+    .post(UserController.updateCardList)
+
+
 module.exports = router

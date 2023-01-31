@@ -5,7 +5,7 @@ const { default: slugify } = require("slugify");
 const CardSet = require("../models/CardSet");
 const Card = require("../models/Card");
 const User = require("../models/User");
-let baseURL = "https://www.pricecharting.com/game/pokemon-";
+const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 
 module.exports = {
   createCard: async ({ body }, res) => {
@@ -23,15 +23,16 @@ module.exports = {
           cardProperty != "cardSet" &&
           cardProperty != "artist" &&
           cardProperty != "cardType" &&
-          cardProperty != "userId"
+          cardProperty != "userId" &&
+          cardProperty != "elementalType"
         ) {
           slugArray.push(body.data[cardProperty]);
         }
       }
       let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
-
+      console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
       let response = await axios.get(
-        `${baseURL}${cardSetSlug}/${slugifiedString}`
+        `${BASE_URL}${cardSetSlug}/${slugifiedString}`
       );
 
       let data = response?.data;
@@ -48,7 +49,6 @@ module.exports = {
 
       if (!!price && !!picture) {
         let { _id } = await CardSet.findOne({ name: cardSet });
-        console.log(typeof price);
 
         let { _id: cardId } = await Card.create({
           name,
@@ -62,30 +62,43 @@ module.exports = {
           cardType,
         });
         newCardId = cardId;
+
         res.send({ newCardId }).status(200);
       } else {
-        throw new Error("Coulndt find a price");
+        throw new Error(
+          "Coulnd't find the price for the card you were looking for!"
+        );
       }
     } catch (e) {
       res.status(500).send({
-        message:
-          "Couldn't find a price entered for that card. Please double check your entry or please try again!",
+        message: e.message,
       });
     }
   },
-  findCard: async ({body}, res) => {
+  findCard: async ({ body }, res) => {
     try {
-      
-        let {name, cardNumber} = body.data
-        let results = await Card.findOne({name, cardNumber})
-       
-        let allResults = {...results, fullName: results.fullName}
-        res.send(allResults).status(200)
-    } 
-    catch(e) {
-     
-        res.send(e).status(500)
-    }
-  }
-}
+      let { name, cardNumber } = body.data;
+      let results = await Card.findOne({ name, cardNumber });
 
+      let allResults = { ...results, fullName: results.fullName };
+      res.send(allResults).status(200);
+    } catch (e) {
+      res.send(e).status(500);
+    }
+  },
+  cardExistInDb: async ({ body }, res) => {
+    try {
+      let response;
+      let { name, cardNumber } = body.data;
+      let results = await Card.findOne({ name, cardNumber });
+      if (results) {
+        response = true;
+      } else {
+        response = false;
+      }
+      res.send(response).status(200);
+    } catch (e) {
+      res.send(e).status(500);
+    }
+  },
+};

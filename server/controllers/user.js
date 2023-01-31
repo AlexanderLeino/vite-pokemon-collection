@@ -35,9 +35,10 @@ module.exports = {
 
   },
   updateCardList: async ({body}, res) => {
+    let {userId, cardId:{newCardId}} = body.data
     await User.updateOne({_id: userId}, {
       $push: {
-          cards: cardId
+          cards: newCardId
       }
   })
  

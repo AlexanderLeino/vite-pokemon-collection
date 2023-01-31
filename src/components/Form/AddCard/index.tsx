@@ -22,9 +22,14 @@ const AddCardForm = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        await axios.post('http://localhost:3001/api/card/createCard', {
+        let {data: newCardId}= await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
+        console.log('New Card ID', newCardId)
+        await axios.post('http://localhost:3001/api/user/updateCardList', {
+            data: {cardId: newCardId, userId: currentUser.userId}
+        })
+        
     }
 
     return (
