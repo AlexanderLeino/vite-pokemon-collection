@@ -11,7 +11,7 @@ module.exports = {
   createCard: async ({ body }, res) => {
     try {
       let newCardId;
-      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType } =
+      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags } =
         body.data;
 
       let cardSetSlug = slugify(cardSet).toLowerCase();
@@ -24,7 +24,8 @@ module.exports = {
           cardProperty != "artist" &&
           cardProperty != "cardType" &&
           cardProperty != "userId" &&
-          cardProperty != "elementalType"
+          cardProperty != "elementalType" &&
+          cardProperty != 'tags'
         ) {
           slugArray.push(body.data[cardProperty]);
         }
@@ -38,7 +39,7 @@ module.exports = {
       let data = response?.data;
 
       const $ = cheerio.load(data);
-      //Using the slice method to remove the $ from the returned value for the price
+      
       let price = parseFloat(
         $('td[id="used_price"] > span[class="price js-price"]')
           .text()
@@ -60,6 +61,7 @@ module.exports = {
           picture,
           artist,
           cardType,
+          tags
         });
         newCardId = cardId;
 
@@ -101,4 +103,5 @@ module.exports = {
       res.send(e).status(500);
     }
   },
+
 };

@@ -11,29 +11,43 @@ import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId })
+    const [createCard , setCreateCard] = useState(false)
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementalType: 'Fire' })
+
+    useEffect(() => {
+       if(createCard){
+        handleSubmit()
+       } 
+    }, [createCard])
+    useEffect(() => {
+        console.log('CARDY CARD', card)
+    }, [card])
    
     const handleChange = (e: any) => {
         let value = e.target.value
         let name = e.target.name
-        console.log(name, value)
-        setCard({ ...card, [name]: value })
+        setCard({ ...card, [name]: value})
     }
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault()
+    const handleSubmit = async () => {
+       
         let {data: newCardId}= await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
-        console.log('New Card ID', newCardId)
         await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardId: newCardId, userId: currentUser.userId}
         })
+        setCreateCard(false)
         
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => {
+            e.preventDefault()
+            console.log("ARE THEY HERE", card.suffix, card.elementalType)
+            setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
+            setCreateCard(true)
+            }}>
             <Flex flexDirection="flex-col">
                 <Input onChange={handleChange} name='prefix' label="Prefix" type='text'/>
                 <Input name='name' label="Name" onChange={handleChange} type='text' />

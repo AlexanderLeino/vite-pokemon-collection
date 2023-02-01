@@ -3,7 +3,7 @@ const expiration = '1h';
 const secret = process.env.secret
 module.exports = {
   authMiddleware: function ( req ) {
-    console.log('Flowing', req)
+    console.log('Flowing', req.body.token, req.query.token, req.headers.authorization)
     // allows token to be sent via req.body, req.query, or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
 

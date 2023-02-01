@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const axios = require('axios')
-const { RouterProvider } = require('react-router-dom')
 const CardSchema = new Schema({
     name: {
         type: String,
@@ -83,7 +82,8 @@ const CardSchema = new Schema({
     cardNumber: {
         type: String,
         required: true
-    }
+    },
+    tags: [{type: String}]
     
 },{collection: 'Card'})
 
@@ -105,11 +105,11 @@ CardSchema.pre("save", async function(next){
         const err = new Error("The card already exists in the database. If you would like to add the card to your collection please refer to the find card tab.")
            next(err)
        } else {
-         next()
+            next()
        }
 
     } catch(e) {
-        console.log(e)
+       console.log(e.message)
     }
 })
 

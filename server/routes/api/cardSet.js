@@ -5,4 +5,7 @@ const CardSetController = require('../../controllers/cardSet')
 router.route('/findAll')
     .get(CardSetController.getAllCardSets)
 
+router.route('/findOneCardSet')
+    .post(CardSetController.findOneCardSet)
+
 module.exports = router

@@ -6,7 +6,6 @@ const cors = require('cors')
 const app = express()
 const path = require('path')
 const db = require('./config/connection')
-const { authMiddleware } = require('./middleware')
 const port = process.env.PORT || 3001
 
 app.use(express.json());

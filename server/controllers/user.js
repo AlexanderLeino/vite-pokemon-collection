@@ -22,26 +22,28 @@ module.exports = {
     }
   },
   createUser: async ({ body }, res) => {
-    console.log('trying our best', body)
     try {
         let {userName, password, email} = body
         let response = await User.create({ userName, password, email });
         let token = signToken(response)
         res.send(token).status(200);
     } catch (e) {
-      console.log("An error occured!", e);
-      res.send(e).status(400);
+      res.send({message: e.message}).status(400);
     }
 
   },
   updateCardList: async ({body}, res) => {
-    let {userId, cardId:{newCardId}} = body.data
-    await User.updateOne({_id: userId}, {
-      $push: {
-          cards: newCardId
-      }
-  })
- 
+    try {
+        let {userId, cardId:{newCardId}} = body.data
+        await User.updateOne({_id: userId}, {
+          $push: {
+              cards: newCardId
+          }
+      })
+      res.send({message: "User was successfully updated! :)"}).status(200)
+    } catch (e) {
+      res.send(e).status(500)
+    }
   }
   
 };
