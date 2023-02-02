@@ -6,7 +6,6 @@ const User = require("../models/User.js");
 
 module.exports = {
   signIn: async ({ body }, res) => {
-    console.log('Trying to sign in', body)
     let token
     try {
       let { userName, password } = body
@@ -18,7 +17,7 @@ module.exports = {
       }
       res.send({token}).status(200)
     } catch (e) {
-      res.send(e).status(400);
+      res.send({message: e.message}).status(400);
     }
   },
   createUser: async ({ body }, res) => {
@@ -42,7 +41,7 @@ module.exports = {
       })
       res.send({message: "User was successfully updated! :)"}).status(200)
     } catch (e) {
-      res.send(e).status(500)
+      res.send({message: e.message}).status(500)
     }
   }
   
