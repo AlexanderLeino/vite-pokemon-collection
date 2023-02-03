@@ -3,14 +3,13 @@ const cheerio = require("cheerio");
 require("dotenv").config();
 const { default: slugify } = require("slugify");
 const CardSet = require("../models/CardSet");
-const Card = require("../models/Card");
+const {Card} = require("../models/Card");
 const User = require("../models/User");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
-      let newCardId;
       let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags } =
         body.data;
 
@@ -51,7 +50,7 @@ module.exports = {
       if (!!price && !!picture) {
         let { _id } = await CardSet.findOne({ name: cardSet });
 
-        let { _id: cardId } = await Card.create({
+        let results = await Card.create({
           name,
           suffix,
           prefix,
@@ -63,9 +62,8 @@ module.exports = {
           cardType,
           tags
         });
-        newCardId = cardId;
-
-        res.send({ newCardId }).status(200);
+        
+        res.send(results).status(200);
       } else {
         throw new Error(
           "Coulnd't find the price for the card you were looking for!"
@@ -100,7 +98,7 @@ module.exports = {
       }
       res.send(response).status(200);
     } catch (e) {
-      res.send(e).status(500);
+      res.send({message: error.message}).status(500);
     }
   },
 

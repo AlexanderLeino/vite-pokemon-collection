@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const {CardSchema} = require('./Card')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
@@ -33,9 +34,7 @@ const UserSchema = new Schema({
         type: String,
         validate: custom,
     },
-    cards: [{
-        type: Schema.Types.ObjectId, ref: 'Card'
-    }]
+    cards: [CardSchema]
 })
 
 UserSchema.pre('save', function(next) {

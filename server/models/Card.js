@@ -91,7 +91,7 @@ CardSchema.virtual("fullName").get(function(){
     return `${this?.prefix} ${this.name} ${this?.suffix}`.trim()
 })
 
-CardSchema.pre("save", async function(next){
+CardSchema.pre("validate", async function(next){
     try {
         let obj = {
             name: this.name,
@@ -101,18 +101,22 @@ CardSchema.pre("save", async function(next){
             data: obj
         })
         
-       if(results.data){
-        const err = new Error("The card already exists in the database. If you would like to add the card to your collection please refer to the find card tab.")
-           next(err)
+       if(results.data === true){
+        
+        let error = new Error("The card already exists in the database. If you would like to add the card to your collection please refer to the find card tab.")
+        next(error)
+       
+        
        } else {
-            next()
+           next()
        }
 
     } catch(e) {
        console.log(e.message)
+       
     }
 })
 
 const Card = mongoose.model('Card', CardSchema)
 
-module.exports = Card
+module.exports = {Card, CardSchema}

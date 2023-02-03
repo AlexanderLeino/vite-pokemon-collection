@@ -12,16 +12,15 @@ import axios from "axios"
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementalType: 'Fire' })
+    const [card, setCard] = useState({prefix: '', name: 'Umbreon', suffix: 'vmax', cardNumber: '215', cardType: 'Pokemon', cardSet: 'Evolutions', userId: currentUser.userId, tags: [""], elementalType: 'Fire', artist: "me" })
 
     useEffect(() => {
        if(createCard){
+        console.log("RUNNING CREATED CARD")
         handleSubmit()
        } 
     }, [createCard])
-    useEffect(() => {
-        console.log('CARDY CARD', card)
-    }, [card])
+   
    
     const handleChange = (e: any) => {
         let value = e.target.value
@@ -30,12 +29,12 @@ const AddCardForm = () => {
     }
 
     const handleSubmit = async () => {
-       
-        let {data: newCardId}= await axios.post('http://localhost:3001/api/card/createCard', {
+       console.log("HOW MANY TIMES IS THSI RUNNING?")
+        let {data: cardData} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
         await axios.post('http://localhost:3001/api/user/updateCardList', {
-            data: {cardId: newCardId, userId: currentUser.userId}
+            data: {cardData, userId: currentUser.userId}
         })
         setCreateCard(false)
         
@@ -44,7 +43,6 @@ const AddCardForm = () => {
     return (
         <form onSubmit={(e) => {
             e.preventDefault()
-            console.log("ARE THEY HERE", card.suffix, card.elementalType)
             setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
             setCreateCard(true)
             }}>
@@ -68,7 +66,7 @@ const AddCardForm = () => {
                 }
                 <Input name='artist' label='Artist' onChange={handleChange} type='string' />
                 <Flex justifyContent="justify-center" width="w-full">
-                <Button margin="mt-3" onClick={handleSubmit}>Submit</Button>
+                <Button margin="mt-3" onClick={() => setCreateCard(true)}>Submit</Button>
                 </Flex>
             </Flex>
         </form>

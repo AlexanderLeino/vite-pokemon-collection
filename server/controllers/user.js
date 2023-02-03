@@ -33,12 +33,23 @@ module.exports = {
   },
   updateCardList: async ({body}, res) => {
     try {
-        let {userId, cardId:{newCardId}} = body.data
-        await User.updateOne({_id: userId}, {
-          $push: {
-              cards: newCardId
-          }
-      })
+        let {cardData, userId} = body.data
+        
+      
+        let foundUser = await User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber})
+        console.log("Found USer", foundUser)
+        if(foundUser){ 
+          // await User.updateOne({})
+        } else {
+          await User.updateOne({_id: userId}, {
+            $push: {
+                cards: cardData
+            }
+        })
+        }
+
+
+      
       res.send({message: "User was successfully updated! :)"}).status(200)
     } catch (e) {
       res.send({message: e.message}).status(500)
