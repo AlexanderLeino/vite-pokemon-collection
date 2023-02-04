@@ -28,6 +28,14 @@ const AddCardForm = () => {
         setCard({ ...card, [name]: value})
     }
 
+    const handleFindSubDoc = async () => {
+        console.log(currentUser.userId)
+        let foundUser = await axios.post('http://localhost:3001/api/user/findCardSubDoc', {
+            data: currentUser.userId
+        })
+        
+    }
+
     const handleSubmit = async () => {
        console.log("HOW MANY TIMES IS THSI RUNNING?")
         let {data: cardData} = await axios.post('http://localhost:3001/api/card/createCard', {
@@ -41,35 +49,38 @@ const AddCardForm = () => {
     }
 
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault()
-            setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
-            setCreateCard(true)
-            }}>
-            <Flex flexDirection="flex-col">
-                <Input onChange={handleChange} name='prefix' label="Prefix" type='text'/>
-                <Input name='name' label="Name" onChange={handleChange} type='text' />
-                <Input name='suffix' label="Suffix" onChange={handleChange} type='text'/>
-                <Input name='cardNumber' label='Card Number / Secret Number' onChange={handleChange} type='string' />
-                <Select name='cardType' label='Card Type' data={CardTypeArray} handleChange={handleChange}/>
-                <Select name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange}/>
-                {
-                card.cardType === 'Trainer' 
-                ? 
-                <Select handleChange={handleChange} data={SubTypeArray} name='trainerType' label='Trainer Type'/> 
-                : 
-                card.cardType === 'Pokemon'
-                ?
-                <Select handleChange={handleChange} data={ElementTypesArray} label='Element Type' name='elementalType'/>
-                :
-                null
-                }
-                <Input name='artist' label='Artist' onChange={handleChange} type='string' />
-                <Flex justifyContent="justify-center" width="w-full">
-                <Button margin="mt-3" onClick={() => setCreateCard(true)}>Submit</Button>
+        <>
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
+                setCreateCard(true)
+                }}>
+                <Flex flexDirection="flex-col">
+                    <Input onChange={handleChange} name='prefix' label="Prefix" type='text'/>
+                    <Input name='name' label="Name" onChange={handleChange} type='text' />
+                    <Input name='suffix' label="Suffix" onChange={handleChange} type='text'/>
+                    <Input name='cardNumber' label='Card Number / Secret Number' onChange={handleChange} type='string' />
+                    <Select name='cardType' label='Card Type' data={CardTypeArray} handleChange={handleChange}/>
+                    <Select name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange}/>
+                    {
+                    card.cardType === 'Trainer' 
+                    ? 
+                    <Select handleChange={handleChange} data={SubTypeArray} name='trainerType' label='Trainer Type'/> 
+                    : 
+                    card.cardType === 'Pokemon'
+                    ?
+                    <Select handleChange={handleChange} data={ElementTypesArray} label='Element Type' name='elementalType'/>
+                    :
+                    null
+                    }
+                    <Input name='artist' label='Artist' onChange={handleChange} type='string' />
+                    <Flex justifyContent="justify-center" width="w-full">
+                    <Button margin="mt-3" onClick={() => setCreateCard(true)}>Submit</Button>
+                    </Flex>
                 </Flex>
-            </Flex>
-        </form>
+            </form>
+            <Button onClick={handleFindSubDoc}>Find Sub Doc</Button>
+        </>
     )
 }
 

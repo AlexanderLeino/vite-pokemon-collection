@@ -11,5 +11,7 @@ router.route('/signIn')
 router.route('/updateCardList')
     .post(UserController.updateCardList)
 
+router.route('/findCardSubDoc')
+    .post(UserController.findCardSubDoc)
 
 module.exports = router
