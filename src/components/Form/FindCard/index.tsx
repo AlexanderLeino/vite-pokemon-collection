@@ -25,7 +25,7 @@ export const FindCard = () => {
         let results = await axios.post('http://localhost:3001/api/card/findCard', {
             data: card
         })
-        console.log(results.data.fullName)
+        console.log(results.data)
     }
 
     return (

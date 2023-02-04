@@ -79,11 +79,13 @@ module.exports = {
     try {
       let { name, cardNumber } = body.data;
       let results = await Card.findOne({ name, cardNumber });
-
-      let allResults = { ...results, fullName: results.fullName };
-      res.send(allResults).status(200);
+      let fullName = results.fullName
+      let obj = results._doc
+      obj.fullName = fullName
+      console.log(obj)
+      res.status(200).send(obj);
     } catch (e) {
-      res.send(e).status(500);
+      res.status(500).send({message: e.message})
     }
   },
   cardExistInDb: async ({ body }, res) => {
