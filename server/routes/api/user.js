@@ -4,14 +4,12 @@ const UserController = require('../../controllers/user')
 router.route('/createUser')
     .post(UserController.createUser)
 
+//matches api/user/signIn
 router.route('/signIn')
     .post(UserController.signIn)
 
 //matches api/user/updatedCardList   
 router.route('/updateCardList')
     .post(UserController.updateCardList)
-
-router.route('/findCardSubDoc')
-    .post(UserController.findCardSubDoc)
 
 module.exports = router

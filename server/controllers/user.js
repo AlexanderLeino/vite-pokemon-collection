@@ -36,6 +36,7 @@ module.exports = {
         let {cardData, userId} = body.data
         
         User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber}).select("cards.$").exec(async function(err, doc){
+
           if(doc){
             doc.cards[0].quantity = doc.cards[0].quantity + 1
             
@@ -46,7 +47,7 @@ module.exports = {
             
             let updatedList = cards
             cards[cardIndexToBeUpdated] = doc.cards[0]
-            
+
             await User.findOneAndUpdate({_id: userId}, {
                 cards: updatedList
             
@@ -65,9 +66,4 @@ module.exports = {
       res.send({message: e.message}).status(500)
     }
   },
-  findCardSubDoc: async ({body} , res) => {
-    
-
-  }
-  
 };
