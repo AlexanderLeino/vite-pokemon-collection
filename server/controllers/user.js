@@ -34,23 +34,24 @@ module.exports = {
   updateCardList: async ({body}, res) => {
     try {
         let {cardData, userId} = body.data
-        
-      console.log("updatedCARD LIST", cardData, userId)
-        let foundUser = await User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber})
-        console.log('Found User', foundUser)
-        if(foundUser){ 
-          // await User.updateOne({})
-        } else {
-          await User.updateOne({_id: userId}, {
-            $push: {
-                cards: cardData
-            }
+        console.log(cardData, userId)
+        User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber}).select("cards.$").exec(async function(err, doc){
+          if(doc){
+            doc.cards[0].quantity = doc.cards[0].quantity + 1
+            
+            await User.findOneAndUpdate({_id: userId}, {
+                cards: doc.cards[0]
+            
+            })
+
+          } else {
+            await User.updateOne({_id: userId}, {
+              $push: {
+                  cards: cardData
+              }
+          })
+          }
         })
-        
-        }
-
-
-      
       res.send({message: "User was successfully updated! :)"}).status(200)
     } catch (e) {
       res.send({message: e.message}).status(500)
@@ -58,20 +59,7 @@ module.exports = {
   },
   findCardSubDoc: async ({body} , res) => {
     
-    let foundDocument = User.findOne({_id: body.data}).elemMatch('cards', {name: "Pikachu", cardNumber: "44"}).select("cards.$").exec(async function(err, doc){
-      console.log("DOC", doc, foundDocument)
-      doc.cards[0].quantity = doc.cards[0].quantity + 1
-      let updatedUser = await User.findOneAndUpdate({_id: body.data}, {
-          cards: doc.cards[0]
-      
-      })
 
-      console.log("Updated User", updatedUser)
-    })
-
-
-    
-    
   }
   
 };

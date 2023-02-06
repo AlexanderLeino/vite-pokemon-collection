@@ -16,7 +16,6 @@ const AddCardForm = () => {
 
     useEffect(() => {
        if(createCard){
-        console.log("RUNNING CREATED CARD")
         handleSubmit()
        } 
     }, [createCard])
@@ -41,6 +40,7 @@ const AddCardForm = () => {
         let {data: cardData} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
+       
         await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardData, userId: currentUser.userId}
         })

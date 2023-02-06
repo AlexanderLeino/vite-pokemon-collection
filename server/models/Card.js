@@ -103,8 +103,7 @@ CardSchema.pre("validate", async function(next){
         
        if(results.data === true){
         
-        let error = new Error("The card already exists in the database. If you would like to add the card to your collection please refer to the find card tab.")
-        next(error)
+       return results
        
         
        } else {
