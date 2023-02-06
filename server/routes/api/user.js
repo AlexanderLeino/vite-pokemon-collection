@@ -12,4 +12,7 @@ router.route('/signIn')
 router.route('/updateCardList')
     .post(UserController.updateCardList)
 
+router.route('/userCollection')
+    .post(UserController.userCollection)
+
 module.exports = router

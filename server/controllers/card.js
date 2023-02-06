@@ -50,28 +50,34 @@ module.exports = {
       if (!!price && !!picture) {
 
         let { _id } = await CardSet.findOne({ name: cardSet });
+        let cardData = await Card.findOne({name, cardNumber})
+        if (cardData) {
+          let response = {cardData, message: "The Card Already Exists in the Database but here you go"}
+          res.send(response).status(200);
+        } else {
+          let results = await Card.create({
+            name,
+            suffix,
+            prefix,
+            cardNumber,
+            cardSet: _id,
+            price,
+            picture,
+            artist,
+            cardType,
+            tags
+          });
+          res.send(results).status(200);
+        }
         
-        let results = await Card.create({
-          name,
-          suffix,
-          prefix,
-          cardNumber,
-          cardSet: _id,
-          price,
-          picture,
-          artist,
-          cardType,
-          tags
-        });
         
-        res.send(results).status(200);
       } else {
         throw new Error(
           "Coulnd't find the price for the card you were looking for!"
         );
       }
     } catch (e) {
-      console.log("ERROR HERE")
+      console.log("ERROR HERE", e)
       res.status(500).send({
         message: e.message,
       });

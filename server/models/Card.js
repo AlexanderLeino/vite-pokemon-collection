@@ -91,30 +91,24 @@ CardSchema.virtual("fullName").get(function(){
     return `${this?.prefix} ${this.name} ${this?.suffix}`.trim()
 })
 
-CardSchema.pre("validate", async function(next){
-    try {
-        let obj = {
-            name: this.name,
-            cardNumber: this.cardNumber
-        }
-        let results = await axios.post('http://localhost:3001/api/card/validateCard', {
-            data: obj
-        })
+// CardSchema.pre("validate", async function(next){
+//     try {
+//         let obj = {
+//             name: this.name,
+//             cardNumber: this.cardNumber
+//         }
+//         let results = await axios.post('http://localhost:3001/api/card/validateCard', {
+//             data: obj
+//         })
         
-       if(results.data === true){
-        
-       return results
-       
-        
-       } else {
-           next()
-       }
-
-    } catch(e) {
-       console.log(e.message)
-       
-    }
-})
+//        if(results.data){
+         
+//        } 
+//     } catch(e) {
+//         next(e)
+//         return results 
+//     }
+// })
 
 const Card = mongoose.model('Card', CardSchema)
 

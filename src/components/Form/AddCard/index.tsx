@@ -9,10 +9,11 @@ import SubTypeArray from "../../../data/TrainerTypes"
 import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
+
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: 'Pikachu', suffix: 'vmax', cardNumber: '44', cardType: 'Pokemon', cardSet: 'Vivid Voltage', userId: currentUser.userId, tags: ["Look Here Woooo"], elementalType: 'Lighting', artist: "me" })
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementalType: '', artist: "" })
 
     useEffect(() => {
        if(createCard){
@@ -35,15 +36,27 @@ const AddCardForm = () => {
         
     }
 
+    const updateUserCardList = async (pokemon: any) => {
+        await axios.post('http://localhost:3001/api/user/updateCardList', {
+            data: {cardData: pokemon, userId: currentUser.userId}
+        })
+    }
+
     const handleSubmit = async () => {
        console.log("HOW MANY TIMES IS THSI RUNNING?")
-        let {data: cardData} = await axios.post('http://localhost:3001/api/card/createCard', {
+        let {data} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
        
-        await axios.post('http://localhost:3001/api/user/updateCardList', {
-            data: {cardData, userId: currentUser.userId}
-        })
+        if(data.message) {
+            console.log(data.cardData)
+            updateUserCardList(data.cardData)
+        } else {
+            
+            updateUserCardList(data)
+        }
+       
+        
         setCreateCard(false)
         
     }
@@ -75,7 +88,10 @@ const AddCardForm = () => {
                     }
                     <Input name='artist' label='Artist' onChange={handleChange} type='string' />
                     <Flex justifyContent="justify-center" width="w-full">
-                    <Button margin="mt-3" onClick={() => setCreateCard(true)}>Submit</Button>
+                    <Button margin="mt-3" onClick={() => {
+                        setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
+                        setCreateCard(true)
+                        }}>Submit</Button>
                     </Flex>
                 </Flex>
             </form>

@@ -46,14 +46,15 @@ module.exports = {
             console.log(cardIndexToBeUpdated)
             
             let updatedList = cards
-            cards[cardIndexToBeUpdated] = doc.cards[0]
-
+            updatedList[cardIndexToBeUpdated] = doc.cards[0]
+            console.log("Updated List", updatedList)
             await User.findOneAndUpdate({_id: userId}, {
                 cards: updatedList
             
             })
 
           } else {
+           
             await User.updateOne({_id: userId}, {
               $push: {
                   cards: cardData
@@ -66,4 +67,17 @@ module.exports = {
       res.send({message: e.message}).status(500)
     }
   },
+  userCollection: async ({ body }, res) => {
+    try {
+      let {userId} = body.data
+      let results = await User.findOne({_id: userId}).select("cards")
+      console.log("Results", results)
+      res.status(200).send(results)
+
+    } catch(e) {
+      res.status(500).send({message: e.message})
+    }
+    
+
+  }
 };
