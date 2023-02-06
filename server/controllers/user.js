@@ -34,13 +34,21 @@ module.exports = {
   updateCardList: async ({body}, res) => {
     try {
         let {cardData, userId} = body.data
-        console.log(cardData, userId)
+        
         User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber}).select("cards.$").exec(async function(err, doc){
           if(doc){
             doc.cards[0].quantity = doc.cards[0].quantity + 1
             
+            let {cards} = await User.findOne({_id: userId})
+            
+            let cardIndexToBeUpdated = cards.findIndex(card => card.name === cardData.name && card.cardNumber === cardData.cardNumber)
+            console.log(cardIndexToBeUpdated)
+            
+            let updatedList = cards
+            cards[cardIndexToBeUpdated] = doc.cards[0]
+            
             await User.findOneAndUpdate({_id: userId}, {
-                cards: doc.cards[0]
+                cards: updatedList
             
             })
 
