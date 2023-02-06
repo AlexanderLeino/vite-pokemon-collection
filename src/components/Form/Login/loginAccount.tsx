@@ -11,7 +11,7 @@ export const LoginForm = () => {
   let Auth = useAuthContext()
   
 
-  const [loginInfo, setLoginInfo] = useState({userName: '', password: ''})
+  const [loginInfo, setLoginInfo] = useState({userName: 'Winter', password: 'Winter'})
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -27,10 +27,8 @@ export const LoginForm = () => {
     <form onSubmit={(e) => handleSubmit(e)}>
     <Flex justifyContent='justify-center'  alignItems='items-center' flexDirection='flex-col '>
     <div>Log Into An Acccount!</div>
-      <Label>Username:</Label>
-      <Input name={'userName'} onChange={handleChange}/>
-      <Label>Password:</Label>
-      <Input name={'password'} onChange={handleChange}/>
+      <Input label='Username:' name={'userName'} onChange={handleChange} type='text'/>
+      <Input label='Password'name={'password'} onChange={handleChange} type='text'/>
       <Button margin='mt-3' onClick={handleSubmit}>Submit</Button>
     </Flex>
 </form>

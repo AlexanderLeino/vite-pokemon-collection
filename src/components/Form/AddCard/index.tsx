@@ -12,7 +12,7 @@ import axios from "axios"
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: 'Umbreon', suffix: 'vmax', cardNumber: '215', cardType: 'Pokemon', cardSet: 'Evolutions', userId: currentUser.userId, tags: [""], elementalType: 'Fire', artist: "me" })
+    const [card, setCard] = useState({prefix: '', name: 'Pikachu', suffix: 'vmax', cardNumber: '44', cardType: 'Pokemon', cardSet: 'Vivid Voltage', userId: currentUser.userId, tags: ["Look Here Woooo"], elementalType: 'Lighting', artist: "me" })
 
     useEffect(() => {
        if(createCard){
@@ -29,8 +29,8 @@ const AddCardForm = () => {
     }
 
     const handleFindSubDoc = async () => {
-        console.log(currentUser.userId)
-        let foundUser = await axios.post('http://localhost:3001/api/user/findCardSubDoc', {
+   
+        await axios.post('http://localhost:3001/api/user/findCardSubDoc', {
             data: currentUser.userId
         })
         

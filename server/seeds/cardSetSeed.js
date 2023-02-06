@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const {CardSet} = require('../models')
+const {CardSet} = require('../models/CardSet')
 
 mongoose.connect('mongodb://localhost/pokemonDb', {
   useNewUrlParser: true,
@@ -590,6 +590,6 @@ const CardSetSeed = [
 
 ]
 
-const seedCardSet = async () => await CardSet.collection.insertMany(CardSetSeed)
+const seedCardSet = async () => await CardSet.insertMany(CardSetSeed)
   
 module.exports = {seedCardSet, CardSetSeed}

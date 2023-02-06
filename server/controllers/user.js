@@ -35,7 +35,7 @@ module.exports = {
     try {
         let {cardData, userId} = body.data
         
-      
+      console.log("updatedCARD LIST", cardData, userId)
         let foundUser = await User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber})
         console.log('Found User', foundUser)
         if(foundUser){ 
@@ -46,6 +46,7 @@ module.exports = {
                 cards: cardData
             }
         })
+        
         }
 
 
@@ -57,7 +58,8 @@ module.exports = {
   },
   findCardSubDoc: async ({body} , res) => {
     
-    let foundDocument = User.findOne({_id: body.data}).elemMatch('cards', {name: "Umbreon", cardNumber: "215"}).select("cards.$").exec(async function(err, doc){
+    let foundDocument = User.findOne({_id: body.data}).elemMatch('cards', {name: "Pikachu", cardNumber: "44"}).select("cards.$").exec(async function(err, doc){
+      console.log("DOC", doc, foundDocument)
       doc.cards[0].quantity = doc.cards[0].quantity + 1
       let updatedUser = await User.findOneAndUpdate({_id: body.data}, {
           cards: doc.cards[0]

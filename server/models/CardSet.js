@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 const CardSetSchema = new Schema({
     name: {
         type: String,
-        unique: true,
         required: true
     },
     year: {
@@ -22,4 +21,4 @@ const CardSetSchema = new Schema({
 
 const CardSet = mongoose.model('CardSet', CardSetSchema)
 
-module.exports = CardSet
+module.exports = {CardSet}

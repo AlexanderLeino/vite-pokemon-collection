@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Select } from '../../Select'
 import Flex from '../../Flex'
 import Input from '../../Input'
 import { Button } from '../../Button'
-import CardSets from "../../../data/CardSetData"
-import CardTypeArray from "../../../data/CardType"
-import SubTypeArray from "../../../data/TrainerTypes"
-import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from '../../../context/AuthCtx'
 export const FindCard = () => {
 

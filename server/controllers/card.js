@@ -2,7 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
 const { default: slugify } = require("slugify");
-const CardSet = require("../models/CardSet");
+const {CardSet} = require("../models/CardSet");
 const {Card} = require("../models/Card");
 const User = require("../models/User");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
@@ -45,11 +45,12 @@ module.exports = {
           .trim()
           .slice(1)
       );
-      let picture = $('div[class="cover"] > img').attr("src");
+      let picture = $('div[class="cover"] > img').attr("src")
 
       if (!!price && !!picture) {
-        let { _id } = await CardSet.findOne({ name: cardSet });
 
+        let { _id } = await CardSet.findOne({ name: cardSet });
+        
         let results = await Card.create({
           name,
           suffix,
@@ -70,6 +71,7 @@ module.exports = {
         );
       }
     } catch (e) {
+      console.log("ERROR HERE")
       res.status(500).send({
         message: e.message,
       });
