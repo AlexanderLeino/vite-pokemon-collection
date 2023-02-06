@@ -10,9 +10,9 @@ const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
-      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags } =
+      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementalType } =
         body.data;
-
+      console.log("DOES ELEMENTAL TYPE EXIST?", elementalType)
       let cardSetSlug = slugify(cardSet).toLowerCase();
       let slugArray = [];
 
@@ -50,6 +50,7 @@ module.exports = {
       if (!!price && !!picture) {
 
         let { _id } = await CardSet.findOne({ name: cardSet });
+        
         let cardData = await Card.findOne({name, cardNumber})
         if (cardData) {
           let response = {cardData, message: "The Card Already Exists in the Database but here you go"}

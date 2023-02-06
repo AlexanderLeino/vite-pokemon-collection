@@ -18,7 +18,7 @@ const seedAll = async () => {
     console.log('\n----- CardSets Inserted Into Database -----\n');
     
      
-    await seedPokemon();
+    // await seedPokemon();
     console.log('\n----- Pokemon Inserted Into Database -----\n');
 
   

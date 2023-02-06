@@ -9,13 +9,11 @@ const CardSetSchema = new Schema({
     year: {
         type: Number,
         maxlength: 4,
-        required: true,
     },
     
     totalNumberOfCardsInSet: {
         type: Number,
         maxlength: 3,
-        required: true,
     },
 }, {collection: 'CardSet'}) 
 

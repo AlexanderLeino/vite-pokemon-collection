@@ -1,4 +1,5 @@
 const CardSets = [
+    
     {
         name: "Base Set",
         year: 1999,
@@ -577,8 +578,10 @@ const CardSets = [
         name: 'Scarlet & Violet',
         year: 2023,
         totalNumberOfCardsInSet: 195
-    }
-
+    },
+    {
+        name: "Promo",
+    },
 
 ]
 

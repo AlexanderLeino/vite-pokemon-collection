@@ -585,6 +585,9 @@ const CardSetSeed = [
         name: 'Scarlet & Violet',
         year: 2023,
         totalNumberOfCardsInSet: 195
+    },
+    {
+        name: "Promo",
     }
 
 

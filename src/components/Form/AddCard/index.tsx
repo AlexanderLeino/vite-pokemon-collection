@@ -10,10 +10,26 @@ import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 
+type Pokemon = {
+    name: String,
+    suffix?: String,
+    prefix?: String,
+    artist: String,
+   
+
+}
+
 const AddCardForm = () => {
     const {currentUser} = useAuthContext()
+
+   
     const [createCard , setCreateCard] = useState(false)
     const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementalType: '', artist: "" })
+
+    useEffect(() => {
+        console.log("CARD TYPE", card)
+    }, [card])
+
 
     useEffect(() => {
        if(createCard){
@@ -28,15 +44,8 @@ const AddCardForm = () => {
         setCard({ ...card, [name]: value})
     }
 
-    const handleFindSubDoc = async () => {
-   
-        await axios.post('http://localhost:3001/api/user/findCardSubDoc', {
-            data: currentUser.userId
-        })
-        
-    }
-
     const updateUserCardList = async (pokemon: any) => {
+        console.log("pokemon", pokemon)
         await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardData: pokemon, userId: currentUser.userId}
         })
@@ -55,10 +64,7 @@ const AddCardForm = () => {
             
             updateUserCardList(data)
         }
-       
-        
         setCreateCard(false)
-        
     }
 
     return (
@@ -95,7 +101,7 @@ const AddCardForm = () => {
                     </Flex>
                 </Flex>
             </form>
-            <Button onClick={handleFindSubDoc}>Find Sub Doc</Button>
+           
         </>
     )
 }
