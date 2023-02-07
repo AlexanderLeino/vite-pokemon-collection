@@ -5,11 +5,14 @@ import axios from 'axios'
 export const Profile = () => {
     const {currentUser, setCurrentUser} = useAuthContext()
     const getUserCollection = async () => {
-      console.log(currentUser.userId)
+
       let results = await axios.post('http://localhost:3001/api/user/userCollection', {
         data: currentUser.userId
       })
      
+      let {data: { cardCollection, portfolioValue}} = results
+      console.log("cardCollection", cardCollection, 'Portfolio Value', portfolioValue)
+
     }
   
   return (

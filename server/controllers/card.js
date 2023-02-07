@@ -12,7 +12,7 @@ module.exports = {
     try {
       let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementalType } =
         body.data;
-      console.log("DOES ELEMENTAL TYPE EXIST?", elementalType)
+
       let cardSetSlug = slugify(cardSet).toLowerCase();
       let slugArray = [];
 
@@ -48,14 +48,13 @@ module.exports = {
       let picture = $('div[class="cover"] > img').attr("src")
 
       if (!!price && !!picture) {
-
-        let { _id } = await CardSet.findOne({ name: cardSet });
-        
         let cardData = await Card.findOne({name, cardNumber})
         if (cardData) {
           let response = {cardData, message: "The Card Already Exists in the Database but here you go"}
           res.send(response).status(200);
         } else {
+          let { _id, year } = await CardSet.findOne({ name: cardSet });
+          let allTags = [...tags, year]
           let results = await Card.create({
             name,
             suffix,
@@ -66,12 +65,10 @@ module.exports = {
             picture,
             artist,
             cardType,
-            tags
+            tags: allTags
           });
           res.send(results).status(200);
         }
-        
-        
       } else {
         throw new Error(
           "Coulnd't find the price for the card you were looking for!"

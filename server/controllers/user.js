@@ -1,4 +1,3 @@
-const axios = require("axios");
 const bycrpt = require("bcrypt");
 const { signToken } = require("../utlis");
 require("dotenv").config();
@@ -80,9 +79,11 @@ module.exports = {
   userCollection: async ({ body }, res) => {
     try {
       let { data: userId } = body;
-      let results = await User.findOne({ _id: userId });
-      console.log("Results", results.portfolio);
-      res.status(200).send(results);
+      
+      let results = await User.findOne({ _id: userId }).select('cards')
+      console.log("RESULTS", results)
+
+      res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio});
     } catch (e) {
       res.status(500).send({ message: e.message });
     }
