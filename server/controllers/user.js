@@ -79,9 +79,7 @@ module.exports = {
   userCollection: async ({ body }, res) => {
     try {
       let { data: userId } = body;
-      
       let results = await User.findOne({ _id: userId }).select('cards')
-      console.log("RESULTS", results)
 
       res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio});
     } catch (e) {

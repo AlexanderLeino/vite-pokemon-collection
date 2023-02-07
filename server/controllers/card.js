@@ -10,9 +10,15 @@ const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
+      let serializedCardNumber 
       let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementalType } =
         body.data;
-
+      
+      console.log('CARD NUMBER', cardNumber[0])
+      if(cardNumber[0] === "0") {
+        serializedCardNumber = cardNumber.split("").slice(1).join("")
+       
+      }
       let cardSetSlug = slugify(cardSet).toLowerCase();
       let slugArray = [];
 
@@ -26,7 +32,11 @@ module.exports = {
           cardProperty != "elementalType" &&
           cardProperty != 'tags'
         ) {
-          slugArray.push(body.data[cardProperty]);
+          if(cardProperty === 'cardNumber'){
+            slugArray.push(serializedCardNumber)
+          } else {
+            slugArray.push(body.data[cardProperty]);
+          }
         }
       }
       let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
@@ -48,7 +58,7 @@ module.exports = {
       let picture = $('div[class="cover"] > img').attr("src")
 
       if (!!price && !!picture) {
-        let cardData = await Card.findOne({name, cardNumber})
+        let cardData = await Card.findOne({name, serializedCardNumber})
         if (cardData) {
           let response = {cardData, message: "The Card Already Exists in the Database but here you go"}
           res.send(response).status(200);
@@ -59,13 +69,14 @@ module.exports = {
             name,
             suffix,
             prefix,
-            cardNumber,
+            cardNumber: serializedCardNumber,
             cardSet: _id,
             price,
             picture,
             artist,
             cardType,
-            tags: allTags
+            tags: allTags,
+            elementalType
           });
           res.send(results).status(200);
         }
