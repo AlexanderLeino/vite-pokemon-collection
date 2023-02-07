@@ -34,7 +34,12 @@ const UserSchema = new Schema({
         type: String,
         validate: custom,
     },
-    cards: [CardSchema]
+    cards: [CardSchema],
+    
+    portfolioValue: {
+        type: Number
+
+    }
 })
 
 UserSchema.pre('save', function(next) {
@@ -49,7 +54,12 @@ UserSchema.pre('save', function(next) {
     })
 })
 
-const User = mongoose.model('User', UserSchema)
+UserSchema.virtual('portfolio').get(function(){
+    return totalValue = this.cards.reduce((accumulator, currentValue) => {
+        return accumulator + (currentValue.price * currentValue.quantity)
+    },0)   
+})
 
+const User = mongoose.model('User', UserSchema)
 
 module.exports = User

@@ -1,83 +1,90 @@
 const axios = require("axios");
 const bycrpt = require("bcrypt");
-const {signToken} = require('../utlis') 
+const { signToken } = require("../utlis");
 require("dotenv").config();
 const User = require("../models/User.js");
 
 module.exports = {
   signIn: async ({ body }, res) => {
-    let token
+    let token;
     try {
-      let { userName, password } = body
+      let { userName, password } = body;
       let response = await User.findOne({ userName });
-      
+
       const match = await bycrpt.compare(password, response.password);
-      if(match) {
-        token = signToken(response)
+      if (match) {
+        token = signToken(response);
       }
-      res.send({token}).status(200)
+      res.send({ token }).status(200);
     } catch (e) {
-      res.send({message: e.message}).status(400);
+      res.send({ message: e.message }).status(400);
     }
   },
   createUser: async ({ body }, res) => {
     try {
-        let {userName, password, email} = body
-        let response = await User.create({ userName, password, email });
-        let token = signToken(response)
-        res.send(token).status(200);
+      let { userName, password, email } = body;
+      let response = await User.create({ userName, password, email });
+      let token = signToken(response);
+      res.send(token).status(200);
     } catch (e) {
-      res.send({message: e.message}).status(400);
+      res.send({ message: e.message }).status(400);
     }
-
   },
-  updateCardList: async ({body}, res) => {
+  updateCardList: async ({ body }, res) => {
     try {
-        let {cardData, userId} = body.data
-        
-        User.findOne({_id: userId}).elemMatch('cards', {name: cardData.name, cardNumber: cardData.cardNumber}).select("cards.$").exec(async function(err, doc){
+      let { cardData, userId } = body.data;
 
-          if(doc){
-            doc.cards[0].quantity = doc.cards[0].quantity + 1
-            
-            let {cards} = await User.findOne({_id: userId})
-            
-            let cardIndexToBeUpdated = cards.findIndex(card => card.name === cardData.name && card.cardNumber === cardData.cardNumber)
-            console.log(cardIndexToBeUpdated)
-            
-            let updatedList = cards
-            updatedList[cardIndexToBeUpdated] = doc.cards[0]
-            console.log("Updated List", updatedList)
-            await User.findOneAndUpdate({_id: userId}, {
-                cards: updatedList
-            
-            })
-
-          } else {
-           
-            await User.updateOne({_id: userId}, {
-              $push: {
-                  cards: cardData
-              }
-          })
-          }
+      User.findOne({ _id: userId })
+        .elemMatch("cards", {
+          name: cardData.name,
+          cardNumber: cardData.cardNumber,
         })
-      res.send({message: "User was successfully updated! :)"}).status(200)
+        .select("cards.$")
+        .exec(async function (err, doc) {
+          if (doc) {
+            doc.cards[0].quantity = doc.cards[0].quantity + 1;
+
+            let { cards } = await User.findOne({ _id: userId });
+
+            let cardIndexToBeUpdated = cards.findIndex(
+              (card) =>
+                card.name === cardData.name &&
+                card.cardNumber === cardData.cardNumber
+            );
+
+            let updatedList = cards;
+            updatedList[cardIndexToBeUpdated] = doc.cards[0];
+
+            await User.findOneAndUpdate(
+              { _id: userId },
+              {
+                cards: updatedList,
+              }
+            );
+          } else {
+            await User.updateOne(
+              { _id: userId },
+              {
+                $push: {
+                  cards: cardData,
+                },
+              }
+            );
+          }
+        });
+      res.send({ message: "User was successfully updated! :)" }).status(200);
     } catch (e) {
-      res.send({message: e.message}).status(500)
+      res.send({ message: e.message }).status(500);
     }
   },
   userCollection: async ({ body }, res) => {
     try {
-      let {userId} = body.data
-      let results = await User.findOne({_id: userId}).select("cards")
-      console.log("Results", results)
-      res.status(200).send(results)
-
-    } catch(e) {
-      res.status(500).send({message: e.message})
+      let { data: userId } = body;
+      let results = await User.findOne({ _id: userId });
+      console.log("Results", results.portfolio);
+      res.status(200).send(results);
+    } catch (e) {
+      res.status(500).send({ message: e.message });
     }
-    
-
-  }
+  },
 };

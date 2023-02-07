@@ -27,11 +27,6 @@ const AddCardForm = () => {
     const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementalType: '', artist: "" })
 
     useEffect(() => {
-        console.log("CARD TYPE", card)
-    }, [card])
-
-
-    useEffect(() => {
        if(createCard){
         handleSubmit()
        } 
