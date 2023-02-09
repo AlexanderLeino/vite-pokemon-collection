@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Flex from '../Flex'
 import { Badges } from '../Badges'
 import {AiFillStar, AiOutlineStar} from 'react-icons/ai'
@@ -14,9 +14,36 @@ type pokemonObj = {
   price: number,
   quantity: number,
   tags: string[],
-  picture: string 
+  picture: string,
+  elementalType?: string,
 } 
 
+const getBackgroundColor = (elementalType: string) => {
+  switch(elementalType){
+    case 'Fire':
+      return 'bg-amber-600'
+    case 'Fighting':
+      return 'bg-amber-900'
+    case 'Dragon': 
+      return 'bg-orange-500'
+    case 'Lighting':
+      return 'bg-amber-400'
+    case 'Grass':
+      return 'bg-green-600'
+    case 'Water':
+      return "bg-blue-600"
+    case 'Fairy':
+      return "bg-fuchsia-400"
+    case 'Psychic':
+      return "bg-purple-500"
+    case 'Metal': 
+      return 'bg-slate-500'
+    case 'Colorless': 
+      return 'bg-slate-300'
+    default: 
+      return 'bg-slate-400'
+  }
+}
 
 const getRatingStar = (rating: number) => {
   switch(rating){
@@ -76,22 +103,32 @@ const getRatingStar = (rating: number) => {
   }
 
 
-export const Card = ({rating, picture, tags, quantity, name, prefix, suffix, price}: pokemonObj) => {
-  console.log(prefix, suffix)
+export const Card = ({rating, picture, tags, quantity, name, prefix, suffix, price, elementalType}: pokemonObj) => {
+
+  useEffect(() => {
+    if(elementalType === undefined) {
+      elementalType = "trainer"
+    }
+    const returnedBackgroundColor = getBackgroundColor(elementalType)
+      setBackgroundColor(returnedBackgroundColor)
+
+  }, [])
+  const [backgroundColor, setBackgroundColor] = useState('bg-green-500')
+
   return (
-    <Flex flexDirection='flex-col' margin='mt-2' justifyContent='justify-center' alignItems='items-center'>
+    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-amber-300' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' >
           <Flex horizontalChild='space-x-1.5'>
             {prefix 
             ? 
-            <div>{prefix}</div>
+            <div className='text-xl font-bold mb-2'>{prefix}</div>
             :
             null
           }
-            <div>{name}</div>
+            <div className='text-xl font-bold mb-2'>{name}</div>
           {
             suffix
             ?
-            <div>{suffix}</div>
+            <div className='text-xl font-bold mb-2'>{suffix}</div>
             : 
             null
           }

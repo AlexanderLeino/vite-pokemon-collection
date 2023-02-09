@@ -82,7 +82,7 @@ const CardSchema = new Schema({
         type: String,
         required: true
     },
-    tags: [{type: string}],
+    tags: [{type: String}],
     rating: {
         type: Number,
         require: false

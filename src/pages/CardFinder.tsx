@@ -15,6 +15,7 @@ const CardFinder = () => {
     cardNumber: 215, 
     price: 475.17,
     quantity: 2,
+    elementalType: 'Colorless',
     picture: "https://commondatastorage.googleapis.com/images.pricecharting.com/51be4d69dd4d183041e131460ce0073a5b8b4b574749d41b253f7eb8541ab748/240.jpg",
     tags: ['Vmax', "Psychic", "Evolving Skies", "Umbreon"],
     rating: 0
@@ -23,7 +24,7 @@ const CardFinder = () => {
     <>
       <FindCard />
       <Flex horizontalChild="space-x-4">
-        <Card prefix={card?.prefix} suffix={card?.suffix} name={card.name} cardType={card.cardType} artist={card.artist} cardNumber={card.cardNumber} rating={card.rating} quantity={card.quantity} picture={card.picture} price={card.price} tags={card.tags}/>
+        <Card elementalType={card.elementalType} prefix={card?.prefix} suffix={card?.suffix} name={card.name} cardType={card.cardType} artist={card.artist} cardNumber={card.cardNumber} rating={card.rating} quantity={card.quantity} picture={card.picture} price={card.price} tags={card.tags}/>
         <Card name={card.name} cardType={card.cardType} artist={card.artist} cardNumber={card.cardNumber} rating={card.rating} quantity={card.quantity} picture={card.picture} price={card.price} tags={card.tags}/>
       </Flex>
     </>
