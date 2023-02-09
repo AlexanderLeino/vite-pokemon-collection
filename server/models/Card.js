@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const axios = require('axios')
 const CardSchema = new Schema({
     name: {
         type: String,
@@ -83,7 +82,11 @@ const CardSchema = new Schema({
         type: String,
         required: true
     },
-    tags: [{type: String}]
+    tags: [{type: string}],
+    rating: {
+        type: Number,
+        require: false
+    }
     
 },{collection: 'Card'})
 

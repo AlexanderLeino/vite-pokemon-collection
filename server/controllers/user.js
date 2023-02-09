@@ -86,4 +86,7 @@ module.exports = {
       res.status(500).send({ message: e.message });
     }
   },
+  updateUserCard: async ({body}, res) => {
+    
+  }
 };
