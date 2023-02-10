@@ -8,14 +8,14 @@ import { Profile } from './pages/Profile'
 import { Login } from './pages/Login'
 import AuthService from './utlis/Auth'
 import { Layout } from './components/Layout'
-import CardFinder from './pages/CardFinder'
+import {CardFinder} from './pages/CardFinder'
 import {
   Routes,
   Route,
 
 } from "react-router-dom";
 import { Signup } from './pages/Signup'
-import { CardVault } from './pages/CardVault'
+import CardVault from './pages/CardVault'
 
 function App() {
   return (

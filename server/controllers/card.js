@@ -76,7 +76,7 @@ module.exports = {
             artist,
             cardType,
             tags: allTags,
-            elementalType
+            elementType
           });
           res.send(results).status(200);
         }

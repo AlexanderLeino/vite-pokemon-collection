@@ -36,9 +36,9 @@ export const QuantityController = ({ quantity = 0 }: props) => {
     
     
     return (
-        <Flex horizontalChild='space-x-5' marginTop='mt-2' justifyContent='justify-center' width='w-full' alignItems='items-center'>
+        <Flex horizontalChild='space-x-5' marginTop='mt-2' justifyContent='justify-center' width='w-full' alignItems='items-center' flexWrap='nowrap'>
             <Button 
-                width='w-10' 
+                width='w-full' 
                 fontWeight='font-bold' 
                 backgroundColor='bg-red-700'
                 fontSize='text-xl'
@@ -47,7 +47,7 @@ export const QuantityController = ({ quantity = 0 }: props) => {
             >-</Button>
             <div className='text-xl font-bold'>{quantityValue}</div>
             <Button 
-                width='w-10' 
+                width='w-full' 
                 fontWeight='font-bold' 
                 backgroundColor='bg-green-700' 
                 fontSize='text-xl'

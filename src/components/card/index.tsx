@@ -3,6 +3,7 @@ import Flex from '../Flex'
 import { Badges } from '../Badges'
 import {AiFillStar, AiOutlineStar} from 'react-icons/ai'
 import { QuantityController } from '../QuantityController'
+import { BsArrowBarDown } from 'react-icons/bs'
 type pokemonObj = {
   name: string, 
   prefix?: string, 
@@ -10,12 +11,12 @@ type pokemonObj = {
   cardType: string,
   artist: string,
   rating: number,
-  cardNumber: number,
+  cardNumber: string,
   price: number,
   quantity: number,
   tags: string[],
   picture: string,
-  elementalType?: string,
+  elementType?: string,
 } 
 
 const getBackgroundColor = (elementalType: string) => {
@@ -45,78 +46,20 @@ const getBackgroundColor = (elementalType: string) => {
   }
 }
 
-const getRatingStar = (rating: number) => {
-  switch(rating){
-    case 5:
-    return <Flex>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-    </Flex>
-
-    case 4: 
-      return <Flex>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-      </Flex>
-
-    case 3: 
-      return <Flex>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-      </Flex>
- 
-    case 2: 
-      return <Flex>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-      </Flex>
-    
-    case 1: 
-    return <Flex>
-            <AiFillStar className='hover:text-yellow-500 text-2xl'/>
-            <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-            <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-            <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-            <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-    </Flex>
-    default: 
-      return <Flex>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-              <AiOutlineStar className='hover:text-yellow-500 text-2xl'/>
-      </Flex>
-}
-  }
-
-
-export const Card = ({rating, picture, tags, quantity, name, prefix, suffix, price, elementalType}: pokemonObj) => {
-
+export const Card = ({picture,  quantity, name, prefix, suffix, price, elementType}: pokemonObj) => {
+  console.log("Pokemon Elemental Type", elementType)
   useEffect(() => {
-    if(elementalType === undefined) {
-      elementalType = "trainer"
+    if(elementType === undefined) {
+      elementType = "trainer"
     }
-    const returnedBackgroundColor = getBackgroundColor(elementalType)
+    const returnedBackgroundColor = getBackgroundColor(elementType)
       setBackgroundColor(returnedBackgroundColor)
 
   }, [])
   const [backgroundColor, setBackgroundColor] = useState('bg-green-500')
 
   return (
-    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-amber-300' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' >
+    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-orange-200' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' width='w-13' boxShadow='shadow-lg' >
           <Flex horizontalChild='space-x-1.5'>
             {prefix 
             ? 
@@ -134,11 +77,11 @@ export const Card = ({rating, picture, tags, quantity, name, prefix, suffix, pri
           }
           </Flex>
             <img style={{width: 'fit-content'}} src={picture}/>
-            {getRatingStar(rating)}
-        <Badges tags={tags}/>
-        <div>Value: {price}</div>
-        <div>Total Value: {(quantity * price)} </div>
+        <div className='font-bold'>Market Value: {price}</div>
+        <div className='font-bold'>Total Value: {(quantity * price)} </div>
         <QuantityController quantity={quantity}/>
+          <Flex>
+        </Flex>
     </Flex>
   )
 }
