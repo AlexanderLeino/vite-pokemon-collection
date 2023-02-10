@@ -43,7 +43,7 @@ const getBackgroundColor = (elementalType: string) => {
   }
 }
 
-export const Card = ({picture,  quantity, name, prefix, suffix, price, elementType}: pokemonObj) => {
+export const Card = ({picture,  quantity, name, prefix, suffix, price, elementType, cardNumber}: pokemonObj) => {
   useEffect(() => {
     if(elementType === undefined) {
       elementType = "trainer"
@@ -55,8 +55,8 @@ export const Card = ({picture,  quantity, name, prefix, suffix, price, elementTy
   const [backgroundColor, setBackgroundColor] = useState('bg-green-500')
 
   return (
-    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-orange-200' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' width='w-13' boxShadow='shadow-lg' >
-          <Flex horizontalChild='space-x-1.5' backgroundColor='bg-orange-200' paddingX='px-2' paddingY='py-1' borderColor='border-neutral-900' borderWidth='border-2' borderRadius='rounded' marginTop='mt-1' marginBottom='mb-2'>
+    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-orange-200' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' width='w-13' boxShadow='shadow-lg' grow='grow-0' >
+          <Flex horizontalChild='space-x-1.5' backgroundColor='bg-orange-200' paddingX='px-2' paddingY='py-1' borderColor='border-neutral-900' borderWidth='border-2' borderRadius='rounded' marginTop='mt-1' marginBottom='mb-2' grow='grow-0'>
             {prefix 
             ? 
             <div className='text-xl font-bold'>{prefix}</div>
@@ -75,7 +75,7 @@ export const Card = ({picture,  quantity, name, prefix, suffix, price, elementTy
             <img style={{width: 'fit-content'}} src={picture}/>
         <div className='font-bold text-lg'>Market Value: ${price}</div>
         
-        <QuantityController quantity={quantity}/>
+        <QuantityController quantity={quantity} cardName={name} cardNumber={cardNumber}/>
           <Flex>
         </Flex>
     </Flex>

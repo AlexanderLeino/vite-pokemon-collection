@@ -13,16 +13,15 @@ module.exports = {
       let serializedCardNumber 
       let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementType } =
         body.data;
-
+      let upperCasedSuffix = suffix.toUpperCase()
+      let upperCasedPrefix = prefix.toUpperCase()
       if(cardNumber[0] === "0") {
         serializedCardNumber = cardNumber.split("").slice(1).join("")
        
       } else {
         serializedCardNumber = cardNumber
       }
-      console.log("CARD SET", cardSet)
       let cardSetSlug = slugify(cardSet).toLowerCase();
-      console.log("cardSet Slug", cardSetSlug)
       let slugArray = [];
 
       for (const cardProperty in body.data) {
@@ -70,8 +69,8 @@ module.exports = {
           let allTags = [...tags, year]
           let results = await Card.create({
             name,
-            suffix,
-            prefix,
+            suffix:upperCasedSuffix,
+            prefix: upperCasedPrefix,
             cardNumber: serializedCardNumber,
             cardSet: _id,
             price,

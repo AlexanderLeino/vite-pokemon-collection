@@ -4,12 +4,14 @@ import Flex from '../Flex'
 import { useAuthContext } from '../../context/AuthCtx'
 import axios from 'axios'
 type props = {
-    quantity: number
+    quantity: number,
+    cardName: string,
+    cardNumber: string,
 }
 
 
 
-export const QuantityController = ({ quantity = 0 }: props) => {
+export const QuantityController = ({ quantity = 0, cardName, cardNumber}: props) => {
     const [quantityValue, setQuantityValue] = useState(quantity)
     const { currentUser } = useAuthContext()
     
@@ -28,9 +30,12 @@ export const QuantityController = ({ quantity = 0 }: props) => {
     
     }
 
-    const submitQuanityChange = () => {
-        console.log(quantity, quantityValue)
+    const submitQuanityChange = async () => {
         if(quantity === quantityValue) return
+
+        await axios.post("http://localhost:3001/api/user/updateCardList", {
+            data:{quantityValue, userId: currentUser.userId, cardData: {cardName, cardNumber}},
+        })
         
     }
     

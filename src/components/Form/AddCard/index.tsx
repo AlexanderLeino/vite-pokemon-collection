@@ -24,7 +24,7 @@ const AddCardForm = () => {
 
    
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementType: '', artist: "" })
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: '', artist: "" })
 
     useEffect(() => {
        if(createCard){
@@ -47,7 +47,6 @@ const AddCardForm = () => {
     }
 
     const handleSubmit = async () => {
-       console.log("HOW MANY TIMES IS THSI RUNNING?")
         let {data} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
