@@ -24,9 +24,8 @@ interface Collection {
 } 
 
 const CardVault = () => {
-  let portfolioVal
   const [userCollection, setUserCollection] =  useState<Collection | undefined>()
-  const [portValue, setPortValue] = useState()
+  const [portValue, setPortValue] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const {currentUser} = useAuthContext()
 
@@ -35,7 +34,6 @@ const CardVault = () => {
     let {data: {cardCollection, portfolioValue}} = await axios.post('http://localhost:3001/api/user/userCollection', {
       data: currentUser.userId
     })
-    console.log("portfoli", portfolioValue)
     setPortValue(portfolioValue)
     setUserCollection(cardCollection)
     setIsLoading(false)
@@ -47,14 +45,14 @@ const CardVault = () => {
   return (
     <>
       <Flex justifyContent='justify-end' width='w-full'>
-        <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue}</div>
+        <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue?.toFixed(2)}</div>
       </Flex>
      
       <Flex horizontalChild="space-x-4">
 
         {
           userCollection?.map((card) => {
-            return <Card elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} rating={card?.rating} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags}/>
+            return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} rating={card?.rating} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags}/>
           })
         }
         

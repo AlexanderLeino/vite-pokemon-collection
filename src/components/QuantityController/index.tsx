@@ -7,11 +7,12 @@ type props = {
     quantity: number,
     cardName: string,
     cardNumber: string,
+    getUserCollection: () => void
 }
 
 
 
-export const QuantityController = ({ quantity = 0, cardName, cardNumber}: props) => {
+export const QuantityController = ({getUserCollection, quantity = 0, cardName, cardNumber}: props) => {
     const [quantityValue, setQuantityValue] = useState(quantity)
     const { currentUser } = useAuthContext()
     
@@ -36,7 +37,7 @@ export const QuantityController = ({ quantity = 0, cardName, cardNumber}: props)
         await axios.post("http://localhost:3001/api/user/updateCardList", {
             data:{quantityValue, userId: currentUser.userId, cardData: {cardName, cardNumber}},
         })
-        
+        getUserCollection()
     }
     
     
