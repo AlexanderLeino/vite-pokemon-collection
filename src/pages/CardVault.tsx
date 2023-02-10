@@ -24,16 +24,19 @@ interface Collection {
 } 
 
 const CardVault = () => {
+  let portfolioVal
   const [userCollection, setUserCollection] =  useState<Collection | undefined>()
+  const [portValue, setPortValue] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const {currentUser} = useAuthContext()
 
   const getUserCollection = async () => {
     setIsLoading(true)
-    let {data: {cardCollection}} = await axios.post('http://localhost:3001/api/user/userCollection', {
+    let {data: {cardCollection, portfolioValue}} = await axios.post('http://localhost:3001/api/user/userCollection', {
       data: currentUser.userId
     })
-  
+    console.log("portfoli", portfolioValue)
+    setPortValue(portfolioValue)
     setUserCollection(cardCollection)
     setIsLoading(false)
 }
@@ -41,9 +44,12 @@ const CardVault = () => {
     getUserCollection()
   }, [])
 
- 
   return (
     <>
+      <Flex justifyContent='justify-end' width='w-full'>
+        <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue}</div>
+      </Flex>
+     
       <Flex horizontalChild="space-x-4">
 
         {

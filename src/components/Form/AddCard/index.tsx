@@ -24,7 +24,7 @@ const AddCardForm = () => {
 
    
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementalType: '', artist: "" })
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementType: '', artist: "" })
 
     useEffect(() => {
        if(createCard){
@@ -66,7 +66,7 @@ const AddCardForm = () => {
         <>
             <form onSubmit={(e) => {
                 e.preventDefault()
-                setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
+                setCard({...card, tags:[card.suffix, card.elementType, card.cardSet, card.name]})
                 setCreateCard(true)
                 }}>
                 <Flex flexDirection="flex-col">
@@ -83,14 +83,14 @@ const AddCardForm = () => {
                     : 
                     card.cardType === 'Pokemon'
                     ?
-                    <Select handleChange={handleChange} data={ElementTypesArray} label='Element Type' name='elementalType'/>
+                    <Select handleChange={handleChange} data={ElementTypesArray} label='Element Type' name='elementType'/>
                     :
                     null
                     }
                     <Input name='artist' label='Artist' onChange={handleChange} type='string' />
                     <Flex justifyContent="justify-center" width="w-full">
                     <Button margin="mt-3" onClick={() => {
-                        setCard({...card, tags:[card.suffix, card.elementalType, card.cardSet, card.name]})
+                        setCard({...card, tags:[card.suffix, card.elementType, card.cardSet, card.name]})
                         setCreateCard(true)
                         }}>Submit</Button>
                     </Flex>

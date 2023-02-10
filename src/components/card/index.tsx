@@ -1,9 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import Flex from '../Flex'
-import { Badges } from '../Badges'
-import {AiFillStar, AiOutlineStar} from 'react-icons/ai'
 import { QuantityController } from '../QuantityController'
-import { BsArrowBarDown } from 'react-icons/bs'
 type pokemonObj = {
   name: string, 
   prefix?: string, 
@@ -47,7 +44,6 @@ const getBackgroundColor = (elementalType: string) => {
 }
 
 export const Card = ({picture,  quantity, name, prefix, suffix, price, elementType}: pokemonObj) => {
-  console.log("Pokemon Elemental Type", elementType)
   useEffect(() => {
     if(elementType === undefined) {
       elementType = "trainer"
@@ -60,25 +56,25 @@ export const Card = ({picture,  quantity, name, prefix, suffix, price, elementTy
 
   return (
     <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-orange-200' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' width='w-13' boxShadow='shadow-lg' >
-          <Flex horizontalChild='space-x-1.5'>
+          <Flex horizontalChild='space-x-1.5' backgroundColor='bg-orange-200' paddingX='px-2' paddingY='py-1' borderColor='border-neutral-900' borderWidth='border-2' borderRadius='rounded' marginTop='mt-1' marginBottom='mb-2'>
             {prefix 
             ? 
-            <div className='text-xl font-bold mb-2'>{prefix}</div>
+            <div className='text-xl font-bold'>{prefix}</div>
             :
             null
           }
-            <div className='text-xl font-bold mb-2'>{name}</div>
+            <div className='text-xl font-bold '>{name}</div>
           {
             suffix
             ?
-            <div className='text-xl font-bold mb-2'>{suffix}</div>
+            <div className='text-xl font-bold '>{suffix}</div>
             : 
             null
           }
           </Flex>
             <img style={{width: 'fit-content'}} src={picture}/>
-        <div className='font-bold'>Market Value: {price}</div>
-        <div className='font-bold'>Total Value: {(quantity * price)} </div>
+        <div className='font-bold text-lg'>Market Value: ${price}</div>
+        
         <QuantityController quantity={quantity}/>
           <Flex>
         </Flex>

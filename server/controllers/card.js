@@ -11,15 +11,18 @@ module.exports = {
   createCard: async ({ body }, res) => {
     try {
       let serializedCardNumber 
-      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementalType } =
+      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementType } =
         body.data;
-      
-      console.log('CARD NUMBER', cardNumber[0])
+
       if(cardNumber[0] === "0") {
         serializedCardNumber = cardNumber.split("").slice(1).join("")
        
+      } else {
+        serializedCardNumber = cardNumber
       }
+      console.log("CARD SET", cardSet)
       let cardSetSlug = slugify(cardSet).toLowerCase();
+      console.log("cardSet Slug", cardSetSlug)
       let slugArray = [];
 
       for (const cardProperty in body.data) {
@@ -29,7 +32,7 @@ module.exports = {
           cardProperty != "artist" &&
           cardProperty != "cardType" &&
           cardProperty != "userId" &&
-          cardProperty != "elementalType" &&
+          cardProperty != "elementType" &&
           cardProperty != 'tags'
         ) {
           if(cardProperty === 'cardNumber'){
