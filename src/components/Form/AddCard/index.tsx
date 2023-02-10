@@ -15,16 +15,18 @@ type Pokemon = {
     suffix?: String,
     prefix?: String,
     artist: String,
-   
-
 }
 
-const AddCardForm = () => {
+type props = {
+    setFoundCard: (card: any) => void
+}
+
+const AddCardForm = ({setFoundCard}: props) => {
     const {currentUser} = useAuthContext()
 
    
     const [createCard , setCreateCard] = useState(false)
-    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: '', artist: "" })
+    const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
 
     useEffect(() => {
        if(createCard){
@@ -55,7 +57,8 @@ const AddCardForm = () => {
             console.log(data.cardData)
             updateUserCardList(data.cardData)
         } else {
-            
+            console.log(data)
+            setFoundCard(data)
             updateUserCardList(data)
         }
         setCreateCard(false)

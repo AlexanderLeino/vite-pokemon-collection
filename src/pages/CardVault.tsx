@@ -52,7 +52,7 @@ const CardVault = () => {
 
         {
           userCollection?.map((card) => {
-            return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} rating={card?.rating} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags}/>
+            return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags}/>
           })
         }
         

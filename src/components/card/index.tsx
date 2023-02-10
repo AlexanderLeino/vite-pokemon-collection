@@ -7,14 +7,14 @@ type pokemonObj = {
   suffix?: string,
   cardType: string,
   artist: string,
-  rating: number,
   cardNumber: string,
   price: number,
   quantity: number,
   tags: string[],
   picture: string,
   elementType?: string,
-  getUserCollection: () => void
+  getUserCollection?: () => void
+ 
 } 
 
 const getBackgroundColor = (elementalType: string) => {

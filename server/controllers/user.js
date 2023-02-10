@@ -32,7 +32,6 @@ module.exports = {
   updateCardList: async ({ body }, res) => {
     try {
       let { cardData, userId, quantityValue } = body.data;
-      console.log("Quantity Value", quantityValue)
       User.findOne({ _id: userId })
         .elemMatch("cards", {
           name: cardData.cardName,
@@ -53,7 +52,6 @@ module.exports = {
 
             let updatedList = cards;
             updatedList[cardIndexToBeUpdated] = doc.cards[0];
-            console.log("updatedCard List", updatedList)
             await User.findOneAndUpdate(
               { _id: userId },
               {

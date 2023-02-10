@@ -7,7 +7,7 @@ type props = {
     quantity: number,
     cardName: string,
     cardNumber: string,
-    getUserCollection: () => void
+    getUserCollection?: () => void
 }
 
 
@@ -37,7 +37,9 @@ export const QuantityController = ({getUserCollection, quantity = 0, cardName, c
         await axios.post("http://localhost:3001/api/user/updateCardList", {
             data:{quantityValue, userId: currentUser.userId, cardData: {cardName, cardNumber}},
         })
-        getUserCollection()
+        if(getUserCollection){
+            getUserCollection()
+        }
     }
     
     
