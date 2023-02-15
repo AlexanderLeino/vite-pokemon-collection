@@ -6,10 +6,6 @@ import { Card } from '../components/Card'
 export const CardFinder = () => {
   const [foundCard, setFoundCard] = useState({name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], })
 
-  useEffect(() => {
-    console.log("FOUND CARD", foundCard)
-  }, [foundCard])
-
   return (
     <Flex>
       <AddCardForm setFoundCard={setFoundCard}/>

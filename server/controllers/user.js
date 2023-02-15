@@ -78,8 +78,24 @@ module.exports = {
     try {
       let { data: userId } = body;
       let results = await User.findOne({ _id: userId }).select('cards')
+      let tagArray = []
 
-      res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio});
+     results.cards.forEach((card) => {
+        
+        card.tags.forEach((tag) => {
+          tagArray.push(tag)
+        })
+      })  
+      let uniqueTagArray = [...new Set(tagArray)]
+      let tagsArray = uniqueTagArray.map((tag) => {
+       
+        return {value: tag, label: tag}
+      })
+
+      console.log("TAGS ARRAY", tagsArray)
+      
+   
+      res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio, tags: tagsArray});
     } catch (e) {
       res.status(500).send({ message: e.message });
     }
