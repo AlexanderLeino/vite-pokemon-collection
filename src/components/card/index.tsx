@@ -20,27 +20,27 @@ type pokemonObj = {
 const getBackgroundColor = (elementalType: string) => {
   switch(elementalType){
     case 'Fire':
-      return 'bg-amber-600'
+      return 'border-amber-600'
     case 'Fighting':
-      return 'bg-amber-900'
+      return 'border-amber-900'
     case 'Dragon': 
-      return 'bg-orange-500'
+      return 'border-orange-500'
     case 'Lighting':
-      return 'bg-amber-400'
+      return 'border-amber-400'
     case 'Grass':
-      return 'bg-green-600'
+      return 'border-green-600'
     case 'Water':
-      return "bg-blue-600"
+      return "border-blue-600"
     case 'Fairy':
-      return "bg-fuchsia-400"
+      return "border-fuchsia-400"
     case 'Psychic':
-      return "bg-purple-500"
+      return "border-purple-500"
     case 'Metal': 
-      return 'bg-slate-500'
+      return 'border-slate-500'
     case 'Colorless': 
-      return 'bg-slate-300'
+      return 'border-slate-300'
     default: 
-      return 'bg-slate-400'
+      return 'border-slate-500'
   }
 }
 
@@ -50,33 +50,56 @@ export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffi
       elementType = "trainer"
     }
     const returnedBackgroundColor = getBackgroundColor(elementType)
-      setBackgroundColor(returnedBackgroundColor)
+      setCardBorderColor(returnedBackgroundColor)
 
   }, [])
-  const [backgroundColor, setBackgroundColor] = useState('bg-green-500')
+  const [cardBorderColor, setCardBorderColor] = useState('')
 
   return (
-    <Flex flexDirection='flex-col' marginTop='mt-2' backgroundColor={backgroundColor} justifyContent='justify-center' alignItems='items-center' borderWidth='border-8' borderColor='border-orange-200' paddingX='px-2' paddingY='py-2' borderRadius='rounded-2xl' width='w-13' boxShadow='shadow-lg' grow='grow-0' >
-          <Flex horizontalChild='space-x-1.5' backgroundColor='bg-orange-200' paddingX='px-2' paddingY='py-1' borderColor='border-neutral-900' borderWidth='border-2' borderRadius='rounded' marginTop='mt-1' marginBottom='mb-2' grow='grow-0'>
+    <Flex 
+      flexDirection='flex-col' 
+      marginTop='mt-2' 
+      justifyContent='justify-center' 
+      alignItems='items-center' 
+      borderWidth='border-4'
+      backgroundColor='bg-orange-300'
+      borderColor={cardBorderColor} 
+      borderRadius='rounded-2xl' 
+      width='w-13' 
+      boxShadow='shadow-lg' 
+      grow='grow-0' >
+          <Flex 
+            horizontalChild='space-x-1.5' 
+            backgroundColor='bg-orange-200' 
+            paddingX='px-2' 
+            paddingY='py-1' 
+            borderColor='border-neutral-900'  
+            roundedTop='rounded-t-xl'
+            marginBottom='mb-2' 
+            width='w-full'
+            justifyContent='justify-center'
+            grow='grow-1'>
+            
             {prefix 
             ? 
-            <div className='text-xl font-bold'>{prefix}</div>
+            <div className='text-xl font-extrabold text-orange-500'>{prefix}</div>
             :
             null
           }
-            <div className='text-xl font-bold '>{name}</div>
+            <div className='text-xl font-extrabold text-orange-500'>{name}</div>
           {
             suffix
             ?
-            <div className='text-xl font-bold '>{suffix}</div>
+            <div className='text-xl font-extrabold text-orange-500'>{suffix}</div>
             : 
             null
           }
           </Flex>
-            <img style={{width: 'fit-content'}} src={picture}/>
-        <div className='font-bold text-lg'>Market Value: ${price}</div>
-        
-        <QuantityController getUserCollection={getUserCollection} quantity={quantity} cardName={name} cardNumber={cardNumber}/>
+            <img className='mx-3' style={{width: 'fit-content'}} src={picture}/>
+        <div className='bg-orange-200 w-full mt-2 rounded-b-xl'>
+          <div className='font-extrabold text-lg text-center text-orange-600'>Value: ${price}</div>
+          <QuantityController getUserCollection={getUserCollection} quantity={quantity} cardName={name} cardNumber={cardNumber}/>
+        </div>
           <Flex>
         </Flex>
     </Flex>

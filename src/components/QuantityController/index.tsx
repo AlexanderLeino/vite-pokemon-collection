@@ -44,23 +44,26 @@ export const QuantityController = ({getUserCollection, quantity = 0, cardName, c
     
     
     return (
-        <Flex horizontalChild='space-x-5' marginTop='mt-2' justifyContent='justify-center' width='w-full' alignItems='items-center' flexWrap='nowrap'>
+        <Flex horizontalChild='space-x-5' marginTop='mt-1' justifyContent='justify-center' width='w-full' alignItems='items-center' flexWrap='nowrap'>
             <Button 
                 width='w-full' 
                 fontWeight='font-bold' 
-                backgroundColor='bg-red-700'
+                backgroundColor='bg-orange-400'
                 fontSize='text-xl'
                 onClick={(e: any) => handleQuantityChange(e)}
                 name='decrement'
+                borderRadiusBottomLeft='rounded-bl-lg'
+                
             >-</Button>
-            <div className='text-xl font-bold'>{quantityValue}</div>
+            <div className='text-xl font-extrabold text-orange-600'>{quantityValue}</div>
             <Button 
                 width='w-full' 
                 fontWeight='font-bold' 
-                backgroundColor='bg-green-700' 
+                backgroundColor='bg-orange-500' 
                 fontSize='text-xl'
                 onClick={(e: any) => handleQuantityChange(e)}
                 name='increment'
+                borderRadiusBottomRight='rounded-br-lg'
             >+</Button>
         </Flex>
 

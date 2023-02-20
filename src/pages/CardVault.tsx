@@ -19,50 +19,31 @@ interface Collection {
   tags: string[],
   picture: string,
   elementType?: string,
+  filter: (card: any) => void,
+  setUserCollection: (cards: any) => void
   
 } 
 
 const CardVault = () => {
-  const [userCollection, setUserCollection] =  useState<Collection | undefined>()
+  const [userCollection, setUserCollection] =  useState([{name: "Rayquaza", prefix: '', suffix: 'VMAX', cardType: 'Pokemon', artist: 'Unknown', cardNumber: '218', picture: 'https://commondatastorage.googleapis.com/images.pricecharting.com/b49dff0e72cbc9cb4be78a3b2e9fccc5edc4c0375ebd2d26f166f2dd4ecf2d12/240.jpg', quantity: 2, price: 266.24, elementType: 'Dragon', tags: ['Tags']}])
   const [portValue, setPortValue] = useState(0)
-  const [tags, setTags] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const {currentUser} = useAuthContext()
-  const [selectedOptions, setSelectedOptions] = useState([])
-  console.log("SELECTED OPTIONS", selectedOptions)
 
   const getUserCollection = async () => {
-    setIsLoading(true)
     let {data: {cardCollection, portfolioValue, tags}} = await axios.post('http://localhost:3001/api/user/userCollection', {
       data: currentUser.userId
     })
     setPortValue(portfolioValue)
     setUserCollection(cardCollection)
-    setTags(tags)
-    setSelectedOptions([])
-    setIsLoading(false)
 }
   useEffect(() => {
-    getUserCollection()
-  }, [])
-
-  const handleSelectChange = (e: any) => {
-    setSelectedOptions(e)
-  }
-
-  useEffect(() => {
-    if(selectedOptions.length >= 1){
-      console.log("WE HAVE AN OPTION")
+    if(currentUser.userId){
+      getUserCollection()
     }
-  }, [selectedOptions])
+  }, [])
 
   return (
     <>
-    <Select 
-      options={tags} isMulti={true} defaultValue={tags}
-      onChange={(e) => handleSelectChange(e)}
-    />
-    
       <Flex justifyContent='justify-end' width='w-full'>
         <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue?.toFixed(2)}</div>
       </Flex>
