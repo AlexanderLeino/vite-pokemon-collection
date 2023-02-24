@@ -30,6 +30,7 @@ module.exports = {
     }
   },
   updateCardList: async ({ body }, res) => {
+    console.log("Update card LIST")
     try {
       let { cardData, userId, quantityValue } = body.data;
       User.findOne({ _id: userId })
@@ -41,7 +42,7 @@ module.exports = {
         .exec(async function (err, doc) {
           if (doc) {
             doc.cards[0].quantity = quantityValue;
-            console.log("DOC DOC", doc)
+          
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
@@ -91,9 +92,6 @@ module.exports = {
        
         return {value: tag, label: tag}
       })
-
-      console.log("TAGS ARRAY", tagsArray)
-      
    
       res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio, tags: tagsArray});
     } catch (e) {
@@ -102,5 +100,8 @@ module.exports = {
   },
   updateUserCard: async ({body}, res) => {
     
+  },
+  deleteCard: async ({body}, res) => {
+      console.log("Hey We made it to the delete route", body)
   }
 };

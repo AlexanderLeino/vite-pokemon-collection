@@ -13,7 +13,17 @@ export const CardFinder = () => {
         foundCard?.name 
         ?
         <Card 
-        elementType={foundCard?.elementType} prefix={foundCard?.prefix} suffix={foundCard?.suffix} name={foundCard?.name} cardType={foundCard?.cardType} artist={foundCard?.artist} cardNumber={foundCard?.cardNumber}  quantity={foundCard?.quantity} picture={foundCard?.picture} price={foundCard?.price} tags={foundCard?.tags}
+          elementType={foundCard?.elementType}
+          prefix={foundCard?.prefix} 
+          suffix={foundCard?.suffix} 
+          name={foundCard?.name} 
+          cardType={foundCard?.cardType} 
+          artist={foundCard?.artist} 
+          cardNumber={foundCard?.cardNumber} 
+          quantity={foundCard?.quantity} 
+          picture={foundCard?.picture} 
+          price={foundCard?.price} 
+          tags={foundCard?.tags}
         />
         : 
         null

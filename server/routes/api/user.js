@@ -12,7 +12,12 @@ router.route('/signIn')
 router.route('/updateCardList')
     .post(UserController.updateCardList)
 
+    //matches api/user/userCollection
 router.route('/userCollection')
     .post(UserController.userCollection)
+
+// matches api/user/deleteCardFromCollection
+router.route('/deleteCardFromCollection')
+    .delete(UserController.deleteCard)
 
 module.exports = router

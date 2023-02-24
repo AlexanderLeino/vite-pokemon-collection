@@ -4,7 +4,6 @@ require("dotenv").config();
 const { default: slugify } = require("slugify");
 const {CardSet} = require("../models/CardSet");
 const {Card} = require("../models/Card");
-const User = require("../models/User");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 
 module.exports = {
@@ -88,7 +87,6 @@ module.exports = {
         );
       }
     } catch (e) {
-      console.log("ERROR HERE", e)
       res.status(500).send({
         message: e.message,
       });
@@ -101,7 +99,6 @@ module.exports = {
       let fullName = results.fullName
       let obj = results._doc
       obj.fullName = fullName
-      console.log(obj)
       res.status(200).send(obj);
     } catch (e) {
       res.status(500).send({message: e.message})
@@ -122,5 +119,4 @@ module.exports = {
       res.send({message: error.message}).status(500);
     }
   },
-
 };

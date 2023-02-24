@@ -11,4 +11,6 @@ router.route('/findCard')
 router.route('/validateCard')
     .post(CardController.cardExistInDb)
 
+
+    
 module.exports = router

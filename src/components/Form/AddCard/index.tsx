@@ -10,21 +10,13 @@ import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 
-type Pokemon = {
-    name: String,
-    suffix?: String,
-    prefix?: String,
-    artist: String,
-}
-
 type props = {
     setFoundCard: (card: any) => void
 }
 
 const AddCardForm = ({setFoundCard}: props) => {
     const {currentUser} = useAuthContext()
-
-   
+    const [isLoading , setIsLoading] = useState(false)
     const [createCard , setCreateCard] = useState(false)
     const [card, setCard] = useState({prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
 
@@ -42,7 +34,7 @@ const AddCardForm = ({setFoundCard}: props) => {
     }
 
     const updateUserCardList = async (pokemon: any) => {
-        console.log("pokemon", pokemon)
+    s
         await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardData: pokemon, userId: currentUser.userId}
         })
