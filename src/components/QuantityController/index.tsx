@@ -27,6 +27,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
 
     const handleQuantityChange = (e: any) => {
         let name = e.target.name
+        if(quantityValue === 0 && name === 'decrement') return
         name === 'increment'
             ? setQuantityValue(quantityValue + 1)
             : setQuantityValue(quantityValue - 1)
@@ -34,7 +35,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
     }
 
     const submitQuanityChange = async () => {
-        if (originalQuantity === quantityValue || quantityValue <= 0) return
+        if (originalQuantity === quantityValue) return
 
         await axios.post("http://localhost:3001/api/user/updateCardList", {
             data: { quantityValue, userId: currentUser.userId, cardData: { cardName, cardNumber } },
@@ -47,7 +48,13 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
     }
 
     const handleDelete = async () => {
-        console.log("HANDLING DELETE")
+        console.log('CARD NAME', cardName)
+        let results = await axios.post('http://localhost:3001/api/user/deleteCardFromCollection', {
+            data: {userId: currentUser.userId, cardData: {
+                cardName, cardNumber
+            }}
+        })
+        console.log('RESULTIES', results)
     }
 
 
@@ -63,7 +70,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
                         width='w-full'
                         backgroundColor='bg-orange-400'
                         fontSize='text-lg'
-                        onClick={(e: any) => handleQuantityChange(e)}
+                        onClick={handleDelete}
                         name='decrement'
                         borderRadiusBottomLeft='rounded-bl-xl'
                         border='border-0'

@@ -18,6 +18,6 @@ router.route('/userCollection')
 
 // matches api/user/deleteCardFromCollection
 router.route('/deleteCardFromCollection')
-    .delete(UserController.deleteCard)
+    .post(UserController.deleteCard)
 
 module.exports = router
