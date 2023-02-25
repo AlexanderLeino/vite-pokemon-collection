@@ -103,7 +103,6 @@ module.exports = {
   },
   deleteCard: async ({body}, res) => {
       let {userId, cardData:{cardName, cardNumber}} = body.data
-      console.log("WE HERE", cardName, cardNumber)
       User.findOne({ _id: userId })
         .elemMatch("cards", {
           name: cardName,
@@ -111,7 +110,6 @@ module.exports = {
         })
         .select("cards.$")
         .exec(async function (err, doc) {
-          console.log("DO", doc.cards[0]._id)
           let results = await User.findOneAndUpdate({_id: userId}, {
             $pull: {
              cards: {
@@ -119,7 +117,6 @@ module.exports = {
              }
             }
            })
-           console.log('RESULT', results)
         })
     }
 };
