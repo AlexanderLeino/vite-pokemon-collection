@@ -6,7 +6,7 @@ import { Card } from '../components/Card'
 
 
 const CardVault = () => {
-  const [userCollection, setUserCollection] =  useState([{name: "Rayquaza", prefix: '', suffix: 'VMAX', cardType: 'Pokemon', artist: 'Unknown', cardNumber: '218', picture: 'https://commondatastorage.googleapis.com/images.pricecharting.com/b49dff0e72cbc9cb4be78a3b2e9fccc5edc4c0375ebd2d26f166f2dd4ecf2d12/240.jpg', quantity: 2, price: 266.24, elementType: 'Dragon', tags: ['Tags']}])
+  const [userCollection, setUserCollection] =  useState([{name: "Rayquaza", prefix: '', suffix: 'VMAX', cardType: 'Pokemon', artist: 'Unknown', cardNumber: '218', picture: 'https://commondatastorage.googleapis.com/images.pricecharting.com/b49dff0e72cbc9cb4be78a3b2e9fccc5edc4c0375ebd2d26f166f2dd4ecf2d12/240.jpg', quantity: 1, price: 266.24, elementType: 'Dragon', tags: ['Tags']}])
   const [portValue, setPortValue] = useState(0)
   const {currentUser} = useAuthContext()
 
@@ -17,11 +17,15 @@ const CardVault = () => {
     setPortValue(portfolioValue)
     setUserCollection(cardCollection)
 }
+
+
   useEffect(() => {
-    if(currentUser.userId){
-      getUserCollection()
-    }
+    getUserCollection()
   }, [])
+
+  useEffect(() => {
+    console.log("USER CARD COLLECTION", userCollection)
+  }, [userCollection]) 
 
   return (
     <>

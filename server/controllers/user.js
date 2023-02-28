@@ -30,9 +30,10 @@ module.exports = {
     }
   },
   updateCardList: async ({ body }, res) => {
-    console.log("Update card LIST")
+    console.log("Update card LIST", body)
     try {
       let { cardData, userId, quantityValue } = body.data;
+      console.log('QUANTITY VALUE', quantityValue)
       User.findOne({ _id: userId })
         .elemMatch("cards", {
           name: cardData.cardName,

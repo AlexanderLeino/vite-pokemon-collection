@@ -13,14 +13,9 @@ type pokemonObj = {
   tags: string[],
   picture: string,
   elementType?: string,
-  getUserCollection?: () => void
+  getUserCollection: () => void
  
 } 
-
-type quantityState = {
-  originalQuantity: number,
- 
-}
 
 const getBackgroundColor = (elementalType: string) => {
   switch(elementalType){
@@ -50,19 +45,13 @@ const getBackgroundColor = (elementalType: string) => {
 }
 
 export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffix, price, elementType, cardNumber}: pokemonObj) => {
-  const [originalQuantity, setOriginalQuantity] = useState(quantity)
   useEffect(() => {
     if(elementType === undefined) {
       elementType = "trainer"
     }
     const returnedBackgroundColor = getBackgroundColor(elementType)
       setCardBorderColor(returnedBackgroundColor)
-
   }, [])
-
-  useEffect(() => {
-    console.log("ORIGINAL QUANITYT HAS BEEN UPDATED", originalQuantity)
-  }, [originalQuantity])
 
   const [cardBorderColor, setCardBorderColor] = useState('')
 
@@ -110,11 +99,10 @@ export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffi
         <div className='bg-orange-200 w-full mt-2 rounded-b-xl'>
           <div className='font-extrabold text-lg text-center text-orange-600'>Value: ${price}</div>
           <QuantityController 
-              originalQuantity={originalQuantity} 
-              setOriginalQuantity={setOriginalQuantity} 
-              getUserCollection={getUserCollection} 
+              getUserCollection={() => getUserCollection()} 
               cardName={name} 
               cardNumber={cardNumber}
+              quantity={quantity}
             />
         </div>
           <Flex>

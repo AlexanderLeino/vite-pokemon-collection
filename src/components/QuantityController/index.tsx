@@ -6,55 +6,62 @@ import axios from 'axios'
 type props = {
     cardName: string,
     cardNumber: string,
-    getUserCollection?: () => void,
-    setOriginalQuantity: (quantity: number) => void
-    originalQuantity: number,
-   
+    getUserCollection: () => void,
+    quantity: number
 }
 
 
 
-export const QuantityController = ({ getUserCollection, originalQuantity, cardName, setOriginalQuantity, cardNumber }: props) => {
-    const [quantityValue, setQuantityValue] = useState(originalQuantity)
+export const QuantityController = ({ getUserCollection, cardName, cardNumber, quantity }: props) => {
     const { currentUser } = useAuthContext()
+    const [displayedQuantity, setDisplayedQuantity] = useState(quantity)
 
     useEffect(() => {
-        let timer = setTimeout(submitQuanityChange, 3000)
-        return () => {
-            clearTimeout(timer)
+        console.log('How many times does this re render?')
+        if(displayedQuantity != quantity){
+            setDisplayedQuantity(quantity)
         }
-    }, [quantityValue])
+    }, [quantity])
+    
+    useEffect(() => {
+        if(quantity != displayedQuantity) {
+            let timer = setTimeout(submitQuanityChange, 3000)
+            return () => {
+                clearTimeout(timer)
+            }
+        }
+    }, [displayedQuantity])
+
+
 
     const handleQuantityChange = (e: any) => {
         let name = e.target.name
-        if(quantityValue === 0 && name === 'decrement') return
+        if(displayedQuantity === 0 && name === 'decrement') return
         name === 'increment'
-            ? setQuantityValue(quantityValue + 1)
-            : setQuantityValue(quantityValue - 1)
+            ? setDisplayedQuantity(displayedQuantity + 1)
+            : setDisplayedQuantity(displayedQuantity - 1)
 
     }
 
     const submitQuanityChange = async () => {
-        if (originalQuantity === quantityValue) return
+        if (displayedQuantity === quantity) return
 
         await axios.post("http://localhost:3001/api/user/updateCardList", {
-            data: { quantityValue, userId: currentUser.userId, cardData: { cardName, cardNumber } },
-            quantity : quantityValue
+            data: { quantityValue: displayedQuantity, userId: currentUser.userId, cardData: { cardName, cardNumber } },
         })
-        setOriginalQuantity(quantityValue)
-        if (getUserCollection) {
-            getUserCollection()
-        }
+        getUserCollection()
+        
     }
 
     const handleDelete = async () => {
-        console.log('CARD NAME', cardName)
-        let results = await axios.post('http://localhost:3001/api/user/deleteCardFromCollection', {
+      
+        await axios.post('http://localhost:3001/api/user/deleteCardFromCollection', {
             data: {userId: currentUser.userId, cardData: {
                 cardName, cardNumber
             }}
         })
-        console.log('RESULTIES', results)
+
+        getUserCollection()
     }
 
 
@@ -62,7 +69,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
         <>
            
             {
-                quantityValue === 0
+                displayedQuantity === 0
                     ?
                 <>
                     <Flex horizontalChild='space-x-5' marginTop='mt-1' justifyContent='justify-center' width='w-full' alignItems='items-center' flexWrap='nowrap'>
@@ -76,7 +83,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
                         border='border-0'
     
                     >Delete</Button>
-                    <div className='text-xl font-extrabold text-orange-600'>{quantityValue}</div>
+                    <div className='text-xl font-extrabold text-orange-600'>{displayedQuantity}</div>
                     <Button
                         width='w-full'
                         backgroundColor='bg-orange-500'
@@ -101,7 +108,7 @@ export const QuantityController = ({ getUserCollection, originalQuantity, cardNa
                         border='border-0'
     
                     >-</Button>
-                    <div className='text-xl font-extrabold text-orange-600'>{quantityValue}</div>
+                    <div className='text-xl font-extrabold text-orange-600'>{displayedQuantity}</div>
                     <Button
                         width='w-full'
                         fontWeight='font-bold'
