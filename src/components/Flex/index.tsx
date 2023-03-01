@@ -24,12 +24,13 @@ interface props {
   padding?: string,
   columns?: string,
   roundedTop?:string,
+  height?: string
 }
 
-const Flex = ({children, flexDirection = 'row', borderRadius, justifyContent, backgroundColor, alignItems, boxShadow, width='w-fit', paddingY='py-0', paddingX='px-0', margin='m-0', marginRight='mr-0', borderWidth= '',  marginLeft='ml-0', marginTop='mt-0', marginBottom, flexWrap='flex-wrap', grow='grow', borderColor, horizontalChild, roundedTop,  columns}:props) => {
+const Flex = ({children, flexDirection = 'row', borderRadius, justifyContent, backgroundColor, alignItems, boxShadow, width='w-fit', paddingY='py-0', paddingX='px-0', margin='m-0', marginRight='mr-0', borderWidth= '',  marginLeft='ml-0', marginTop='mt-0', marginBottom, flexWrap='flex-wrap', grow='grow', borderColor, horizontalChild, roundedTop,  columns, height}:props) => {
 
   return (
-    <div className={`flex ${flexDirection} ${borderRadius} ${justifyContent} ${backgroundColor} ${alignItems} ${boxShadow} ${width} ${paddingY} ${paddingX} ${margin} ${marginRight} ${marginLeft} ${marginTop} ${marginBottom} ${flexWrap} ${grow} ${borderWidth} ${borderColor} ${horizontalChild} ${columns} ${roundedTop}`}>{children}</div>
+    <div className={`flex ${flexDirection} ${borderRadius} ${justifyContent} ${backgroundColor} ${alignItems} ${boxShadow} ${width} ${paddingY} ${paddingX} ${margin} ${marginRight} ${marginLeft} ${marginTop} ${marginBottom} ${flexWrap} ${grow} ${borderWidth} ${borderColor} ${horizontalChild} ${columns} ${roundedTop} ${height}`}>{children}</div>
   )
 }
 

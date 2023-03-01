@@ -125,7 +125,9 @@ module.exports = {
       
     },
   incrementQuantity: async({body}, res) => {
-    let {cardData: {name, cardNumber, quantity}, _id: userId} = body
+
+    try {
+      let {cardData: {name, cardNumber}, _id: userId} = body
     User.findOne({ _id: userId })
         .elemMatch("cards", {
           name,
@@ -134,9 +136,9 @@ module.exports = {
         .select("cards.$")
         .exec(async function (err, doc) {
           if (doc) {
-            console.log("FOUND DOC", doc)
+
             doc.cards[0].quantity = doc.cards[0].quantity + 1
-            console.log("DOC AFTER Update", doc)
+          
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
@@ -153,7 +155,15 @@ module.exports = {
               {
                 cards: updatedList,
               }
-            );
-  }
-        })}
+              );
+            }     
+            res.send({message: "It appears that this card already exists in your collection but we will add the additional card to teh quantity of said card", card: doc.cards[0]}).status(200)
+        })
+
+    } catch (e) {
+      res.send({message: e.message}).status(500)
+    }
+
+    
+      }
 }

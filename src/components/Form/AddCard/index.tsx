@@ -11,10 +11,10 @@ import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 
 type props = {
-    setFoundCard: (card: any) => void
+    setResults: (card: any) => void
 }
 
-const AddCardForm = ({setFoundCard}: props) => {
+const AddCardForm = ({setResults}: props) => {
     const {currentUser} = useAuthContext()
     const [isLoading , setIsLoading] = useState(false)
     const [createCard , setCreateCard] = useState(false)
@@ -26,6 +26,10 @@ const AddCardForm = ({setFoundCard}: props) => {
        } 
     }, [createCard])
    
+    useEffect(() => {
+        console.log("CARDY ", card)
+    }, [card])
+
    
     const handleChange = (e: any) => {
         let value = e.target.value
@@ -34,33 +38,36 @@ const AddCardForm = ({setFoundCard}: props) => {
     }
 
     const updateUserCardList = async (pokemon: any) => {
-        console.log("POKEMON", pokemon)
-        await axios.post('http://localhost:3001/api/user/updateCardList', {
+        let results = await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardData: pokemon, userId: currentUser.userId}
         })
+        console.log("update USER CARD LIST", results)
     }
 
     const handleSubmit = async () => {
         let {data} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
-    
-    const incrementQuantityByOne = async (pokemon: any) => {
-        console.log(pokemon)
-        await axios.post('http://localhost:3001/api/user/incrementQuantity', {
-            cardData: pokemon, _id: currentUser.userId
-        })
-    }
-       
         if(data.message) {
+            console.log("DATA MESSAGE", data.message)
             incrementQuantityByOne(data.cardData)
-            setFoundCard(data.cardData)
         } else {
-            setFoundCard(data)
+            console.log("DATA AFTER CARD CREATION", data)
+            setResults({card: data, message:'This Card wasnt found in the database so thank you for your contribution :)'})
             updateUserCardList(data)
         }
         setCreateCard(false)
     }
+    
+    const incrementQuantityByOne = async (pokemon: any) => {
+        let {data: {card, message }} = await axios.post('http://localhost:3001/api/user/incrementQuantity', {
+            cardData: pokemon, _id: currentUser.userId
+        })
+        
+        setResults({message, card})
+    }
+       
+       
 
     return (
         <>

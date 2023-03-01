@@ -67,7 +67,8 @@ export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffi
       borderRadius='rounded-2xl' 
       width='w-13' 
       boxShadow='shadow-lg' 
-      grow='grow-0' >
+      grow='grow-0'
+      height='h-fit' >
           <Flex 
             horizontalChild='space-x-1.5' 
             backgroundColor='bg-orange-200' 
@@ -78,7 +79,7 @@ export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffi
             marginBottom='mb-2' 
             width='w-full'
             justifyContent='justify-center'
-            grow='grow-1'>
+            grow='grow-0'>
             
             {prefix 
             ? 

@@ -4,32 +4,48 @@ import Flex from '../components/Flex'
 import { Card } from '../components/Card'
 
 export const CardFinder = () => {
-  const [foundCard, setFoundCard] = useState({name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], })
+  const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
+ 
+  useEffect(() => {
+    console.log('RESULTSSSSSSSS', results)
+  }, [results])
 
   return (
-    <Flex>
-      <AddCardForm setFoundCard={setFoundCard}/>
+    <>
+      <Flex horizontalChild={"space-x-20"} marginTop='mt-6'>
+        <AddCardForm setResults={setResults}/>
+      
       {
-        foundCard?.name 
+        results?.card?.name 
         ?
-        <Card 
-          elementType={foundCard?.elementType}
-          prefix={foundCard?.prefix} 
-          suffix={foundCard?.suffix} 
-          name={foundCard?.name} 
-          cardType={foundCard?.cardType} 
-          artist={foundCard?.artist} 
-          cardNumber={foundCard?.cardNumber} 
-          quantity={foundCard?.quantity} 
-          picture={foundCard?.picture} 
-          price={foundCard?.price} 
-          tags={foundCard?.tags}
-          getUserCollection={() => null}
-        />
+        <Flex flexDirection='flex-col'>
+        <>
+          {
+            results.message 
+            ? <div>{results.message}</div>
+            : null
+          }
+          <Card 
+            elementType={results.card?.elementType}
+            prefix={results.card?.prefix} 
+            suffix={results.card?.suffix} 
+            name={results.card?.name} 
+            cardType={results.card?.cardType} 
+            artist={results.card?.artist} 
+            cardNumber={results.card?.cardNumber} 
+            quantity={results.card?.quantity} 
+            picture={results.card?.picture} 
+            price={results.card?.price} 
+            tags={results.card?.tags}
+            getUserCollection={() => null}
+          />
+        </>
+        </Flex>
         : 
         null
       }
-      
-    </Flex>
+        
+      </Flex>
+    </>
   )
 }
