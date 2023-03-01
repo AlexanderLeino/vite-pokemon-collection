@@ -24,6 +24,7 @@ export const CardFinder = () => {
           picture={foundCard?.picture} 
           price={foundCard?.price} 
           tags={foundCard?.tags}
+          getUserCollection={() => null}
         />
         : 
         null

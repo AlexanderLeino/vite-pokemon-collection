@@ -59,8 +59,11 @@ module.exports = {
       let picture = $('div[class="cover"] > img').attr("src")
 
       if (!!price && !!picture) {
-        let cardData = await Card.findOne({name, serializedCardNumber})
+        console.log("NAME", name, "serialized Card Number", serializedCardNumber)
+        let cardData = await Card.findOne({name, cardNumber: serializedCardNumber})
+        console.log("CARD DATA", cardData)
         if (cardData) {
+          console.log("WE FOUND THE SAME CARD LOL", cardData)
           let response = {cardData, message: "The Card Already Exists in the Database but here you go"}
           res.send(response).status(200);
         } else {

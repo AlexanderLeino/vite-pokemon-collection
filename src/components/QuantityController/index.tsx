@@ -44,11 +44,10 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     }
 
     const submitQuanityChange = async () => {
-        if (displayedQuantity === quantity) return
-
         await axios.post("http://localhost:3001/api/user/updateCardList", {
             data: { quantityValue: displayedQuantity, userId: currentUser.userId, cardData: { cardName, cardNumber } },
         })
+        console.log("CALLING USER COLLECTION")
         getUserCollection()
         
     }

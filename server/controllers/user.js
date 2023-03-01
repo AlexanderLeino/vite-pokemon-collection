@@ -32,27 +32,34 @@ module.exports = {
   updateCardList: async ({ body }, res) => {
     try {
       let { cardData, userId, quantityValue } = body.data;
-      console.log('QUANTITY VALUE', quantityValue)
+     
+     
       User.findOne({ _id: userId })
         .elemMatch("cards", {
-          name: cardData.cardName,
+          name: cardData.name,
           cardNumber: cardData.cardNumber,
         })
         .select("cards.$")
         .exec(async function (err, doc) {
           if (doc) {
-            doc.cards[0].quantity = quantityValue;
+            if(quantityValue === undefined) {
+              doc.cards[0].quantity = doc.cards[0].quantity + 1
+            }
+            else {
+              doc.cards[0].quantity = quantityValue;
+            }
           
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
               (card) =>
-                card.name === cardData.cardName &&
+                card.name === cardData.name &&
                 card.cardNumber === cardData.cardNumber
             );
 
             let updatedList = cards;
             updatedList[cardIndexToBeUpdated] = doc.cards[0];
+            console.log("updated LIST", updatedList)
             await User.findOneAndUpdate(
               { _id: userId },
               {
@@ -111,7 +118,7 @@ module.exports = {
         })
         .select("cards.$")
         .exec(async function (err, doc) {
-          let results = await User.findOneAndUpdate({_id: userId}, {
+          await User.findOneAndUpdate({_id: userId}, {
             $pull: {
              cards: {
                _id: doc.cards[0]._id

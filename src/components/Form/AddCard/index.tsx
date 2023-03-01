@@ -34,6 +34,7 @@ const AddCardForm = ({setFoundCard}: props) => {
     }
 
     const updateUserCardList = async (pokemon: any) => {
+        console.log("POKEMON", pokemon)
         await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: {cardData: pokemon, userId: currentUser.userId}
         })
@@ -45,10 +46,9 @@ const AddCardForm = ({setFoundCard}: props) => {
         })
        
         if(data.message) {
-            console.log(data.cardData)
             updateUserCardList(data.cardData)
+            setFoundCard(data.cardData)
         } else {
-            console.log(data)
             setFoundCard(data)
             updateUserCardList(data)
         }
