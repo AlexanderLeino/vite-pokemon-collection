@@ -2,23 +2,31 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
 const { default: slugify } = require("slugify");
-const {CardSet} = require("../models/CardSet");
-const {Card} = require("../models/Card");
+const { CardSet } = require("../models/CardSet");
+const { Card } = require("../models/Card");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
-      let serializedCardNumber 
-      let { name, prefix, suffix, cardNumber, cardSet, artist, cardType, tags, elementType } =
-        body.data;
-      let upperCasedSuffix = suffix.toUpperCase()
-      let upperCasedPrefix = prefix.toUpperCase()
-      if(cardNumber[0] === "0") {
-        serializedCardNumber = cardNumber.split("").slice(1).join("")
-       
+      let serializedCardNumber;
+      let {
+        name,
+        prefix,
+        suffix,
+        cardNumber,
+        cardSet,
+        artist,
+        cardType,
+        tags,
+        elementType,
+      } = body.data;
+      let upperCasedSuffix = suffix.toUpperCase();
+      let upperCasedPrefix = prefix.toUpperCase();
+      if (cardNumber[0] === "0") {
+        serializedCardNumber = cardNumber.split("").slice(1).join("");
       } else {
-        serializedCardNumber = cardNumber
+        serializedCardNumber = cardNumber;
       }
       let cardSetSlug = slugify(cardSet).toLowerCase();
       let slugArray = [];
@@ -31,10 +39,10 @@ module.exports = {
           cardProperty != "cardType" &&
           cardProperty != "userId" &&
           cardProperty != "elementType" &&
-          cardProperty != 'tags'
+          cardProperty != "tags"
         ) {
-          if(cardProperty === 'cardNumber'){
-            slugArray.push(serializedCardNumber)
+          if (cardProperty === "cardNumber") {
+            slugArray.push(serializedCardNumber);
           } else {
             slugArray.push(body.data[cardProperty]);
           }
@@ -49,29 +57,33 @@ module.exports = {
       let data = response?.data;
 
       const $ = cheerio.load(data);
-      
+
       let price = parseFloat(
         $('td[id="used_price"] > span[class="price js-price"]')
           .text()
           .trim()
           .slice(1)
       );
-      let picture = $('div[class="cover"] > img').attr("src")
+      let picture = $('div[class="cover"] > img').attr("src");
 
       if (!!price && !!picture) {
+        let cardData = await Card.findOne({
+          name,
+          cardNumber: serializedCardNumber,
+        });
 
-        let cardData = await Card.findOne({name, cardNumber: serializedCardNumber})
-       
         if (cardData) {
-          
-          let response = {cardData, message: "This card already exists in the database!"}
+          let response = {
+            cardData,
+            message: "This card already exists in the database!",
+          };
           res.send(response).status(200);
         } else {
           let { _id, year } = await CardSet.findOne({ name: cardSet });
-          let allTags = [...tags, year]
+          let allTags = [...tags, year];
           let results = await Card.create({
             name,
-            suffix:upperCasedSuffix,
+            suffix: upperCasedSuffix,
             prefix: upperCasedPrefix,
             cardNumber: serializedCardNumber,
             cardSet: _id,
@@ -80,7 +92,7 @@ module.exports = {
             artist,
             cardType,
             tags: allTags,
-            elementType
+            elementType,
           });
           res.send(results).status(200);
         }
@@ -99,12 +111,12 @@ module.exports = {
     try {
       let { name, cardNumber } = body.data;
       let results = await Card.findOne({ name, cardNumber });
-      let fullName = results.fullName
-      let obj = results._doc
-      obj.fullName = fullName
+      let fullName = results.fullName;
+      let obj = results._doc;
+      obj.fullName = fullName;
       res.status(200).send(obj);
     } catch (e) {
-      res.status(500).send({message: e.message})
+      res.status(500).send({ message: e.message });
     }
   },
   cardExistInDb: async ({ body }, res) => {
@@ -119,7 +131,7 @@ module.exports = {
       }
       res.send(response).status(200);
     } catch (e) {
-      res.send({message: error.message}).status(500);
+      res.send({ message: error.message }).status(500);
     }
   },
 };
