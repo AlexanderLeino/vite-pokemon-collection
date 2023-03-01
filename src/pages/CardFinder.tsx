@@ -1,20 +1,25 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import AddCardForm from '../components/Form/AddCard'
 import Flex from '../components/Flex'
-import { Card } from '../components/Card'
+import { Notification } from '../components/Notification'
 import { ExpandedCard } from '../components/Expanded-Card'
+import { toast } from 'react-toastify';
 
 export const CardFinder = () => {
   const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
- 
+
+
   useEffect(() => {
-    console.log('RESULTSSSSSSSS', results)
+    if(results.card.name){
+      notify()
+    }
   }, [results])
 
+  const notify = () => toast("User has been updated!");
   return (
     <>
       <Flex horizontalChild={"space-x-20"} marginTop='mt-6'>
-        <AddCardForm setResults={setResults}/>
+        <AddCardForm setResults={setResults} notify={notify}/>
       
       {
         results?.card?.name 
@@ -38,6 +43,7 @@ export const CardFinder = () => {
             picture={results.card?.picture} 
             price={results.card?.price} 
             tags={results.card?.tags}
+            notify={() => notify()}
             getUserCollection={() => null}
           />
         </>
@@ -47,6 +53,8 @@ export const CardFinder = () => {
       }
         
       </Flex>
+      
+      <Notification />
     </>
   )
 }

@@ -13,7 +13,8 @@ type pokemonObj = {
   tags: string[],
   picture: string,
   elementType?: string,
-  getUserCollection: () => void
+  getUserCollection: () => void,
+  notify: () => void
  
 } 
 
@@ -44,7 +45,7 @@ const getBackgroundColor = (elementalType: string) => {
   }
 }
 
-export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffix, price, elementType, cardNumber}: pokemonObj) => {
+export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffix, price, elementType, cardNumber, notify}: pokemonObj) => {
   useEffect(() => {
     if(elementType === undefined) {
       elementType = "trainer"
@@ -104,6 +105,7 @@ export const Card = ({picture, getUserCollection,  quantity, name, prefix, suffi
               cardName={name} 
               cardNumber={cardNumber}
               quantity={quantity}
+              notify={() => notify()}
             />
         </div>
           <Flex>

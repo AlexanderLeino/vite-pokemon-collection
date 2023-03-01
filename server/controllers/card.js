@@ -22,7 +22,21 @@ module.exports = {
         elementType,
       } = body.data;
       let upperCasedSuffix = suffix.toUpperCase();
-      let upperCasedPrefix = prefix.toUpperCase();
+      let serializedPrefix
+      if(prefix){
+        let arrayedPrefix = prefix.split(' ')
+        let resultsArray = []
+
+        arrayedPrefix.forEach((word) => {
+          let firstLetter = word[0].toUpperCase()
+            let restOfWord = word.slice(1).toLowerCase()
+
+            let newWord = `${firstLetter}${restOfWord}`
+            resultsArray.push(newWord)
+            serializedPrefix = resultsArray.join(' ')
+        })
+
+      }
       if (cardNumber[0] === "0") {
         serializedCardNumber = cardNumber.split("").slice(1).join("");
       } else {
@@ -84,7 +98,7 @@ module.exports = {
           let results = await Card.create({
             name,
             suffix: upperCasedSuffix,
-            prefix: upperCasedPrefix,
+            prefix: serializedPrefix,
             cardNumber: serializedCardNumber,
             cardSet: _id,
             price,

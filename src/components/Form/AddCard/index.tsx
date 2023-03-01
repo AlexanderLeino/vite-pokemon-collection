@@ -11,10 +11,11 @@ import { useAuthContext } from "../../../context/AuthCtx"
 import axios from "axios"
 
 type props = {
-    setResults: (card: any) => void
+    setResults: (card: any) => void,
+    notify: () => void
 }
 
-const AddCardForm = ({setResults}: props) => {
+const AddCardForm = ({setResults, notify}: props) => {
     const {currentUser} = useAuthContext()
     const [isLoading , setIsLoading] = useState(false)
     const [createCard , setCreateCard] = useState(false)
