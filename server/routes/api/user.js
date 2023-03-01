@@ -20,4 +20,7 @@ router.route('/userCollection')
 router.route('/deleteCardFromCollection')
     .post(UserController.deleteCard)
 
+router.route("/incrementQuantity")
+    .post(UserController.incrementQuantity)
+
 module.exports = router

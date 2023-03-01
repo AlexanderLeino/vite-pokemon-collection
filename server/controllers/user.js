@@ -32,34 +32,26 @@ module.exports = {
   updateCardList: async ({ body }, res) => {
     try {
       let { cardData, userId, quantityValue } = body.data;
-     
-     
       User.findOne({ _id: userId })
         .elemMatch("cards", {
-          name: cardData.name,
+          name: cardData.cardName,
           cardNumber: cardData.cardNumber,
         })
         .select("cards.$")
         .exec(async function (err, doc) {
           if (doc) {
-            if(quantityValue === undefined) {
-              doc.cards[0].quantity = doc.cards[0].quantity + 1
-            }
-            else {
-              doc.cards[0].quantity = quantityValue;
-            }
+            doc.cards[0].quantity = quantityValue;
           
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
               (card) =>
-                card.name === cardData.name &&
+                card.name === cardData.cardName &&
                 card.cardNumber === cardData.cardNumber
             );
 
             let updatedList = cards;
             updatedList[cardIndexToBeUpdated] = doc.cards[0];
-            console.log("updated LIST", updatedList)
             await User.findOneAndUpdate(
               { _id: userId },
               {
@@ -131,5 +123,37 @@ module.exports = {
       res.send({message: e.message}).status(500)
     }
       
-    }
-};
+    },
+  incrementQuantity: async({body}, res) => {
+    let {cardData: {name, cardNumber, quantity}, _id: userId} = body
+    User.findOne({ _id: userId })
+        .elemMatch("cards", {
+          name,
+          cardNumber
+        })
+        .select("cards.$")
+        .exec(async function (err, doc) {
+          if (doc) {
+            console.log("FOUND DOC", doc)
+            doc.cards[0].quantity = doc.cards[0].quantity + 1
+            console.log("DOC AFTER Update", doc)
+            let { cards } = await User.findOne({ _id: userId });
+
+            let cardIndexToBeUpdated = cards.findIndex(
+              (card) =>
+                card.name === name &&
+                card.cardNumber === cardNumber
+            );
+            
+            let updatedList = cards;
+            updatedList[cardIndexToBeUpdated] = doc.cards[0];
+    
+            await User.findOneAndUpdate(
+              { _id: userId },
+              {
+                cards: updatedList,
+              }
+            );
+  }
+        })}
+}

@@ -44,9 +44,16 @@ const AddCardForm = ({setFoundCard}: props) => {
         let {data} = await axios.post('http://localhost:3001/api/card/createCard', {
           data: card
         })
+    
+    const incrementQuantityByOne = async (pokemon: any) => {
+        console.log(pokemon)
+        await axios.post('http://localhost:3001/api/user/incrementQuantity', {
+            cardData: pokemon, _id: currentUser.userId
+        })
+    }
        
         if(data.message) {
-            updateUserCardList(data.cardData)
+            incrementQuantityByOne(data.cardData)
             setFoundCard(data.cardData)
         } else {
             setFoundCard(data)
