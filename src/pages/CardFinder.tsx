@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import AddCardForm from '../components/Form/AddCard'
 import Flex from '../components/Flex'
 import { Card } from '../components/Card'
+import { ExpandedCard } from '../components/Expanded-Card'
 
 export const CardFinder = () => {
   const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
@@ -25,7 +26,7 @@ export const CardFinder = () => {
             ? <div>{results.message}</div>
             : null
           }
-          <Card 
+          <ExpandedCard 
             elementType={results.card?.elementType}
             prefix={results.card?.prefix} 
             suffix={results.card?.suffix} 
