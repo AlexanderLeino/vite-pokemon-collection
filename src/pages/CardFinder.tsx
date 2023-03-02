@@ -8,14 +8,13 @@ import { toast } from 'react-toastify';
 export const CardFinder = () => {
   const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
 
-
   useEffect(() => {
-    if(results.card.name){
-      notify()
+    if(results.message.length > 2){
+      notify(results.message)
     }
   }, [results])
 
-  const notify = () => toast("User has been updated!");
+  const notify = (message: string) => toast(message);
   return (
     <>
       <Flex horizontalChild={"space-x-20"} marginTop='mt-6'>
@@ -26,11 +25,6 @@ export const CardFinder = () => {
         ?
         <Flex flexDirection='flex-col'>
         <>
-          {
-            results.message 
-            ? <div>{results.message}</div>
-            : null
-          }
           <ExpandedCard 
             elementType={results.card?.elementType}
             prefix={results.card?.prefix} 
@@ -43,7 +37,7 @@ export const CardFinder = () => {
             picture={results.card?.picture} 
             price={results.card?.price} 
             tags={results.card?.tags}
-            notify={() => notify()}
+            notify={() => notify(results?.message)}
             getUserCollection={() => null}
           />
         </>

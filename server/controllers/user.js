@@ -157,7 +157,7 @@ module.exports = {
               }
               );
             }     
-            res.send({message: "It appears that this card already exists in your collection but we will add the additional card to teh quantity of said card", card: doc.cards[0]}).status(200)
+            res.send({message: "It appears that this card already exists in your collection but we will add the additional card to the total quantity of said card", card: doc?.cards[0]}).status(200)
         })
 
     } catch (e) {
@@ -165,5 +165,21 @@ module.exports = {
     }
 
     
+      },
+  doesCardExistOnUser: async({body}, res) => {
+    let {userId, name, cardNumber} = body.data
+    User.findOne({ _id: userId })
+    .elemMatch("cards", {
+      name,
+      cardNumber
+    })
+    .select("cards.$")
+    .exec(async function (err, doc) {
+      if (doc) {
+       res.send({result: true})
+      } else {
+        res.send({result: false})
       }
+    });
+  }
 }

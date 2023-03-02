@@ -18,7 +18,6 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     const [displayedQuantity, setDisplayedQuantity] = useState(quantity)
 
     useEffect(() => {
-        console.log('How many times does this re render?')
         if(displayedQuantity != quantity){
             setDisplayedQuantity(quantity)
         }

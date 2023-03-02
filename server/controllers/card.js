@@ -88,7 +88,7 @@ module.exports = {
 
         if (cardData) {
           let response = {
-            cardData,
+            card: cardData,
             message: "This card already exists in the database!",
           };
           res.send(response).status(200);
@@ -108,7 +108,7 @@ module.exports = {
             tags: allTags,
             elementType,
           });
-          res.send(results).status(200);
+          res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
         }
       } else {
         throw new Error(
@@ -116,9 +116,10 @@ module.exports = {
         );
       }
     } catch (e) {
-      res.status(500).send({
-        message: e.message,
-      });
+      console.log("oops an error occcured")
+      res.send({
+        message: "Couldn't find the price for the card you were looking for!",
+      }).status(500);
     }
   },
   findCard: async ({ body }, res) => {

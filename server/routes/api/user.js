@@ -23,4 +23,7 @@ router.route('/deleteCardFromCollection')
 router.route("/incrementQuantity")
     .post(UserController.incrementQuantity)
 
+router.route('/doesCardExistOnUser')
+    .post(UserController.doesCardExistOnUser)
+
 module.exports = router
