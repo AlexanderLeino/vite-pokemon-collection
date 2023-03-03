@@ -53,7 +53,8 @@ module.exports = {
           cardProperty != "cardType" &&
           cardProperty != "userId" &&
           cardProperty != "elementType" &&
-          cardProperty != "tags"
+          cardProperty != "tags" &&
+          cardProperty != "trainerType"
         ) {
           if (cardProperty === "cardNumber") {
             slugArray.push(serializedCardNumber);

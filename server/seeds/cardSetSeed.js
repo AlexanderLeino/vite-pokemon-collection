@@ -588,6 +588,11 @@ const CardSetSeed = [
     },
     {
         name: "Promo",
+    },
+    {
+        name: "Shining Fates",
+        year: 2021,
+        totalNumberOfCardsInSet: 122
     }
 
 
