@@ -1,12 +1,13 @@
 
 interface props {
     children: string,
-    className?: string
+    fontSize?: string,
+    fontColor?: string,
 }
 
-const Label = ({children} :props) => {
+const Label = ({children, fontSize, fontColor} :props) => {
   return (
-    <div className='text-left w-full'>{children}</div>
+    <div className={`${fontSize} ${fontColor}`}>{children}</div>
   )
 }
 

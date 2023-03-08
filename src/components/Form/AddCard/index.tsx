@@ -17,7 +17,6 @@ type props = {
 
 const AddCardForm = ({ setResults, notify }: props) => {
     const { currentUser } = useAuthContext()
-    const [isLoading, setIsLoading] = useState(false)
     const [createCard, setCreateCard] = useState(false)
     const [card, setCard] = useState({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
 

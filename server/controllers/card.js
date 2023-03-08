@@ -117,7 +117,6 @@ module.exports = {
         );
       }
     } catch (e) {
-      console.log("oops an error occcured")
       res.send({
         message: "Couldn't find the price for the card you were looking for!",
       }).status(500);
