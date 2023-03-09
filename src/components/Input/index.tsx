@@ -17,7 +17,7 @@ const Input = ({onChange, name, label, type = 'string', required = false, fontSi
 
   return (
     <Flex justifyContent="justify-start" flexDirection="flex-col">
-        <Label labelColor={labelColor} fontSize={fontSize} margin={margin}>{label}</Label>
+        <Label required={required} labelColor={labelColor} fontSize={fontSize} margin={margin}>{label}</Label>
         { 
           required ?  
           <input name={name} className={`${width} valid:border-green-600 ${fontSize} h-fit focus:invalid:border-red-500 border-2 outline-none border-slate-300 rounded-md p-1`} onChange={onChange} type={type} required /> 

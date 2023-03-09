@@ -12,7 +12,6 @@ const ops = [
 const ReactSelect = () =>{ 
   const [selectedOptions, setSelectedOptions] = useState(ops)
   const handleSelectChange = (e: any) => {
-    console.log("Something Changed", e)
     setSelectedOptions(e)
   }
 

@@ -37,9 +37,12 @@ module.exports = {
         })
 
       }
-      if (cardNumber[0] === "0") {
+      if (cardNumber[0] === "0" && cardNumber[1] === "0") {
+        serializedCardNumber = cardNumber.split("").slice(2).join("");
+      } else if(cardNumber[0] === "0") {
         serializedCardNumber = cardNumber.split("").slice(1).join("");
-      } else {
+      }
+      else {
         serializedCardNumber = cardNumber;
       }
       let cardSetSlug = slugify(cardSet).toLowerCase();

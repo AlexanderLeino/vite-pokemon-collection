@@ -540,6 +540,11 @@ const CardSets = [
         totalNumberOfCardsInSet: 284
     },
     {
+        name: "Darkness Ablaze", 
+        year: 2020,
+        totalNumberOfCardsInSet: 201
+    },
+    {
         name: 'Celebrations', 
         year: 2021,
         totalNumberOfCardsInSet: 50

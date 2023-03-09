@@ -8,6 +8,7 @@ import CardTypeArray from "../../../data/CardType"
 import SubTypeArray from "../../../data/TrainerTypes"
 import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from "../../../context/AuthCtx"
+import { Layout } from "../../Layout"
 import axios from "axios"
 
 type props = {
@@ -33,7 +34,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
     }
 
     const updateUserCardList = async (pokemon: any) => {
-        let results = await axios.post('http://localhost:3001/api/user/updateCardList', {
+        await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: { cardData: pokemon, userId: currentUser.userId }
         })
     }
@@ -46,7 +47,6 @@ const AddCardForm = ({ setResults, notify }: props) => {
         setResults({card: foundCard, message})
         if(foundCard){
             let {data: {result}} = await doesCardExistOnUser(foundCard)
-            console.log("SO DOES IT", result)
             if(result){
                 incrementQuantityByOne(foundCard)
             } else {
@@ -76,30 +76,38 @@ const AddCardForm = ({ setResults, notify }: props) => {
 
     return (
         <>
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                setCard({ ...card, tags: [card.suffix, card.elementType, card.cardSet, card.name] })
-                setCreateCard(true)
-            }}>
+        <Layout>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    setCard({ ...card, tags: [card.suffix, card.elementType, card.cardSet, card.name] })
+                    setCreateCard(true)
+                }}
+            >
                 <Flex flexDirection="flex-col">
-                    <Input onChange={handleChange} name='prefix' label="Prefix" type='text' />
-                    <Input name='name' label="Name" onChange={handleChange} type='text' />
-                    <Input name='suffix' label="Suffix" onChange={handleChange} type='text' />
-                    <Input name='cardNumber' label='Card Number / Secret Number' onChange={handleChange} type='string' />
-                    <Select name='cardType' label='Card Type' data={CardTypeArray} handleChange={handleChange} />
-                    <Select name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange} />
+                    <div className="grid grid-cols-3 space-x-3 w-fit">
+                        <Input onChange={handleChange} name='prefix' label="Prefix" type='text' fontSize="text-md"  labelColor="text-orange-900" />
+                        <Input name='name' label="Name" onChange={handleChange} type='text' fontSize="text-md" labelColor="text-orange-900" required />
+                        <Input name='suffix' label="Suffix" onChange={handleChange} fontSize="text-md" labelColor="text-orange-900" type='text' />
+                    </div>
+                    
+                    <Input name='cardNumber' label='Card Number / Secret Number' fontSize="text-md" labelColor="text-orange-900" onChange={handleChange} type='string' required />
+                    
+                    <Select name='cardType' label='Card Type' fontSize="text-md" labelColor="text-orange-900" data={CardTypeArray} handleChange={handleChange} />
+                    
+                    <Select fontSize="text-md" labelColor="text-orange-900"  name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange} />
                     {
                         card.cardType === 'Trainer'
                             ?
-                            <Select handleChange={handleChange} data={SubTypeArray} name='trainerType' label='Trainer Type' />
+                            <Select handleChange={handleChange} data={SubTypeArray} name='trainerType' label='Trainer Type' fontSize="text-md" labelColor="text-orange-900"  />
                             :
                             card.cardType === 'Pokemon'
                                 ?
-                                <Select handleChange={handleChange} data={ElementTypesArray} label='Element Type' name='elementType' />
+                                <Select handleChange={handleChange} data={ElementTypesArray} fontSize="text-md" labelColor="text-orange-900"  label='Element Type' name='elementType' />
                                 :
                                 null
                     }
-                    <Input name='artist' label='Artist' onChange={handleChange} type='string' />
+                    <Input name='artist' fontSize="text-md" labelColor="text-orange-900"  label='Artist' required onChange={handleChange} type='string' />
                     <Flex justifyContent="justify-center" width="w-full">
                         <Button margin="mt-3" onClick={() => {
                             setCard({ ...card, tags: [card.suffix, card.elementType, card.cardSet, card.name] })
@@ -108,6 +116,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     </Flex>
                 </Flex>
             </form>
+        </Layout>
 
         </>
     )

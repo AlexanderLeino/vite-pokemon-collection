@@ -5,6 +5,7 @@ import { useAuthContext } from '../context/AuthCtx'
 import { Card } from '../components/Card'
 import { Notification } from '../components/Notification'
 import { toast } from 'react-toastify';
+import { Layout } from '../components/Layout'
 
 const CardVault = () => {
   const [userCollection, setUserCollection] =  useState([{name: "Rayquaza", prefix: '', suffix: 'VMAX', cardType: 'Pokemon', artist: 'Unknown', cardNumber: '218', picture: 'https://commondatastorage.googleapis.com/images.pricecharting.com/b49dff0e72cbc9cb4be78a3b2e9fccc5edc4c0375ebd2d26f166f2dd4ecf2d12/240.jpg', quantity: 1, price: 266.24, elementType: 'Dragon', tags: ['Tags']}])
@@ -26,6 +27,7 @@ const CardVault = () => {
 
   return (
     <>
+    <Layout>
       <Flex justifyContent='justify-end' width='w-full'>
         <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue?.toFixed(2)}</div>
       </Flex>
@@ -40,6 +42,7 @@ const CardVault = () => {
         
       </Flex>
       <Notification />
+    </Layout>
     </>
   )
 }
