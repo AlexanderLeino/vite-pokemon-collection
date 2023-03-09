@@ -8,7 +8,7 @@ import stockImg from '../../../assets/stockImg.svg'
 const localStorage = window.localStorage
 export const CreateAccount = () => {
 
-  const [accountInfo, setAccountInfo] = useState({ userName: '', password: '', firstName: '', lastName: '', email: '' })
+  const [accountInfo, setAccountInfo] = useState({ userName: "", password: '', email: '' })
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -22,16 +22,20 @@ export const CreateAccount = () => {
     setAccountInfo({ ...accountInfo, [e.target.name]: e.target.value })
   };
   return (
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <Flex justifyContent='justify-center' alignItems='items-center' flexDirection='flex-col' borderRadius='rounded-md'>
-          <div className='text-3xl'>Create An Account</div>
-          <Input label='Username' type='string' name={'userName'} onChange={handleChange} />
-          <Input label='Password' type='string' name={'password'} onChange={handleChange} />
-          <Input label='Email' type='string' name={'email'} onChange={handleChange} />
-          <Input label='First Name' type='string' name={'firstName'} onChange={handleChange} />
-          <Input label='Last Name' type='string' name={'lastName'} onChange={handleChange} />
-          <Button onClick={handleSubmit} margin='mt-3'>Submit</Button>
+    <div className='flex flex-col justify-start w-full bg-orange-300 items-center rounded-tl-3xl rounded-bl-3xl h-full' >
+      <form onSubmit={(e) => handleSubmit(e)} className='h-fit flex flex-col items-center justify-center w-full '>
+        <Flex flexDirection='flex-col' alignItems='items-center' justifyContent='justify-center' height='h-full'>
+          <div className='font-bold text-6xl mt-40 text-orange-500'>Get started</div>
+          <div className='mt-2 text-orange-400 font-bold text-2xl'>Create your account now</div>
+        </Flex>
+        <Flex justifyContent='justify-center' alignItems='items-center' flexDirection='flex-col' borderRadius='rounded-md' marginTop='mt-5' height='h-full'>
+          <Input label='Email' type='email' name={'email'} margin={'mt-2'}  required onChange={handleChange} />
+          <Input label='Username' type='string' name={'userName'} margin={'mt-5'}  width={'w-full'} required onChange={handleChange} />
+          <Input label='Password' name={'password'} width={'w-full'} margin={'mt-5'}  type='password' required onChange={handleChange} />
+          <Button onClick={handleSubmit} margin='mt-5' width='w-full' border='border-none'>Submit</Button>
+          <div className='mt-2 text-orange-500'>Have an account?<a className='ml-2 font-bold text-orange-500' href='/login'>Login</a></div>
         </Flex>
       </form>
+    </div>
   )
 }

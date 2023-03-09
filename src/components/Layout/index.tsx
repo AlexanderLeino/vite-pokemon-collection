@@ -7,6 +7,6 @@ type props = {
 
 export const Layout = ({children}: props) => {
   return (
-    <div className='mx-4'>{children}</div>
+    <div className='mx-0'>{children}</div>
   )
 }

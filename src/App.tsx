@@ -21,7 +21,6 @@ function App() {
   return (
     <>
     <NavBar />
-     <Layout >
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/profile/:id' element={<Profile />}/>
@@ -30,7 +29,7 @@ function App() {
           <Route path='/card-finder' element={<CardFinder />} />
         </Routes>
       <Footer />
-     </Layout>
+     
     </>
   )
 }

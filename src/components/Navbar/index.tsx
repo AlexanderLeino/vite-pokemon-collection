@@ -15,7 +15,7 @@ export const NavBar = () => {
         <Flex justifyContent='space-around' width='w-full'>
           <Flex alignItems='items-center'>
             <a href='/'>
-            <div className='font-bold text-orange-500 text-3xl ml-4'>Pokemon Portfolio</div>
+              <div className='font-bold text-orange-500 text-3xl ml-4'>Pokemon Portfolio</div>
             </a>
           </Flex>
           {width <= 875 ? <MiniNavbar /> : <Flex alignItems='items-center' justifyContent='justify-end'>
@@ -40,7 +40,7 @@ export const NavBar = () => {
                 <Tab to='card-finder'>Card Finder</Tab>
                 <Tab to='login'>Login</Tab>
                 <Tab to='signup'>
-                  <Button>Sign Up </Button>
+                  <Button border='border-none'>Sign Up </Button>
                 </Tab>
 
               </>

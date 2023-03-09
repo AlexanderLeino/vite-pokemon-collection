@@ -5,15 +5,26 @@ interface props {
     name: string,
     label: string,
     type: string,
+    required?: boolean,
+    fontSize?: string,
+    width?: string,
+    labelColor?: string,
+    margin?: string,
 }
 
 
-const Input = ({onChange, name, label, type} : props) => {
+const Input = ({onChange, name, label, type = 'string', required = false, fontSize = 'text-base', width = 'w-fit', labelColor = 'text-orange-500', margin} : props) => {
 
   return (
     <Flex justifyContent="justify-start" flexDirection="flex-col">
-      <Label>{label}</Label>
-      <input name={name} className="max-w-fit focus-visible: border-solid border-2 rounded-md border-slate-500 hover:border-orange-500 p-1 outline-none focus-visible:outline-none focus-visible:border-orange-500 " onChange={onChange} type={type} />
+        <Label labelColor={labelColor} fontSize={fontSize} margin={margin}>{label}</Label>
+        { 
+          required ?  
+          <input name={name} className={`${width} valid:border-green-600 ${fontSize} h-fit focus:invalid:border-red-500 border-2 outline-none border-slate-300 rounded-md p-1`} onChange={onChange} type={type} required /> 
+          : 
+          <input name={name} className={`${width} border-2 outline-none ${fontSize} h-fit border-slate-300 rounded-md p-1`} onChange={onChange} type={type} /> 
+        }
+      
     </Flex>
   );
 };
