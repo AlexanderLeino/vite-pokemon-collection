@@ -97,6 +97,11 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     
                     <Select fontSize="text-md" labelColor="text-orange-900"  name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange} />
                     {
+                        card.cardSet === 'Promo' ? 
+                        <Input onChange={handleChange} name='year' labelColor="text-orange-900" fontSize="text-md" label="Year" type="text"/>
+                        : null
+                    }
+                    {
                         card.cardType === 'Trainer'
                             ?
                             <Select handleChange={handleChange} data={SubTypeArray} name='trainerType' label='Trainer Type' fontSize="text-md" labelColor="text-orange-900"  />
@@ -107,10 +112,16 @@ const AddCardForm = ({ setResults, notify }: props) => {
                                 :
                                 null
                     }
+                   
                     <Input name='artist' fontSize="text-md" labelColor="text-orange-900"  label='Artist' required onChange={handleChange} type='string' />
                     <Flex justifyContent="justify-center" width="w-full">
                         <Button margin="mt-3" onClick={() => {
-                            setCard({ ...card, tags: [card.suffix, card.elementType, card.cardSet, card.name] })
+                            if(card?.suffix) {
+                                setCard({ ...card, tags: [card?.suffix, card.elementType, card.cardSet, card.name] })
+                            } else {
+                                setCard({ ...card, tags: [card.elementType, card.cardSet, card.name] })
+
+                            }
                             setCreateCard(true)
                         }}>Submit</Button>
                     </Flex>

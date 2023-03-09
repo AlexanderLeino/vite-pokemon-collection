@@ -19,8 +19,12 @@ module.exports = {
         artist,
         cardType,
         tags,
+        year: enteredPromoYear,
         elementType,
       } = body.data;
+
+      console.log("THIS YEAR EXIST ON THIS REQ", enteredPromoYear)
+
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix
       if(prefix){
@@ -57,7 +61,8 @@ module.exports = {
           cardProperty != "userId" &&
           cardProperty != "elementType" &&
           cardProperty != "tags" &&
-          cardProperty != "trainerType"
+          cardProperty != "trainerType" &&
+          cardProperty != "year"
         ) {
           if (cardProperty === "cardNumber") {
             slugArray.push(serializedCardNumber);
@@ -98,7 +103,12 @@ module.exports = {
           res.send(response).status(200);
         } else {
           let { _id, year } = await CardSet.findOne({ name: cardSet });
-          let allTags = [...tags, year];
+          let allTags = []
+          if(cardSet === "Promo"){
+            allTags = [...tags, enteredPromoYear];
+          } else {
+            allTags = [...tags, year];
+          }
           let results = await Card.create({
             name,
             suffix: upperCasedSuffix,

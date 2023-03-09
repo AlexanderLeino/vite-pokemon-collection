@@ -29,7 +29,7 @@ export const NavBar = () => {
                 <Tab to={'card-vault'}>Card Vault</Tab>
                 <Tab to='signup'>
 
-                  <Button onClick={() => {
+                  <Button border='border-0' onClick={() => {
                     AuthService.logout()
                     setCurrentUser({ userId: '', userName: '', email: '', iat: 0, exp: 0 })
                   }}>Logout</Button>
