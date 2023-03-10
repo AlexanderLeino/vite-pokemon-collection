@@ -6,6 +6,7 @@ import Label from '../../label'
 import { loginUserState } from '../../../interfaces/form-states'
 import axios from 'axios'
 import AuthService from '../../../utlis/Auth'
+import { Layout } from '../../Layout'
 import { useAuthContext } from '../../../context/AuthCtx'
 export const LoginForm = () => {
   let Auth = useAuthContext()
@@ -24,13 +25,16 @@ export const LoginForm = () => {
     setLoginInfo({...loginInfo, [e.target.name]: e.target.value})
   };
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
-    <Flex justifyContent='justify-center'  alignItems='items-center' flexDirection='flex-col '>
-    <div>Log Into An Acccount!</div>
-      <Input label='Username:' name={'userName'} onChange={handleChange} type='text'/>
-      <Input label='Password'name={'password'} onChange={handleChange} type='text'/>
-      <Button margin='mt-3' onClick={handleSubmit}>Submit</Button>
-    </Flex>
-</form>
+  <Flex width='w-full' height='h-full' backgroundColor='bg-orange-300' justifyContent='justify-center'>
+    <form className='mt-20' onSubmit={(e) => handleSubmit(e)}>
+      <Flex justifyContent='justify-center'  alignItems='items-center' flexDirection='flex-col'>
+        <div className='text-orange-500 font-bold text-7xl'>Welcome back</div>
+        <div className='text-orange-400 mt-2 font-bold'>Please enter your creditials to access your portfolio</div>
+        <Input margin='mt-3' label='Username:' name={'userName'} onChange={handleChange} type='text'/>
+        <Input margin='mt-3' label='Password'name={'password'} onChange={handleChange} type='text'/>
+        <Button border='border-0' width='w-3/5' margin='mt-5' onClick={handleSubmit}>Submit</Button>
+      </Flex>
+    </form>
+  </Flex>
   )
 }

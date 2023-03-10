@@ -13,9 +13,10 @@ const CardVault = () => {
   const {currentUser} = useAuthContext()
   const notify = () => toast("User has been Updated!")
   const getUserCollection = async () => {
-    let {data: {cardCollection, portfolioValue, tags}} = await axios.post('http://localhost:3001/api/user/userCollection', {
+    let {data: {cardCollection, portfolioValue}} = await axios.post('http://localhost:3001/api/user/userCollection', {
       data: currentUser.userId
     })
+    console.log("USER COLLECTION CALLED", portfolioValue)
     setPortValue(portfolioValue)
     setUserCollection(cardCollection)
   }

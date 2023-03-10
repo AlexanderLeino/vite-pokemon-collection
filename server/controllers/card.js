@@ -1,11 +1,10 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
-const { default: slugify } = require("slugify");
+const  slugify  = require("slugify");
 const { CardSet } = require("../models/CardSet");
 const { Card } = require("../models/Card");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
-
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
@@ -23,10 +22,8 @@ module.exports = {
         elementType,
       } = body.data;
 
-      console.log("THIS YEAR EXIST ON THIS REQ", enteredPromoYear)
-
       let upperCasedSuffix = suffix.toUpperCase();
-      let serializedPrefix
+      let serializedPrefix = ''
       if(prefix){
         let arrayedPrefix = prefix.split(' ')
         let resultsArray = []
@@ -71,7 +68,20 @@ module.exports = {
           }
         }
       }
-      let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
+      let slugifiedString  
+      if(name.includes("&")) {
+        let nameSlug = name.trim().split(' ').join("-").toLowerCase()
+        if(prefix && suffix){
+          slugifiedString = `${prefix} ${nameSlug} ${suffix} ${cardNumber}`.replace(' ', '-').toLowerCase()
+        } else if (prefix) {
+          slugifiedString = `${prefix} ${nameSlug} ${cardNumber}`.replace(' ', '-').toLowerCase()
+        } else if (suffix) {
+          console.log("MAKING IT TO SUFFIX")
+          slugifiedString = `${nameSlug} ${suffix}-${cardNumber}`.trim().replace(' ', '-').toLowerCase()
+        } 
+      } else {
+        slugifiedString = slugify(slugArray.join(" ").toLowerCase());
+      }
       console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
       let response = await axios.get(
         `${BASE_URL}${cardSetSlug}/${slugifiedString}`
@@ -87,8 +97,9 @@ module.exports = {
           .trim()
           .slice(1)
       );
+      console.log("PRICE", price)
       let picture = $('div[class="cover"] > img').attr("src");
-
+        console.log("PICTURE", picture)
       if (!!price && !!picture) {
         let cardData = await Card.findOne({
           name,
@@ -109,6 +120,7 @@ module.exports = {
           } else {
             allTags = [...tags, year];
           }
+         
           let results = await Card.create({
             name,
             suffix: upperCasedSuffix,
@@ -122,6 +134,7 @@ module.exports = {
             tags: allTags,
             elementType,
           });
+          
           res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
         }
       } else {
@@ -130,6 +143,7 @@ module.exports = {
         );
       }
     } catch (e) {
+      console.log("ERROR MESSAGe", e)
       res.send({
         message: "Couldn't find the price for the card you were looking for!",
       }).status(500);

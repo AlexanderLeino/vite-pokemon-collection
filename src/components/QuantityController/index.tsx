@@ -44,6 +44,7 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     }
 
     const submitQuanityChange = async () => {
+        console.log("Quantity Change Submitted")
         await axios.post("http://localhost:3001/api/user/updateCardList", {
             data: { quantityValue: displayedQuantity, userId: currentUser.userId, cardData: { cardName, cardNumber } },
         })

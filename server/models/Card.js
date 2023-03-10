@@ -5,7 +5,7 @@ const CardSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        maxlength: 25,
+        maxlength: 35,
     },
     prefix: {
         type: String,
