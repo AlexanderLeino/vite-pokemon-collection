@@ -17,15 +17,12 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     const { currentUser } = useAuthContext()
     const [displayedQuantity, setDisplayedQuantity] = useState(quantity)
 
-    useEffect(() => {
-        if(displayedQuantity != quantity){
-            setDisplayedQuantity(quantity)
-        }
-    }, [quantity])
+
     
     useEffect(() => {
+        console.log("QUANITYT", quantity, "DISPLAYED QUANTITY", displayedQuantity)
         if(quantity != displayedQuantity) {
-            let timer = setTimeout(submitQuanityChange, 3000)
+            let timer = setTimeout(submitQuanityChange, 500)
             return () => {
                 clearTimeout(timer)
             }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import Flex from '../Flex'
 import { QuantityController } from '../QuantityController'
 type pokemonObj = {
@@ -15,8 +15,10 @@ type pokemonObj = {
   elementType?: string,
   getUserCollection: () => void,
   notify: () => void
- 
+  
 } 
+
+
 
 const getBackgroundColor = (elementalType: string) => {
   switch(elementalType){

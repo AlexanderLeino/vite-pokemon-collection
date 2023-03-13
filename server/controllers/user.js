@@ -69,6 +69,7 @@ module.exports = {
             );
           }
         });
+        console.log("SEENDING BACK")
       res.send({ message: "User was successfully updated! :)" }).status(200);
     } catch (e) {
       res.send({ message: e.message }).status(500);

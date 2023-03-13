@@ -55,6 +55,7 @@ UserSchema.pre('save', function(next) {
 })
 
 UserSchema.virtual('portfolio').get(function(){
+   
     return totalValue = this.cards.reduce((accumulator, currentValue) => {
         return accumulator + (currentValue.price * currentValue.quantity)
     },0)   
