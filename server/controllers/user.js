@@ -31,6 +31,7 @@ module.exports = {
   },
   updateCardList: async ({ body }, res) => {
     try {
+      let result
       let { cardData, userId, quantityValue } = body.data;
       User.findOne({ _id: userId })
         .elemMatch("cards", {
@@ -41,7 +42,6 @@ module.exports = {
         .exec(async function (err, doc) {
           if (doc) {
             doc.cards[0].quantity = quantityValue;
-          
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
@@ -52,25 +52,24 @@ module.exports = {
 
             let updatedList = cards;
             updatedList[cardIndexToBeUpdated] = doc.cards[0];
-            await User.findOneAndUpdate(
+              result = await User.findOneAndUpdate(
               { _id: userId },
               {
                 cards: updatedList,
               }
             );
           } else {
-            await User.findOneAndUpdate(
+           result = await User.findOneAndUpdate(
               { _id: userId },
               {
                 $push: {
                   cards: cardData,
                 },
               }
-            );
-          }
-        });
-        console.log("SEENDING BACK")
-      res.send({ message: "User was successfully updated! :)" }).status(200);
+              );
+            }
+            res.send( result ).status(200);
+          });
     } catch (e) {
       res.send({ message: e.message }).status(500);
     }
@@ -79,21 +78,8 @@ module.exports = {
     try {
       let { data: userId } = body;
       let results = await User.findOne({ _id: userId }).select('cards')
-      let tagArray = []
 
-     results.cards.forEach((card) => {
-        
-        card.tags.forEach((tag) => {
-          tagArray.push(tag)
-        })
-      })  
-      let uniqueTagArray = [...new Set(tagArray)]
-      let tagsArray = uniqueTagArray.map((tag) => {
-       
-        return {value: tag, label: tag}
-      })
-   
-      res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio, tags: tagsArray});
+      res.status(200).send({cardCollection: results.cards, portfolioValue: results.portfolio});
     } catch (e) {
       res.status(500).send({ message: e.message });
     }

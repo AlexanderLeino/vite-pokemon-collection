@@ -8,7 +8,6 @@ interface props {
 }
 
 const Label = ({children, fontSize = 'text-base', labelColor = 'text-orange-400', margin, required = false} :props) => {
-  console.log(required)
   return (
     <>
       {

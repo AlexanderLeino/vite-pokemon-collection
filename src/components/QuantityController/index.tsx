@@ -16,18 +16,17 @@ type props = {
 export const QuantityController = ({ getUserCollection, cardName, cardNumber, quantity, notify}: props) => {
     const { currentUser } = useAuthContext()
     const [displayedQuantity, setDisplayedQuantity] = useState(quantity)
-
+   
 
     
     useEffect(() => {
-        console.log("QUANITYT", quantity, "DISPLAYED QUANTITY", displayedQuantity)
         if(quantity != displayedQuantity) {
-            let timer = setTimeout(submitQuanityChange, 500)
+            let timer = setTimeout(submitQuanityChange, 250)
             return () => {
                 clearTimeout(timer)
             }
         }
-    }, [displayedQuantity])
+    }, [displayedQuantity, quantity])
 
 
 
@@ -42,10 +41,10 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
 
     const submitQuanityChange = async () => {
         console.log("Quantity Change Submitted")
-        await axios.post("http://localhost:3001/api/user/updateCardList", {
+        let results = await axios.post("http://localhost:3001/api/user/updateCardList", {
             data: { quantityValue: displayedQuantity, userId: currentUser.userId, cardData: { cardName, cardNumber } },
         })
-    
+        console.log("RESULTS", results)
         getUserCollection()
         notify()
         
