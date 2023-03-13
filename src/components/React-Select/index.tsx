@@ -1,40 +1,59 @@
-import React, {useState, useEffect} from 'react'
-import Select from 'react-select'
-import Flex from '../Flex'
+import React, { KeyboardEventHandler, useEffect } from 'react';
 
-const ops = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
+import CreatableSelect from 'react-select/creatable';
 
+const components = {
+  DropdownIndicator: null,
+};
 
-const ReactSelect = () =>{ 
-  const [selectedOptions, setSelectedOptions] = useState(ops)
-  const handleSelectChange = (e: any) => {
-    setSelectedOptions(e)
-  }
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
 
+type props = {
+  setFilterCriteria: (criteria : string[]) => void
+}
 
+const createOption = (label: string) => ({
+  label,
+  value: label,
+});
 
-return (
-  <>
-    <Select options={ops} isMulti={true} defaultValue={ops} onChange={(e) => handleSelectChange(e)} />
-    <div className='mt-3'>
-      
-        <Flex flexDirection='flex-col'>
-        {selectedOptions.map((choice) => {
-          return <>
-          <Flex>
-             
-              <div className='ml-3'>Name: {choice.value}</div>
-          </Flex>
-          </>
-        })}
-        </Flex>
-      
-    </div>
-  </>
-)}
+export default ({setFilterCriteria}: props) => {
+  const [inputValue, setInputValue] = React.useState('');
+  const [value, setValue] = React.useState<readonly Option[]>([]);
 
-export default ReactSelect
+  useEffect(() => {
+    console.log('Input Value', value)
+    let valueArray = value 
+    let newValue = valueArray.map((obj) => obj.value )
+    setFilterCriteria(newValue)
+  }, [value])
+
+  const handleKeyDown: KeyboardEventHandler = (event) => {
+    if (!inputValue) return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        setValue((prev) => [...prev, createOption(inputValue)]);
+        setInputValue('');
+        event.preventDefault();
+    }
+  };
+
+  return (
+    <CreatableSelect
+      components={components}
+      inputValue={inputValue}
+      isClearable
+      isMulti
+      menuIsOpen={false}
+      onChange={(newValue) => setValue(newValue)}
+      onInputChange={(newValue) => setInputValue(newValue)}
+      onKeyDown={handleKeyDown}
+      placeholder="Type something and press enter..."
+      value={value}
+    />
+  );
+};

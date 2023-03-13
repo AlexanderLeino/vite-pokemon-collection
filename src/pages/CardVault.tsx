@@ -7,10 +7,11 @@ import { Notification } from '../components/Notification'
 import { toast } from 'react-toastify';
 import { Layout } from '../components/Layout'
 import { IPokemon } from '../interfaces/IPokemon'
+import { FilterBar } from '../components/Filter-Bar'
 const CardVault = () => {
   const [userCollection, setUserCollection] =  useState<any[]>([])
   const [filteredCollection, setFilteredCollection] = useState<any[]>([])
-  const [filterCriteria, setFilterCriteria] = useState(['VMAX'])
+  const [filterCriteria, setFilterCriteria] = useState([])
   const [portValue, setPortValue] = useState(0)
   const {currentUser} = useAuthContext()
 
@@ -31,7 +32,6 @@ const CardVault = () => {
           return false
       }
   })
-  console.log("RESULTS", results)
   return results
 }
 
@@ -41,7 +41,6 @@ useEffect(() => {
 
 useEffect(() => {
   let filteredSelection = userCollection.filter(pokemon => {
-    console.log("POKEMONNNN", pokemon)
     if(filterUsersCollection(pokemon)) {
       return true
   } else {
@@ -52,20 +51,25 @@ useEffect(() => {
   setFilteredCollection(filteredSelection)
 }, [userCollection, filterCriteria])
 
-
   return (
     <>
     <Layout>
       <Flex justifyContent='justify-end' width='w-full'>
         <div className="font-bold text-2xl text-orange-100 bg-orange-600 p-2">Current Value Of ${portValue?.toFixed(2)}</div>
       </Flex>
+      <FilterBar setFilterCriteria={setFilterCriteria}/>
      
       <Flex horizontalChild="space-x-4">
-
         {
+          filterCriteria.length > 0 
+          ? 
           filteredCollection.map((card) => {
             return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags} notify={notify}/>
           })
+          : 
+          userCollection.map((card) => {
+          return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags} notify={notify}/>
+        })
         }
         
       </Flex>
