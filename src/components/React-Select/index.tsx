@@ -1,7 +1,7 @@
 import React, { KeyboardEventHandler, useEffect } from 'react';
 
 import CreatableSelect from 'react-select/creatable';
-
+import './styles.css'
 const components = {
   DropdownIndicator: null,
 };
@@ -52,8 +52,15 @@ export default ({setFilterCriteria}: props) => {
       onChange={(newValue) => setValue(newValue)}
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
-      placeholder="Type something and press enter..."
+    placeholder={`Quickly filter through your Pokemon by using their tags. Enter a tag and hit enter! Enter as many tags as your heart desires to obtain the most optimal results!`}
       value={value}
+      styles={{
+        control: (baseStyles, state) => ({
+          ...baseStyles,
+          borderRadius: '20px',
+        })
+      }}
+      className='react-select-container react-select-control'
     />
   );
 };
