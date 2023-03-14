@@ -21,7 +21,7 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     
     useEffect(() => {
         if(quantity != displayedQuantity) {
-            let timer = setTimeout(submitQuanityChange, 250)
+            let timer = setTimeout(submitQuanityChange, 1000)
             return () => {
                 clearTimeout(timer)
             }

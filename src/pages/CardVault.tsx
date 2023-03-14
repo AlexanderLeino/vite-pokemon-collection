@@ -24,14 +24,17 @@ const CardVault = () => {
     setUserCollection(cardCollection)
   }
   const filterUsersCollection = (pokemon: IPokemon) => {
-    let results = pokemon.tags.some(tag => {
-      let founded = filterCriteria.find(element => element === tag)
-      if(founded) {
-          return true
-      } else {
-          return false
-      }
+
+  let results = filterCriteria.every((criteria) => {
+  
+    let founded = pokemon.tags.find(tag => tag === criteria)
+    if(founded) {
+      return true
+    } else {
+      return false
+    }
   })
+
   return results
 }
 
