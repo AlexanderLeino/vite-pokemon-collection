@@ -80,7 +80,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    setCard({ ...card, tags: [card.suffix, card.elementType, card.cardSet, card.name] })
+                    setCard({ ...card, tags: [card.prefix, card.suffix, card.elementType, card.cardSet, card.name] })
                     setCreateCard(true)
                 }}
             >

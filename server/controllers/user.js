@@ -115,7 +115,7 @@ module.exports = {
 
     try {
       let {cardData: {name, cardNumber}, _id: userId} = body
-    User.findOne({ _id: userId })
+      User.findOne({ _id: userId })
         .elemMatch("cards", {
           name,
           cardNumber
@@ -123,9 +123,9 @@ module.exports = {
         .select("cards.$")
         .exec(async function (err, doc) {
           if (doc) {
-
-            doc.cards[0].quantity = doc.cards[0].quantity + 1
-          
+            let cardToBeUpdated = doc.cards[0]
+            cardToBeUpdated.quantity++
+            console.log(cardToBeUpdated.quantity)
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
@@ -133,18 +133,17 @@ module.exports = {
                 card.name === name &&
                 card.cardNumber === cardNumber
             );
-            
             let updatedList = cards;
-            updatedList[cardIndexToBeUpdated] = doc.cards[0];
-    
-            await User.findOneAndUpdate(
-              { _id: userId },
+            updatedList[cardIndexToBeUpdated] = cardToBeUpdated;
+              console.log("UPDATED LIST", updatedList)
+            let results = await User.findByIdAndUpdate(userId,
               {
                 cards: updatedList,
               }
               );
-            }     
-            res.send({message: "It appears that this card already exists in your collection but we will add the additional card to the total quantity of said card", card: doc?.cards[0]}).status(200)
+              console.log("RESULTSSSS", results) 
+              res.send({message: "It appears that this card already exists in your collection but we will add the additional card to the total quantity of said card", card: doc?.cards[0]}).status(200)
+            }    
         })
 
     } catch (e) {

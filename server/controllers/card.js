@@ -120,9 +120,9 @@ module.exports = {
           let { _id, year } = await CardSet.findOne({ name: cardSet });
           let allTags = []
           if(cardSet === "Promo"){
-            allTags = [...tags, enteredPromoYear];
+            allTags = [...tags, serializedPrefix, enteredPromoYear];
           } else {
-            allTags = [...tags, year];
+            allTags = [...tags, serializedPrefix, year];
           }
          
           let results = await Card.create({
