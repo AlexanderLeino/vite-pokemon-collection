@@ -21,7 +21,7 @@ module.exports = {
         year: enteredPromoYear,
         elementType,
       } = body.data;
-
+     
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix = ''
       if(prefix){
@@ -47,6 +47,10 @@ module.exports = {
         serializedCardNumber = cardNumber;
       }
       let cardSetSlug = slugify(cardSet).toLowerCase();
+
+      if(cardSetSlug.includes("pokemon")){
+          cardSetSlug = cardSetSlug.split('-').slice(1).join('')
+      }
       let slugArray = [];
 
       for (const cardProperty in body.data) {
@@ -97,9 +101,9 @@ module.exports = {
           .trim()
           .slice(1)
       );
-      console.log("PRICE", price)
+     
       let picture = $('div[class="cover"] > img').attr("src");
-        console.log("PICTURE", picture)
+        
       if (!!price && !!picture) {
         let cardData = await Card.findOne({
           name,
