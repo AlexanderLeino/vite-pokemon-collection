@@ -8,20 +8,24 @@ import { toast } from 'react-toastify';
 import { Layout } from '../components/Layout'
 import { IPokemon } from '../interfaces/IPokemon'
 import { FilterBar } from '../components/Filter-Bar'
+import { Spinner } from '../components/Spinner'
 const CardVault = () => {
   const [userCollection, setUserCollection] = useState<any[]>([])
   const [filteredCollection, setFilteredCollection] = useState<any[]>([])
   const [filterCriteria, setFilterCriteria] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const [portValue, setPortValue] = useState(0)
   const { currentUser } = useAuthContext()
 
   const notify = () => toast("User has been Updated!")
   const getUserCollection = async () => {
+    setIsLoading(true)
     let { data: { cardCollection, portfolioValue } } = await axios.post('http://localhost:3001/api/user/userCollection', {
       data: currentUser.userId
     })
     setPortValue(portfolioValue)
     setUserCollection(cardCollection)
+    setIsLoading(false)
   }
   const filterUsersCollection = (pokemon: IPokemon) => {
 
@@ -53,6 +57,14 @@ const CardVault = () => {
     })
     setFilteredCollection(filteredSelection)
   }, [userCollection, filterCriteria])
+
+  if (isLoading){
+    return(
+      <div className='flex justify-center items-center h-full w-full'>
+        <Spinner />
+      </div>
+       )
+  }
 
   return (
     <>
