@@ -119,12 +119,19 @@ module.exports = {
         } else {
           let { _id, year } = await CardSet.findOne({ name: cardSet });
           let allTags = []
+
+          
           if(cardSet === "Promo"){
-            allTags = [...tags, serializedPrefix, enteredPromoYear];
+            allTags = [...tags, serializedPrefix, artist, enteredPromoYear];
           } else {
-            allTags = [...tags, serializedPrefix, year];
+            allTags = [...tags, serializedPrefix, artist, year];
           }
-         
+          if(name.includes('&')){
+            let names = name.split('&')
+            let trimmedNames = names.map((name) => name.trim())
+            allTags = [...allTags, trimmedNames].flat()
+          }
+          
           let results = await Card.create({
             name,
             suffix: upperCasedSuffix,

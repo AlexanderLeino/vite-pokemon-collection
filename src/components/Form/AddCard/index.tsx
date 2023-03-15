@@ -44,16 +44,18 @@ const AddCardForm = ({ setResults, notify }: props) => {
             data: card
         })
         
-        setResults({card: foundCard, message})
         if(foundCard){
             let {data: {result}} = await doesCardExistOnUser(foundCard)
             if(result){
+                setResults({card: result, message})
                 incrementQuantityByOne(foundCard)
             } else {
                 updateUserCardList(foundCard)
+                setResults({card: foundCard, message})
             }
         }
         setCreateCard(false)
+        setCard({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
     }
 
     const incrementQuantityByOne = async (pokemon: any) => {
