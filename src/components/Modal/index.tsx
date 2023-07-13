@@ -13,12 +13,15 @@ interface Props {
 export const Modal = ({isOpen, title, setIsOpen}: Props) => {
     const [cardSetData, setCardSetData] = useState({})
     //name, year, totalNumberOfCardsInSet
-    const addCardSet = () => {
-        
+    const addCardSet = async (e:any ) => {
+     
+       await axios.post("http://localhost:3001/api/cardSet/addCardSet", {
+        data: cardSetData
+       })
     }
 
     const onChange = (e:any) => {
-        console.log('Event', e.target.name, e.target.value)
+        setCardSetData( { ...cardSetData, [e.target.name]: e.target.value})
     }
   return (
    
@@ -29,7 +32,7 @@ export const Modal = ({isOpen, title, setIsOpen}: Props) => {
         <section className="modal p-3">
             <h2 className="text-3xl font-bold text-orange-600 text-center">Add Cardset</h2>
             <Flex justifyContent='justify-center' width='w-full' flexDirection='flex-col' alignItems='items-center'>
-                <Input labelColor='text-orange-600'  type='string' label='Name' name='name' required={true} onChange={onChange}></Input>
+                <Input labelColor='text-orange-600'  type='string' label='Name' name='cardSetName' required={true} onChange={onChange}></Input>
                 <Input labelColor='text-orange-600' type='number' label='Year' name='year' required={true} onChange={onChange}></Input>
                 <Input labelColor='text-orange-600' type='number' label='Number Of Cards in Set' name='totalNumberOfCardsInSet' required={true} onChange={onChange}></Input>
             </Flex>

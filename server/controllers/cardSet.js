@@ -1,12 +1,12 @@
 require('dotenv').config()
-const {CardSet} = require('../models')
+const {CardSet} = require('../models/CardSet')
 module.exports = {
     getAllCardSets: async (req, res) => {
         try {
             let sets = await CardSet.find({})
             res.send(sets).status(200)
         } catch(e) {
-            res.send({message: e.message}).status(200)
+            res.send({message: e.message}).status(400)
         }
     },
     
@@ -16,7 +16,19 @@ module.exports = {
             res.send({name}).status(200)
         } catch(e) {
             console.log(e)
-            res.send({message: e.message})
+            res.send({message: e.message}).status(400)
+        }
+    },
+    addCardSet: async (req, res) => {
+        console.log(req.body)
+        let {cardSetName, year, totalNumberOfCardsInSet} = req.body.data
+        console.log("cardSetName", cardSetName, totalNumberOfCardsInSet, year)
+        try {
+            await CardSet.create({name: cardSetName, year, totalNumberOfCardsInSet})
+            res.send({message: "created Successfully"}).status(200)
+        }
+        catch(e) {
+            res.send({message:e.message}).status(400)
         }
     }
 }

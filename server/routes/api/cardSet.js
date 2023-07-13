@@ -8,4 +8,7 @@ router.route('/findAll')
 router.route('/findOneCardSet')
     .post(CardSetController.findOneCardSet)
 
+router.route('/addCardSet')
+    .post(CardSetController.addCardSet)
+
 module.exports = router
