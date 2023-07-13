@@ -1,0 +1,33 @@
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    transition: opacity 250ms ease;
+    background-color: rgba(0,0,0,0.75);
+  }
+  
+  .modal {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    right: 25%;
+    margin: auto;
+    width: 90%;
+    max-width: 40rem;
+    background-color:#fdba74;
+    border-radius: 1.5rem;
+  }
+  
+  .modal-header,
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .section {
+    width: 100%;
+  }

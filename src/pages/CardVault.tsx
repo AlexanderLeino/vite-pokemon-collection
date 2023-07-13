@@ -58,14 +58,6 @@ const CardVault = () => {
     setFilteredCollection(filteredSelection)
   }, [userCollection, filterCriteria])
 
-  if (isLoading){
-    return(
-      <div className='flex justify-center items-center h-full w-full'>
-        <Spinner />
-      </div>
-       )
-  }
-
   return (
     <>
       <Layout>

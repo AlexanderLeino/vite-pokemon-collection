@@ -9,6 +9,7 @@ import SubTypeArray from "../../../data/TrainerTypes"
 import ElementTypesArray from "../../../data/ElementTypes"
 import { useAuthContext } from "../../../context/AuthCtx"
 import { Layout } from "../../Layout"
+import { AddCardset } from "../../Add-Cardset"
 import axios from "axios"
 
 type props = {
@@ -97,7 +98,10 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     
                     <Select name='cardType' label='Card Type' fontSize="text-md" labelColor="text-orange-900" data={CardTypeArray} handleChange={handleChange} />
                     
+                
                     <Select fontSize="text-md" labelColor="text-orange-900"  name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange} />
+                    <AddCardset />
+             
                     {
                         card.cardSet === 'Promo' ? 
                         <Input onChange={handleChange} name='year' labelColor="text-orange-900" fontSize="text-md" label="Year" type="text"/>

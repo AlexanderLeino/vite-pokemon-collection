@@ -33,7 +33,7 @@ export const LoginForm = () => {
         <div className='text-orange-500 font-bold text-7xl'>Welcome back</div>
         <div className='text-orange-400 mt-2 font-bold'>Please enter your creditials to access your portfolio</div>
         <Input margin='mt-3' label='Username:' name={'userName'} onChange={handleChange} type='text'/>
-        <Input margin='mt-3' label='Password'name={'password'} onChange={handleChange} type='text'/>
+        <Input margin='mt-3' label='Password'name={'password'} onChange={handleChange} type='password'/>
         <Button border='border-0' width='w-3/5' margin='mt-5' onClick={handleSubmit}>Submit</Button>
         <div className='text-orange-400 font-bold mt-4'>Dont Have An Account? <a href='/signup' className='text-orange-500 font-extrabold'>Sign Up</a></div>
       </Flex>
