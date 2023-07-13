@@ -13,6 +13,7 @@ module.exports = {
         name,
         prefix,
         suffix,
+        cardStyle,
         cardNumber,
         cardSet,
         artist,
@@ -20,8 +21,11 @@ module.exports = {
         tags,
         year: enteredPromoYear,
         elementType,
+       
       } = body.data;
-     
+
+      console.log("DATAATATA", body.data)
+      let slugifiedCardStyle = slugify(cardStyle).toLowerCase()
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix = ''
       if(prefix){
@@ -51,23 +55,24 @@ module.exports = {
       if(cardSetSlug.includes("pokemon")){
           cardSetSlug = cardSetSlug.split('-').slice(1).join('')
       }
-      let slugArray = [];
-
+     
+      let slugArray = []
       for (const cardProperty in body.data) {
         if (
-          body.data[cardProperty] &&
-          cardProperty != "cardSet" &&
-          cardProperty != "artist" &&
-          cardProperty != "cardType" &&
-          cardProperty != "userId" &&
-          cardProperty != "elementType" &&
-          cardProperty != "tags" &&
-          cardProperty != "trainerType" &&
-          cardProperty != "year"
+          cardProperty === 'name' ||
+          cardProperty === 'cardNumber' 
         ) {
-          if (cardProperty === "cardNumber") {
+          if (cardProperty === 'cardNumber') {
             slugArray.push(serializedCardNumber);
-          } else {
+            if(slugifiedCardStyle === 'holo' || slugifiedCardStyle === 'reverse-holo'){
+              slugArray.push(slugifiedCardStyle)
+              let style = slugArray[2]
+              let number = slugArray[1]
+              slugArray[1] = style
+              slugArray[2] = number
+            }
+          }
+          else {
             slugArray.push(body.data[cardProperty]);
           }
         }
@@ -84,6 +89,7 @@ module.exports = {
           slugifiedString = `${nameSlug} ${suffix}-${cardNumber}`.trim().replace(' ', '-').toLowerCase()
         } 
       } else {
+        console.log("Slug Array",slugArray)
         slugifiedString = slugify(slugArray.join(" ").toLowerCase());
       }
       console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
@@ -144,6 +150,7 @@ module.exports = {
             cardType,
             tags: allTags,
             elementType,
+            cardStyle
           });
           
           res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);

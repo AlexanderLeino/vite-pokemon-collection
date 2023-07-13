@@ -11,4 +11,6 @@ router.route('/findOneCardSet')
 router.route('/addCardSet')
     .post(CardSetController.addCardSet)
 
+router.route("/getAllCardSets")
+    .get(CardSetController.getAllCardSets)
 module.exports = router

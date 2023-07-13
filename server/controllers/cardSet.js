@@ -3,7 +3,7 @@ const {CardSet} = require('../models/CardSet')
 module.exports = {
     getAllCardSets: async (req, res) => {
         try {
-            let sets = await CardSet.find({})
+            let sets = await CardSet.find({}).sort({name: 'asc' })
             res.send(sets).status(200)
         } catch(e) {
             res.send({message: e.message}).status(400)

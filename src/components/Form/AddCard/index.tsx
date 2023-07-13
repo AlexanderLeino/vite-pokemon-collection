@@ -17,10 +17,22 @@ type props = {
     notify: (message: string) => void
 }
 
+type cardSet = {
+    _id: string, 
+    name: string,
+    year: number,
+    totalNumberOfCardsInSet: string,
+}
+
 const AddCardForm = ({ setResults, notify }: props) => {
     const { currentUser } = useAuthContext()
     const [createCard, setCreateCard] = useState(false)
-    const [card, setCard] = useState({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
+    const [card, setCard] = useState({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "", cardStyle: '' })
+    const [cardSets, setCardSets] = useState([])
+
+    useEffect(() => {
+        getAllCardSets()
+    },[])
 
     useEffect(() => {
         if (createCard) {
@@ -35,10 +47,17 @@ const AddCardForm = ({ setResults, notify }: props) => {
     }
 
     const updateUserCardList = async (pokemon: any) => {
-        await axios.post('http://localhost:3001/api/user/updateCardList', {
+    await axios.post('http://localhost:3001/api/user/updateCardList', {
             data: { cardData: pokemon, userId: currentUser.userId }
         })
+
     }
+
+    const getAllCardSets = async () => {
+            let {data} = await axios.get("http://localhost:3001/api/cardSet/getAllCardSets")
+            setCardSets(data)      
+    }
+
 
     const handleSubmit = async () => {
         let { data: { card: foundCard, message } } = await axios.post('http://localhost:3001/api/card/createCard', {
@@ -56,8 +75,12 @@ const AddCardForm = ({ setResults, notify }: props) => {
             }
         }
         setCreateCard(false)
-        setCard({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "" })
+        setCard({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementType: '', artist: "", cardStyle: '' })
     }
+
+    useEffect(() =>{
+        console.log(card)
+    }, [card])
 
     const incrementQuantityByOne = async (pokemon: any) => {
         let { data: { card, message } } = await axios.post('http://localhost:3001/api/user/incrementQuantity', {
@@ -75,15 +98,13 @@ const AddCardForm = ({ setResults, notify }: props) => {
         return result
     }
 
-
-
     return (
         <>
         <Layout>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    setCard({ ...card, tags: [card.prefix, card.suffix, card.elementType, card.cardSet, card.name] })
+                    setCard({ ...card, tags: [card.prefix, card.suffix, card.elementType, card.cardSet, card.name, card.cardStyle] })
                     setCreateCard(true)
                 }}
             >
@@ -99,7 +120,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     <Select name='cardType' label='Card Type' fontSize="text-md" labelColor="text-orange-900" data={CardTypeArray} handleChange={handleChange} />
                     
                 
-                    <Select fontSize="text-md" labelColor="text-orange-900"  name='cardSet' label='Card Set' data={CardSets} handleChange={handleChange} />
+                    <Select fontSize="text-md" labelColor="text-orange-900"  name='cardSet' label='Card Set' data={cardSets} handleChange={handleChange} />
                     <AddCardset />
              
                     {
@@ -120,6 +141,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     }
                    
                     <Input name='artist' fontSize="text-md" labelColor="text-orange-900"  label='Artist' required onChange={handleChange} type='string' />
+                    <Select handleChange={handleChange} data={[{name: 'Holo'}, {name: 'Reverse-Holo'},{name:'Standard'}, {name:'Full Art'}, {name:'Rainbow Full Art'}]} name='cardStyle' label="Card Style" labelColor="text-orange-900"/>
                     <Flex justifyContent="justify-center" width="w-full">
                         <Button margin="mt-3" onClick={() => {
                             if(card?.suffix) {

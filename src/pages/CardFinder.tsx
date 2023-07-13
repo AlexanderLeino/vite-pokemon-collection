@@ -6,7 +6,7 @@ import { ExpandedCard } from '../components/Expanded-Card'
 import { toast } from 'react-toastify';
 
 export const CardFinder = () => {
-  const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
+  const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardStyle: '', cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
 
   useEffect(() => {
     if(results.message.length > 2){

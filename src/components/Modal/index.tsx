@@ -4,6 +4,7 @@ import axios from 'axios';
 import Input from '../Input';
 import Flex from '../Flex';
 import './index.css'
+
 interface Props {
     isOpen: boolean,
     title?: string,
@@ -15,9 +16,11 @@ export const Modal = ({isOpen, title, setIsOpen}: Props) => {
     //name, year, totalNumberOfCardsInSet
     const addCardSet = async (e:any ) => {
      
-       await axios.post("http://localhost:3001/api/cardSet/addCardSet", {
+       let response = await axios.post("http://localhost:3001/api/cardSet/addCardSet", {
         data: cardSetData
        })
+
+       setIsOpen(false)
     }
 
     const onChange = (e:any) => {

@@ -3,7 +3,7 @@ import { Button } from '../Button'
 import Flex from '../Flex'
 import { Modal } from '../Modal'
 export const AddCardset = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   return (
   <>
   <Flex justifyContent='justify-end' width='w-full' marginTop='mt-2'>

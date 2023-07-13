@@ -73,6 +73,12 @@ const CardSets = [
     },
 
     {
+        name: "Paldea Evolved",
+        year: 2023,
+        totalNumberOfCardsInSet: 239
+    },
+
+    {
         name: "Expedition Base Set",
         year: 2002,
         totalNumberOfCardsInSet: 165

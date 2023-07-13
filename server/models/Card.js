@@ -58,7 +58,7 @@ const CardSchema = new Schema({
     },
     elementType: {
         type: String,
-        enum: ['Fire', 'Fighting', 'Dragon', 'Lighting', 'Grass', 'Water', 'Fairy', 'Psychic', 'Metal', 'Colorless'],
+        enum: ['Fire', 'Fighting', 'Dragon', 'Lighting', 'Grass', 'Water', 'Fairy', 'Psychic', 'Metal', 'Colorless', 'Darkness'],
         required: this.cardType === 'Pokemon',
     },
     cardSet: {
@@ -86,7 +86,13 @@ const CardSchema = new Schema({
     rating: {
         type: Number,
         require: false
+    },
+    cardStyle: {
+        type: String,
+        enum: ['Reverse-Holo', 'Full Art', 'Holo', 'Standard'],
+        required: true,
     }
+
     
 },{collection: 'Card'})
 
