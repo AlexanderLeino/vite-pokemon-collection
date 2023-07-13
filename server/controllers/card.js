@@ -24,8 +24,6 @@ module.exports = {
        
       } = body.data;
 
-      console.log("DATAATATA", body.data)
-      let slugifiedCardStyle = slugify(cardStyle).toLowerCase()
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix = ''
       if(prefix){
@@ -56,42 +54,35 @@ module.exports = {
           cardSetSlug = cardSetSlug.split('-').slice(1).join('')
       }
      
-      let slugArray = []
+      let slugArray = ["", "", "", "", ""]
       for (const cardProperty in body.data) {
-        if (
-          cardProperty === 'name' ||
-          cardProperty === 'cardNumber' 
-        ) {
-          if (cardProperty === 'cardNumber') {
-            slugArray.push(serializedCardNumber);
-            if(slugifiedCardStyle === 'holo' || slugifiedCardStyle === 'reverse-holo'){
-              slugArray.push(slugifiedCardStyle)
-              let style = slugArray[2]
-              let number = slugArray[1]
-              slugArray[1] = style
-              slugArray[2] = number
-            }
+           switch(cardProperty){
+            case 'name':            
+              if(name.includes('&')){
+                let nameSlug = name.trim().split(' ').join("-").toLowerCase()
+                slugArray[1] = nameSlug
+              } else {
+                slugArray[1] = name
+              }
+                break;
+            case 'prefix': 
+              slugArray[0] = prefix
+                break;
+            case 'suffix': 
+              slugArray[2] = suffix
+                break;
+            case 'cardStyle': 
+              if(cardStyle === 'Reverse Holo' || cardStyle === 'Holo'){
+                slugArray[5] = cardStyle
+              }
+                break;
+            case 'cardNumber':
+              slugArray[4] = serializedCardNumber
+                break;
           }
-          else {
-            slugArray.push(body.data[cardProperty]);
-          }
-        }
       }
-      let slugifiedString  
-      if(name.includes("&")) {
-        let nameSlug = name.trim().split(' ').join("-").toLowerCase()
-        if(prefix && suffix){
-          slugifiedString = `${prefix} ${nameSlug} ${suffix} ${cardNumber}`.replace(' ', '-').toLowerCase()
-        } else if (prefix) {
-          slugifiedString = `${prefix} ${nameSlug} ${cardNumber}`.replace(' ', '-').toLowerCase()
-        } else if (suffix) {
-          console.log("MAKING IT TO SUFFIX")
-          slugifiedString = `${nameSlug} ${suffix}-${cardNumber}`.trim().replace(' ', '-').toLowerCase()
-        } 
-      } else {
-        console.log("Slug Array",slugArray)
-        slugifiedString = slugify(slugArray.join(" ").toLowerCase());
-      }
+
+      let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
       console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
       let response = await axios.get(
         `${BASE_URL}${cardSetSlug}/${slugifiedString}`
@@ -161,7 +152,7 @@ module.exports = {
         );
       }
     } catch (e) {
-      console.log("ERROR MESSAGe", e)
+      console.log("ERROR MESSAGe")
       res.send({
         message: "Couldn't find the price for the card you were looking for!",
       }).status(500);

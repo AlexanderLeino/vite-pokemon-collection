@@ -137,7 +137,7 @@ module.exports = {
           if (doc) {
             let cardToBeUpdated = doc.cards[0];
             cardToBeUpdated.quantity++;
-            console.log(cardToBeUpdated.quantity);
+           
             let { cards } = await User.findOne({ _id: userId });
 
             let cardIndexToBeUpdated = cards.findIndex(
@@ -145,7 +145,6 @@ module.exports = {
             );
             let updatedList = cards;
             updatedList[cardIndexToBeUpdated] = cardToBeUpdated;
-            console.log("UPDATED LIST", updatedList);
             let results = await User.findByIdAndUpdate(userId, {
               cards: updatedList,
             });
