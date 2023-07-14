@@ -119,9 +119,9 @@ module.exports = {
 
           
           if(cardSet === "Promo"){
-            allTags = [...tags, serializedPrefix, artist, enteredPromoYear];
+            allTags = [...tags, serializedPrefix, artist, enteredPromoYear, cardStyle];
           } else {
-            allTags = [...tags, serializedPrefix, artist, year];
+            allTags = [...tags, serializedPrefix, artist, year, cardStyle];
           }
           if(name.includes('&')){
             let names = name.split('&')
