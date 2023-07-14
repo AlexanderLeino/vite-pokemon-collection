@@ -78,10 +78,6 @@ const AddCardForm = ({ setResults, notify }: props) => {
         setCard({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementType: '', artist: "", cardStyle: '' })
     }
 
-    useEffect(() =>{
-        console.log(card)
-    }, [card])
-
     const incrementQuantityByOne = async (pokemon: any) => {
         let { data: { card, message } } = await axios.post('http://localhost:3001/api/user/incrementQuantity', {
             cardData: pokemon, _id: currentUser.userId
@@ -92,7 +88,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
 
     const doesCardExistOnUser = async (card: any) => {
         let result =  await axios.post('http://localhost:3001/api/user/doesCardExistOnUser', {
-            data: {userId: currentUser.userId, name: card.name, cardNumber: card.cardNumber}
+            data: {userId: currentUser.userId, name: card.name, cardNumber: card.cardNumber, cardSet: card.cardSet}
         })
 
         return result

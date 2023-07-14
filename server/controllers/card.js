@@ -1,14 +1,15 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
-const  slugify  = require("slugify");
+const slugify = require("slugify");
 const { CardSet } = require("../models/CardSet");
 const { Card } = require("../models/Card");
+const { error } = require("console");
 const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
-      let serializedCardNumber;
+     
       let {
         name,
         prefix,
@@ -21,110 +22,110 @@ module.exports = {
         tags,
         year: enteredPromoYear,
         elementType,
-       
-      } = body.data;
-
+      } = body.data
+      let price 
+      let picture
+      let cardSetSlug
+      let serializedCardNumber;
+      let fallbackSlugifiedString
       let upperCasedSuffix = suffix.toUpperCase();
-      let serializedPrefix = ''
-      if(prefix){
-        let arrayedPrefix = prefix.split(' ')
-        let resultsArray = []
+      let serializedPrefix = "";
+      let slugArray
+      if (prefix) {
+        let arrayedPrefix = prefix.split(" ");
+        let resultsArray = [];
 
         arrayedPrefix.forEach((word) => {
-          let firstLetter = word[0].toUpperCase()
-            let restOfWord = word.slice(1).toLowerCase()
+          let firstLetter = word[0].toUpperCase();
+          let restOfWord = word.slice(1).toLowerCase();
 
-            let newWord = `${firstLetter}${restOfWord}`
-            resultsArray.push(newWord)
-            serializedPrefix = resultsArray.join(' ')
-        })
-
+          let newWord = `${firstLetter}${restOfWord}`;
+          resultsArray.push(newWord);
+          serializedPrefix = resultsArray.join(" ");
+        });
       }
       if (cardNumber[0] === "0" && cardNumber[1] === "0") {
         serializedCardNumber = cardNumber.split("").slice(2).join("");
-      } else if(cardNumber[0] === "0") {
+      } else if (cardNumber[0] === "0") {
         serializedCardNumber = cardNumber.split("").slice(1).join("");
-      }
-      else {
+      } else {
         serializedCardNumber = cardNumber;
       }
-    
-      
-      let cardSetSlug = slugify(cardSet).toLowerCase();
 
+      //Check to see if card already exists in DB
+      console.log("CARD SET", cardSet)
+      let { _id, year  } = await CardSet.findOne({ name: cardSet });
+      console.log("CardSet ID", _id)
+      console.log("NAME", name, "Serialized Card Number", serializedCardNumber, "cardSet", _id)
+      let cardData = await Card.findOne({
+        name,
+        cardNumber: serializedCardNumber,
+        cardSet: _id
+      });
+      console.log(cardData)
+      if (cardData) {
+        
+        let response = {
+          card: cardData,
+          message: "This card already exists in the database!",
+        };
+        res.send(response).status(200);
+      } else {
+        cardSetSlug = slugify(cardSet).toLowerCase();
 
-      if(cardSet.includes("pokemon")){
-          cardSetSlug = cardSetSlug.split('-').slice(1).join('')
-      }
-      
-      if(cardSet.includes("&")) {
-        console.log("cardSet BEFORE", cardSet)
-        let newString = cardSet.replace(/ /g, "-").toLowerCase()
-        console.log("CARDSET REPLACEd", newString)
-        cardSetSlug = newString
-      }
+        if (cardSet.includes("&")) {
+          let newString = cardSet.replace(/ /g, "-").toLowerCase();
+          cardSetSlug = newString;
+        }
 
-      let slugArray = ["", "", "", "", ""]
-      
-      for (const cardProperty in body.data) {
-           switch(cardProperty){
-            case 'name':            
-              if(name.includes('&')){
-                let nameSlug = name.trim().split(' ').join("-").toLowerCase()
-                slugArray[1] = nameSlug
+        if (cardSet.includes("Pokemon")) {
+          cardSetSlug = cardSetSlug.split("-").slice(1).join("").toLowerCase();
+        }
+
+        slugArray = ["", "", "", "", ""];
+
+        for (const cardProperty in body.data) {
+          switch (cardProperty) {
+            case "name":
+              if (name.includes("&")) {
+                let nameSlug = name.trim().split(" ").join("-").toLowerCase();
+                slugArray[1] = nameSlug;
               } else {
-                slugArray[1] = name
+                slugArray[1] = name;
               }
-                break;
-            case 'prefix': 
-              slugArray[0] = prefix
-                break;
-            case 'suffix': 
-              slugArray[2] = suffix
-                break;
-            case 'cardStyle': 
-              if(cardStyle === 'Reverse Holo' || cardStyle === 'Holo'){
-                slugArray[4] = cardStyle
+              break;
+            case "prefix":
+              slugArray[0] = prefix;
+              break;
+            case "suffix":
+              slugArray[2] = suffix;
+              break;
+            case "cardStyle":
+              if (cardStyle === "Reverse Holo" || cardStyle === "Holo") {
+                slugArray[4] = cardStyle;
               }
-                break;
-            case 'cardNumber':
-              slugArray[5] = serializedCardNumber
-                break;
+              break;
+            case "cardNumber":
+              slugArray[5] = serializedCardNumber;
+              break;
           }
-      }
-      let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
-      //if A price and picture cant be found with original criteria then it will remove either word holo or reverse holo and try again
-      let valueToRemove = slugArray.splice(4,1)
-      let array = [...slugArray, valueToRemove]
-      let fallbackSlugifiedString = slugify(slugArray.join(" ").toLowerCase())
+        }
+        let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
+        //if A price and picture cant be found with original criteria then it will remove either word holo or reverse holo and try again
+        let valueToRemove = slugArray.splice(4, 1);
+        let array = [...slugArray, valueToRemove];
+        fallbackSlugifiedString = slugify(
+          slugArray.join(" ").toLowerCase()
+        );
+        
+        console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
+        let response = await axios.get(
+          `${BASE_URL}${cardSetSlug}/${slugifiedString}`
+        );
 
-      console.log('Original', slugifiedString, "after", fallbackSlugifiedString)
-   
-    
-      console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
-      let response = await axios.get(
-        `${BASE_URL}${cardSetSlug}/${slugifiedString}`
-      );
+        let data = response?.data;
 
-      let data = response?.data;
-
-      let $ = cheerio.load(data);
-
-      let price = parseFloat(
-        $('td[id="used_price"] > span[class="price js-price"]')
-          .text()
-          .trim()
-          .slice(1)
-      );
-     
-      let picture = $('div[class="cover"] > img').attr("src");
-        console.log("BEFORE", price, picture)
-        console.log(!price , !picture)
-        if (!price && !picture) {
-        console.log("MADE IT", `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`)
-        response = await axios.get(`${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`)
-        data = response?.data
-        $ = cheerio.load(data)
+        let $ = cheerio.load(data);
 
         price = parseFloat(
           $('td[id="used_price"] > span[class="price js-price"]')
@@ -132,112 +133,88 @@ module.exports = {
             .trim()
             .slice(1)
         );
-       
-        picture = $('div[class="cover"] > img').attr("src");
-        console.log("After Failure Here", picture, price)
 
-        let cardData = await Card.findOne({
+        picture = $('div[class="cover"] > img').attr("src");
+        console.log("BEFORE", price, picture);
+      }
+
+      if (!price && !picture) {
+        console.log(
+          "Couldnt find on First Go Around",
+          `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`
+        );
+        response = await axios.get(
+          `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`
+        );
+        data = response?.data;
+        $ = cheerio.load(data);
+
+        price = parseFloat(
+          $('td[id="used_price"] > span[class="price js-price"]')
+            .text()
+            .trim()
+            .slice(1)
+        );
+
+        picture = $('div[class="cover"] > img').attr("src");
+        console.log("After Failure Here", picture, price);
+        ///need to verify the obj id for cardSet
+      } else if (price && picture) {
+        console.log("Made it to the final stage")
+        let { _id, year } = await CardSet.findOne({ name: cardSet });
+        let allTags = [];
+
+        if (cardSet === "Promo") {
+          allTags = [
+            ...tags,
+            serializedPrefix,
+            artist,
+            enteredPromoYear,
+            cardStyle,
+          ];
+        } else {
+          allTags = [...tags, serializedPrefix, artist, year, cardStyle];
+        }
+        if (name.includes("&")) {
+          let names = name.split("&");
+          let trimmedNames = names.map((name) => name.trim());
+          allTags = [...allTags, trimmedNames].flat();
+        }
+
+        let results = await Card.create({
           name,
+          suffix: upperCasedSuffix,
+          prefix: serializedPrefix,
           cardNumber: serializedCardNumber,
+          cardSet: _id,
+          price,
+          picture,
+          artist,
+          cardType,
+          tags: allTags,
+          elementType,
+          cardStyle,
         });
 
-        if (cardData) {
-          let response = {
-            card: cardData,
-            message: "This card already exists in the database!",
-          };
-          res.send(response).status(200);
-        } else {
-          let { _id, year } = await CardSet.findOne({ name: cardSet });
-          let allTags = []
-
-          
-          if(cardSet === "Promo"){
-            allTags = [...tags, serializedPrefix, artist, enteredPromoYear, cardStyle];
-          } else {
-            allTags = [...tags, serializedPrefix, artist, year, cardStyle];
-          }
-          if(name.includes('&')){
-            let names = name.split('&')
-            let trimmedNames = names.map((name) => name.trim())
-            allTags = [...allTags, trimmedNames].flat()
-          }
-          
-          let results = await Card.create({
-            name,
-            suffix: upperCasedSuffix,
-            prefix: serializedPrefix,
-            cardNumber: serializedCardNumber,
-            cardSet: _id,
-            price,
-            picture,
-            artist,
-            cardType,
-            tags: allTags,
-            elementType,
-            cardStyle
-          });
-          
-          res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
-        }
-      
-      } 
-        else if (price && picture) {
-          let cardData = await Card.findOne({
-            name,
-            cardNumber: serializedCardNumber,
-          });
-  
-          if (cardData) {
-            let response = {
-              card: cardData,
-              message: "This card already exists in the database!",
-            };
-            res.send(response).status(200);
-          } else {
-            let { _id, year } = await CardSet.findOne({ name: cardSet });
-            let allTags = []
-  
-            
-            if(cardSet === "Promo"){
-              allTags = [...tags, serializedPrefix, artist, enteredPromoYear, cardStyle];
-            } else {
-              allTags = [...tags, serializedPrefix, artist, year, cardStyle];
-            }
-            if(name.includes('&')){
-              let names = name.split('&')
-              let trimmedNames = names.map((name) => name.trim())
-              allTags = [...allTags, trimmedNames].flat()
-            }
-            
-            let results = await Card.create({
-              name,
-              suffix: upperCasedSuffix,
-              prefix: serializedPrefix,
-              cardNumber: serializedCardNumber,
-              cardSet: _id,
-              price,
-              picture,
-              artist,
-              cardType,
-              tags: allTags,
-              elementType,
-              cardStyle
-            });
-            
-            res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
-        }}
-
-      else {
-        throw new Error(
-          "Coulnd't find the price for the card you were looking for!"
+        res
+          .send({
+            message:
+              "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",
+            card: results,
+          })
+          .status(200);
+      } else {
+        throw new error(
+          "Couldnt find card in database or based on the information provided."
         );
       }
     } catch (e) {
-      console.log("Error", e)
-      res.send({
-        message: "Couldn't find the price for the card you were looking for!",
-      }).status(500);
+      console.log("Error", e);
+      res
+        .send({
+          message: "Couldn't find the price for the card you were looking for!",
+        })
+        .status(500);
     }
   },
   findCard: async ({ body }, res) => {
@@ -254,7 +231,7 @@ module.exports = {
   },
   cardExistInDb: async ({ body }, res) => {
     try {
-      let response
+      let response;
       let { name, cardNumber } = body.data;
       let results = await Card.findOne({ name, cardNumber });
       if (results) {

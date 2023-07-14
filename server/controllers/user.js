@@ -2,6 +2,8 @@ const bycrpt = require("bcrypt");
 const { signToken } = require("../utlis");
 require("dotenv").config();
 const User = require("../models/User.js");
+const { Card } = require("../models/Card");
+const { CardSet } = require("../models/CardSet");
 
 module.exports = {
   signIn: async ({ body }, res) => {
@@ -148,7 +150,7 @@ module.exports = {
             let results = await User.findByIdAndUpdate(userId, {
               cards: updatedList,
             });
-            console.log("RESULTSSSS", results);
+            
             res
               .send({
                 message:
@@ -163,11 +165,15 @@ module.exports = {
     }
   },
   doesCardExistOnUser: async ({ body }, res) => {
-    let { userId, name, cardNumber } = body.data;
+    let { userId, name, cardNumber, cardSet } = body.data;
+    console.log("CARD SET 12565464987", cardSet)
+
     User.findOne({ _id: userId })
       .elemMatch("cards", {
         name,
         cardNumber,
+        cardSet
+
       })
       .select("cards.$")
       .exec(async function (err, doc) {

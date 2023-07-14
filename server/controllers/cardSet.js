@@ -22,7 +22,7 @@ module.exports = {
     addCardSet: async (req, res) => {
         console.log(req.body)
         let {cardSetName, year, totalNumberOfCardsInSet} = req.body.data
-        console.log("cardSetName", cardSetName, totalNumberOfCardsInSet, year)
+       
         try {
             await CardSet.create({name: cardSetName, year, totalNumberOfCardsInSet})
             res.send({message: "created Successfully"}).status(200)
