@@ -145,9 +145,9 @@ const AddCardForm = ({ setResults, notify }: props) => {
                     <Flex justifyContent="justify-center" width="w-full">
                         <Button margin="mt-3" onClick={() => {
                             if(card?.suffix) {
-                                setCard({ ...card, tags: [card?.suffix, card.elementType, card.cardSet, card.name] })
+                                setCard({ ...card, tags: [card?.suffix, card.elementType, card.cardSet, card.name, card.cardType] })
                             } else {
-                                setCard({ ...card, tags: [card.elementType, card.cardSet, card.name] })
+                                setCard({ ...card, tags: [card.elementType, card.cardSet, card.name, card.cardType] })
 
                             }
                             setCreateCard(true)

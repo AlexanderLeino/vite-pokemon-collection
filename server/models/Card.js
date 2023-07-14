@@ -58,7 +58,6 @@ const CardSchema = new Schema({
     },
     elementType: {
         type: String,
-        enum: ['Fire', 'Fighting', 'Dragon', 'Lighting', 'Grass', 'Water', 'Fairy', 'Psychic', 'Metal', 'Colorless', 'Darkness'],
         required: this.cardType === 'Pokemon',
     },
     cardSet: {

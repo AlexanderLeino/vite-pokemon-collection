@@ -48,12 +48,22 @@ module.exports = {
       else {
         serializedCardNumber = cardNumber;
       }
+    
+      
       let cardSetSlug = slugify(cardSet).toLowerCase();
 
-      if(cardSetSlug.includes("pokemon")){
+
+      if(cardSet.includes("pokemon")){
           cardSetSlug = cardSetSlug.split('-').slice(1).join('')
       }
-     
+      
+      if(cardSet.includes("&")) {
+        console.log("cardSet BEFORE", cardSet)
+        let newString = cardSet.replace(/ /g, "-").toLowerCase()
+        console.log("CARDSET REPLACEd", newString)
+        cardSetSlug = newString
+      }
+
       let slugArray = ["", "", "", "", ""]
       
       for (const cardProperty in body.data) {
@@ -111,7 +121,7 @@ module.exports = {
         console.log("BEFORE", price, picture)
         console.log(!price , !picture)
         if (!price && !picture) {
-        console.log("MADE IT")
+        console.log("MADE IT", `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`)
         response = await axios.get(`${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`)
         data = response?.data
         $ = cheerio.load(data)
