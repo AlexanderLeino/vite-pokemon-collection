@@ -170,7 +170,55 @@ module.exports = {
           
           res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
         }
-      } else {
+      
+      } 
+        else if (price && picture) {
+          let cardData = await Card.findOne({
+            name,
+            cardNumber: serializedCardNumber,
+          });
+  
+          if (cardData) {
+            let response = {
+              card: cardData,
+              message: "This card already exists in the database!",
+            };
+            res.send(response).status(200);
+          } else {
+            let { _id, year } = await CardSet.findOne({ name: cardSet });
+            let allTags = []
+  
+            
+            if(cardSet === "Promo"){
+              allTags = [...tags, serializedPrefix, artist, enteredPromoYear, cardStyle];
+            } else {
+              allTags = [...tags, serializedPrefix, artist, year, cardStyle];
+            }
+            if(name.includes('&')){
+              let names = name.split('&')
+              let trimmedNames = names.map((name) => name.trim())
+              allTags = [...allTags, trimmedNames].flat()
+            }
+            
+            let results = await Card.create({
+              name,
+              suffix: upperCasedSuffix,
+              prefix: serializedPrefix,
+              cardNumber: serializedCardNumber,
+              cardSet: _id,
+              price,
+              picture,
+              artist,
+              cardType,
+              tags: allTags,
+              elementType,
+              cardStyle
+            });
+            
+            res.send({message: "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",card: results}).status(200);
+        }}
+
+      else {
         throw new Error(
           "Coulnd't find the price for the card you were looking for!"
         );
