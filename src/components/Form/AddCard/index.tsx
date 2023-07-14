@@ -27,7 +27,7 @@ type cardSet = {
 const AddCardForm = ({ setResults, notify }: props) => {
     const { currentUser } = useAuthContext()
     const [createCard, setCreateCard] = useState(false)
-    const [card, setCard] = useState({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: 'Base Set', userId: currentUser.userId, tags: [""], elementType: 'Fire', artist: "", cardStyle: '' })
+    const [card, setCard] = useState({ prefix: 'Radiant', name: 'Eevee', suffix: '', cardNumber: 'SWSH230', cardType: 'Pokemon', cardSet: 'Pokemon GO', userId: currentUser.userId, tags: [""], elementType: 'Colorless', artist: "Souichirou Gunjima", cardStyle: 'Holo' })
     const [cardSets, setCardSets] = useState([])
 
     useEffect(() => {

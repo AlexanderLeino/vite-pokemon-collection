@@ -55,6 +55,7 @@ module.exports = {
       }
      
       let slugArray = ["", "", "", "", ""]
+      
       for (const cardProperty in body.data) {
            switch(cardProperty){
             case 'name':            
@@ -73,16 +74,23 @@ module.exports = {
                 break;
             case 'cardStyle': 
               if(cardStyle === 'Reverse Holo' || cardStyle === 'Holo'){
-                slugArray[5] = cardStyle
+                slugArray[4] = cardStyle
               }
                 break;
             case 'cardNumber':
-              slugArray[4] = serializedCardNumber
+              slugArray[5] = serializedCardNumber
                 break;
           }
       }
-
       let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
+      //if A price and picture cant be found with original criteria then it will remove either word holo or reverse holo and try again
+      let valueToRemove = slugArray.splice(4,1)
+      let array = [...slugArray, valueToRemove]
+      let fallbackSlugifiedString = slugify(slugArray.join(" ").toLowerCase())
+
+      console.log('Original', slugifiedString, "after", fallbackSlugifiedString)
+   
+    
       console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
       let response = await axios.get(
         `${BASE_URL}${cardSetSlug}/${slugifiedString}`
@@ -90,7 +98,7 @@ module.exports = {
 
       let data = response?.data;
 
-      const $ = cheerio.load(data);
+      let $ = cheerio.load(data);
 
       let price = parseFloat(
         $('td[id="used_price"] > span[class="price js-price"]')
@@ -100,8 +108,24 @@ module.exports = {
       );
      
       let picture = $('div[class="cover"] > img').attr("src");
-        
-      if (!!price && !!picture) {
+        console.log("BEFORE", price, picture)
+        console.log(!price , !picture)
+        if (!price && !picture) {
+        console.log("MADE IT")
+        response = await axios.get(`${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`)
+        data = response?.data
+        $ = cheerio.load(data)
+
+        price = parseFloat(
+          $('td[id="used_price"] > span[class="price js-price"]')
+            .text()
+            .trim()
+            .slice(1)
+        );
+       
+        picture = $('div[class="cover"] > img').attr("src");
+        console.log("After Failure Here", picture, price)
+
         let cardData = await Card.findOne({
           name,
           cardNumber: serializedCardNumber,
@@ -152,7 +176,7 @@ module.exports = {
         );
       }
     } catch (e) {
-      console.log("ERROR MESSAGe")
+      console.log("Error", e)
       res.send({
         message: "Couldn't find the price for the card you were looking for!",
       }).status(500);
@@ -172,7 +196,7 @@ module.exports = {
   },
   cardExistInDb: async ({ body }, res) => {
     try {
-      let response;
+      let response
       let { name, cardNumber } = body.data;
       let results = await Card.findOne({ name, cardNumber });
       if (results) {
