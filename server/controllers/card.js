@@ -23,6 +23,16 @@ module.exports = {
         year: enteredPromoYear,
         elementType,
       } = body.data
+      console.log("ALL CARD DATA", name,
+      prefix,
+      suffix,
+      cardStyle,
+      cardNumber,
+      cardSet,
+      artist,
+      cardType,
+      tags,
+      elementType)
       let price 
       let picture
       let cardSetSlug
@@ -31,6 +41,7 @@ module.exports = {
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix = "";
       let slugArray
+      let result
       if (prefix) {
         let arrayedPrefix = prefix.split(" ");
         let resultsArray = [];
@@ -53,24 +64,8 @@ module.exports = {
       }
 
       //Check to see if card already exists in DB
-      console.log("CARD SET", cardSet)
       let { _id, year  } = await CardSet.findOne({ name: cardSet });
-      console.log("CardSet ID", _id)
-      console.log("NAME", name, "Serialized Card Number", serializedCardNumber, "cardSet", _id)
-      let cardData = await Card.findOne({
-        name,
-        cardNumber: serializedCardNumber,
-        cardSet: _id
-      });
-      console.log(cardData)
-      if (cardData) {
-        
-        let response = {
-          card: cardData,
-          message: "This card already exists in the database!",
-        };
-        res.send(response).status(200);
-      } else {
+      
         cardSetSlug = slugify(cardSet).toLowerCase();
 
         if (cardSet.includes("&")) {
@@ -136,7 +131,7 @@ module.exports = {
 
         picture = $('div[class="cover"] > img').attr("src");
         console.log("BEFORE", price, picture);
-      }
+      
 
       if (!price && !picture) {
         console.log(
@@ -159,7 +154,8 @@ module.exports = {
         picture = $('div[class="cover"] > img').attr("src");
         console.log("After Failure Here", picture, price);
         ///need to verify the obj id for cardSet
-      } else if (price && picture) {
+        console.log(!!price, !!picture)
+      } if (!!price && !!picture) {
         console.log("Made it to the final stage")
         let { _id, year } = await CardSet.findOne({ name: cardSet });
         let allTags = [];
@@ -180,8 +176,19 @@ module.exports = {
           let trimmedNames = names.map((name) => name.trim());
           allTags = [...allTags, trimmedNames].flat();
         }
-
-        let results = await Card.create({
+        console.log("BEFORE CREATION", {name,
+          suffix: upperCasedSuffix,
+          prefix: serializedPrefix,
+          cardNumber: serializedCardNumber,
+          cardSet: _id,
+          price,
+          picture,
+          artist,
+          cardType,
+          tags: allTags,
+          elementType,
+          cardStyle,})
+        let response = await Card.create({
           name,
           suffix: upperCasedSuffix,
           prefix: serializedPrefix,
@@ -195,13 +202,11 @@ module.exports = {
           elementType,
           cardStyle,
         });
-
+        result = { message:
+          "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",
+          card: response,}
         res
-          .send({
-            message:
-              "Thanks to your contribution this card is now apart of our database! Also its been added to your profile!",
-            card: results,
-          })
+          .send(result)
           .status(200);
       } else {
         throw new error(
@@ -231,15 +236,27 @@ module.exports = {
   },
   cardExistInDb: async ({ body }, res) => {
     try {
-      let response;
-      let { name, cardNumber } = body.data;
-      let results = await Card.findOne({ name, cardNumber });
-      if (results) {
-        response = true;
+      console.log("Made it to db check!!!")
+      let result
+      let { name, cardNumber, cardSet } = body.data;
+      let serializedCardNumber
+      if (cardNumber[0] === "0" && cardNumber[1] === "0") {
+        serializedCardNumber = cardNumber.split("").slice(2).join("");
+      } else if (cardNumber[0] === "0") {
+        serializedCardNumber = cardNumber.split("").slice(1).join("");
       } else {
-        response = false;
+        serializedCardNumber = cardNumber;
       }
-      res.send(response).status(200);
+      console.log( name, cardNumber, cardSet )
+      let {_id} = await CardSet.findOne({name: cardSet})
+      let response = await Card.findOne({ name, cardNumber: serializedCardNumber, cardSet: _id });
+      console.log("RESULTS OF DB CHECK", response)
+      if (response) {
+        result = {existInDb: true, card: response, message: "The Card Already Exists In Database!"}
+      } else {
+        result = {existInDb: false, card: response, message: "The Card Doesnt Currently Exists In DB"};
+      }
+      res.send(result).status(200);
     } catch (e) {
       res.send({ message: error.message }).status(500);
     }

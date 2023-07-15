@@ -47,9 +47,7 @@ const CardVault = () => {
   }, [])
 
 
-  useEffect(() => {
-    console.log("FILTER USER COLLECTION", filteredCollection)
-  }, [])
+ 
 
   useEffect(() => {
     let filteredSelection = userCollection.filter(pokemon => {

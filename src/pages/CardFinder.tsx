@@ -9,10 +9,11 @@ export const CardFinder = () => {
   const [results, setResults] = useState({card: {name: '', elementType: "", prefix: "", cardType: "", suffix: "", rating: "", artist: "", cardStyle: '', cardNumber: "", quantity: 0, picture: "", price: 0, tags: [""], }, message: ''})
 
   useEffect(() => {
-    if(results.message.length > 2){
-      notify(results.message)
+    if(results?.message.length > 2){
+      notify(results?.message)
     }
   }, [results])
+
 
   const notify = (message: string) => toast(message);
   return (

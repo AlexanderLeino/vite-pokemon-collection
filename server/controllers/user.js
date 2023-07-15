@@ -91,7 +91,6 @@ module.exports = {
       res.status(500).send({ message: e.message });
     }
   },
-  updateUserCard: async ({ body }, res) => {},
   deleteCard: async ({ body }, res) => {
     try {
       let {
@@ -126,13 +125,14 @@ module.exports = {
   incrementQuantity: async ({ body }, res) => {
     try {
       let {
-        cardData: { name, cardNumber },
+        cardData: { name, cardNumber, cardSet },
         _id: userId,
       } = body;
       User.findOne({ _id: userId })
         .elemMatch("cards", {
           name,
           cardNumber,
+          cardSet
         })
         .select("cards.$")
         .exec(async function (err, doc) {
@@ -166,22 +166,36 @@ module.exports = {
   },
   doesCardExistOnUser: async ({ body }, res) => {
     let { userId, name, cardNumber, cardSet } = body.data;
-    console.log("CARD SET 12565464987", cardSet)
+
+    let serializedCardNumber
+    if (cardNumber[0] === "0" && cardNumber[1] === "0") {
+      serializedCardNumber = cardNumber.split("").slice(2).join("");
+    } else if (cardNumber[0] === "0") {
+      serializedCardNumber = cardNumber.split("").slice(1).join("");
+    } else {
+      serializedCardNumber = cardNumber;
+    }
+
+    let {_id} = await CardSet.findOne({name: cardSet})
 
     User.findOne({ _id: userId })
       .elemMatch("cards", {
         name,
-        cardNumber,
-        cardSet
+        cardNumber: serializedCardNumber,
+        cardSet: _id,
 
       })
       .select("cards.$")
       .exec(async function (err, doc) {
         if (doc) {
-          res.send({ result: true });
+          console.log(doc.cards[0])
+          res.send({result: { existOnUser: true,  card: doc.cards[0], message: "Card Already Exists on User's Profile"}});
         } else {
-          res.send({ result: false });
+          res.send({result: { existOnUser: false, card: doc?.cards[0], message: "Card Doesnt Exist on User"}});
         }
       });
   },
+  addCardToUser: async({body}, res) => {
+
+  }
 };

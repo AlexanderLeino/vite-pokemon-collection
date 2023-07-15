@@ -58,7 +58,6 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
       return `${name}`.length
     }
   }
-  console.log("NAME", name, getNameLength())
   useEffect(() => {
     if (elementType === undefined) {
       elementType = "trainer"

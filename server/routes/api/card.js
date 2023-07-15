@@ -8,7 +8,7 @@ router.route('/createCard')
 router.route('/findCard')
     .post(CardController.findCard)
 
-router.route('/validateCard')
+router.route('/doesCardExistInDb')
     .post(CardController.cardExistInDb)
 
 
