@@ -88,7 +88,7 @@ const CardSchema = new Schema({
     },
     cardStyle: {
         type: String,
-        enum: ['Reverse-Holo', 'Full Art', 'Holo', 'Standard'],
+        enum: ['Reverse-Holo', 'Full Art', 'Holo', 'Standard', 'Rainbow Full Art'],
         required: true,
     }
 

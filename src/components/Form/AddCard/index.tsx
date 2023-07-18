@@ -17,6 +17,7 @@ type props = {
     notify: (message: string) => void
 }
 
+
 type cardSet = {
     _id: string, 
     name: string,
@@ -27,7 +28,7 @@ type cardSet = {
 const AddCardForm = ({ setResults, notify }: props) => {
     const { currentUser } = useAuthContext()
     const [createCard, setCreateCard] = useState(false)
-    const [card, setCard] = useState({ prefix: '', name: 'Venusaur', suffix: '', cardNumber: '15', cardType: 'Pokemon', cardSet: 'Celebrations', userId: currentUser.userId, tags: [""], elementType: 'Grass', artist: "Mitsuhiro Arita", cardStyle: 'Holo' })
+    const [card, setCard] = useState({ prefix: '', name: '', suffix: '', cardNumber: '', cardType: 'Pokemon', cardSet: '', userId: currentUser.userId, tags: [""], elementType: '', artist: "", cardStyle: 'Holo' })
     const [cardSets, setCardSets] = useState([])
 
     useEffect(() => {
@@ -63,7 +64,7 @@ const AddCardForm = ({ setResults, notify }: props) => {
         let { data: { card, message } } = await axios.post('http://localhost:3001/api/user/incrementQuantity', {
             cardData: pokemon, _id: currentUser.userId
         })
-
+        console.log("CARD INCREMENT", card)
         setResults({ message, card })
     }
 
@@ -85,34 +86,36 @@ const AddCardForm = ({ setResults, notify }: props) => {
 
     
     const handleSubmit = async () => {
+        let cardSubmitted = card
+        if (card.cardNumber[0] === "0" && card.cardNumber[1] === "0") {
+           cardSubmitted.cardNumber = card.cardNumber.split("").slice(2).join("");
+        } else if (card.cardNumber[0] === "0") {
+           cardSubmitted.cardNumber = card.cardNumber.split("").slice(1).join("");
+        } else {
+            cardSubmitted.cardNumber = card.cardNumber;
+        }
+        let {data: {result}} = await doesCardExistOnUser(cardSubmitted)
 
-        let {data: {result}} = await doesCardExistOnUser(card)
-        console.log("DATA", result)
-        //First Check to see if the card exists on the User
-        //If it doesnt then check to see if it exists in DB
-        //If it doesnt then create card
         if(result.existOnUser) {
-            setResults(result)
+            console.log("RESULT EXISTS ON USER")
             incrementQuantityByOne(result.card)
         } else {
           
-            let results  = await doesCardExistInDb(card)
+            let results  = await doesCardExistInDb(cardSubmitted)
             
             if(results.existInDb) {
                 setResults(results)
                 updateUserCardList(results.card)
             }
             else {
-                console.log("MADE IT TO ESS")
                         let {data} = await axios.post('http://localhost:3001/api/card/createCard', {
-                            data: card
+                            data: cardSubmitted
                         }) 
-                        console.log("DATATATA", data)
                         setResults(data)
-                        updateUserCardList(data.card)
-                        
+                        updateUserCardList(data.card)   
                     }
                 }
+                setCreateCard(false)
                 
             }
         

@@ -23,20 +23,11 @@ module.exports = {
         year: enteredPromoYear,
         elementType,
       } = body.data
-      console.log("ALL CARD DATA", name,
-      prefix,
-      suffix,
-      cardStyle,
-      cardNumber,
-      cardSet,
-      artist,
-      cardType,
-      tags,
-      elementType)
+      console.log("CARDSET", cardSet)
       let price 
       let picture
       let cardSetSlug
-      let serializedCardNumber;
+     
       let fallbackSlugifiedString
       let upperCasedSuffix = suffix.toUpperCase();
       let serializedPrefix = "";
@@ -55,17 +46,6 @@ module.exports = {
           serializedPrefix = resultsArray.join(" ");
         });
       }
-      if (cardNumber[0] === "0" && cardNumber[1] === "0") {
-        serializedCardNumber = cardNumber.split("").slice(2).join("");
-      } else if (cardNumber[0] === "0") {
-        serializedCardNumber = cardNumber.split("").slice(1).join("");
-      } else {
-        serializedCardNumber = cardNumber;
-      }
-
-      //Check to see if card already exists in DB
-      let { _id, year  } = await CardSet.findOne({ name: cardSet });
-      
         cardSetSlug = slugify(cardSet).toLowerCase();
 
         if (cardSet.includes("&")) {
@@ -101,7 +81,7 @@ module.exports = {
               }
               break;
             case "cardNumber":
-              slugArray[5] = serializedCardNumber;
+              slugArray[5] = cardNumber;
               break;
           }
         }
@@ -176,23 +156,12 @@ module.exports = {
           let trimmedNames = names.map((name) => name.trim());
           allTags = [...allTags, trimmedNames].flat();
         }
-        console.log("BEFORE CREATION", {name,
-          suffix: upperCasedSuffix,
-          prefix: serializedPrefix,
-          cardNumber: serializedCardNumber,
-          cardSet: _id,
-          price,
-          picture,
-          artist,
-          cardType,
-          tags: allTags,
-          elementType,
-          cardStyle,})
+       
         let response = await Card.create({
           name,
           suffix: upperCasedSuffix,
           prefix: serializedPrefix,
-          cardNumber: serializedCardNumber,
+          cardNumber,
           cardSet: _id,
           price,
           picture,
@@ -209,7 +178,7 @@ module.exports = {
           .send(result)
           .status(200);
       } else {
-        throw new error(
+        throw Error(
           "Couldnt find card in database or based on the information provided."
         );
       }
@@ -236,20 +205,12 @@ module.exports = {
   },
   cardExistInDb: async ({ body }, res) => {
     try {
-      console.log("Made it to db check!!!")
       let result
       let { name, cardNumber, cardSet } = body.data;
-      let serializedCardNumber
-      if (cardNumber[0] === "0" && cardNumber[1] === "0") {
-        serializedCardNumber = cardNumber.split("").slice(2).join("");
-      } else if (cardNumber[0] === "0") {
-        serializedCardNumber = cardNumber.split("").slice(1).join("");
-      } else {
-        serializedCardNumber = cardNumber;
-      }
-      console.log( name, cardNumber, cardSet )
+     
+     console.log("CARD SET", cardSet)
       let {_id} = await CardSet.findOne({name: cardSet})
-      let response = await Card.findOne({ name, cardNumber: serializedCardNumber, cardSet: _id });
+      let response = await Card.findOne({ name, cardNumber, cardSet: _id });
       console.log("RESULTS OF DB CHECK", response)
       if (response) {
         result = {existInDb: true, card: response, message: "The Card Already Exists In Database!"}

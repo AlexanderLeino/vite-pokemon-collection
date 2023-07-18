@@ -16,6 +16,7 @@ type pokemonObj = {
   getUserCollection: () => void,
   notify: () => void
 
+
 }
 
 const getBackgroundColor = (elementalType: string) => {
@@ -46,6 +47,7 @@ const getBackgroundColor = (elementalType: string) => {
 }
 
 export const ExpandedCard = ({ picture, getUserCollection, tags, artist, quantity, name, prefix, suffix, price, elementType, cardNumber, notify}: pokemonObj) => {
+  console.log("QUANITYT", quantity)
   useEffect(() => {
     if (elementType === undefined) {
       elementType = "trainer"
@@ -117,6 +119,7 @@ export const ExpandedCard = ({ picture, getUserCollection, tags, artist, quantit
           cardName={name}
           cardNumber={cardNumber}
           quantity={quantity}
+        
           notify={() => notify()}
         />
       </div>

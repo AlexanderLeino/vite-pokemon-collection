@@ -16,7 +16,7 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
     const [displayedQuantity, setDisplayedQuantity] = useState(quantity)
 
 
-
+    
     useEffect(() => {
 
         if (quantity != displayedQuantity) {
@@ -81,7 +81,7 @@ export const QuantityController = ({ getUserCollection, cardName, cardNumber, qu
                                 border='border-0'
 
                             >Delete</Button>
-                            <div className='text-xl font-extrabold text-orange-600'>{displayedQuantity}</div>
+                            <div className='text-xl font-extrabold text-orange-600'>{quantity}</div>
                             <Button
                                 width='w-full'
                                 backgroundColor='bg-orange-500'

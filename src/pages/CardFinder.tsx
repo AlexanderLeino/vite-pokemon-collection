@@ -14,7 +14,6 @@ export const CardFinder = () => {
     }
   }, [results])
 
-
   const notify = (message: string) => toast(message);
   return (
     <>

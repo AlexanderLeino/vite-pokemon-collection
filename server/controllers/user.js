@@ -166,7 +166,7 @@ module.exports = {
   },
   doesCardExistOnUser: async ({ body }, res) => {
     let { userId, name, cardNumber, cardSet } = body.data;
-
+    console.log("CARDSET", cardSet)
     let serializedCardNumber
     if (cardNumber[0] === "0" && cardNumber[1] === "0") {
       serializedCardNumber = cardNumber.split("").slice(2).join("");

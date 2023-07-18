@@ -64,7 +64,7 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
     }
     const returnedBackgroundColor = getBackgroundColor(elementType)
     setCardBorderColor(returnedBackgroundColor)
-  }, [])
+  },)
 
   console
 
