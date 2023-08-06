@@ -126,7 +126,7 @@ module.exports = {
           .slice(1))
         
 
-        picture = data.imageUrinpm run
+        picture = data.imageUri
         ///need to verify the obj id for cardSet
       } if (!!price && !!picture) {
         console.log("Made it to the final stage")
