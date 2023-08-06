@@ -102,14 +102,11 @@ module.exports = {
 
         let $ = cheerio.load(data);
 
-        price = parseFloat(
-          $('td[id="used_price"] > span[class="price js-price"]')
-            .text()
-            .trim()
-            .slice(1)
-        );
+        price = parseFloat(data.price1
+        .slice(1))
+        
 
-        picture = $('div[class="cover"] > img').attr("src");
+        picture = data.imageUri
         console.log("BEFORE", price, picture);
       
 
@@ -122,19 +119,15 @@ module.exports = {
           `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}`
         );
         data = response?.data;
+        console.log("DATA", data.price1, data.imageUri)
         $ = cheerio.load(data);
 
-        price = parseFloat(
-          $('td[id="used_price"] > span[class="price js-price"]')
-            .text()
-            .trim()
-            .slice(1)
-        );
+        price = parseFloat(data.price1
+          .slice(1))
+        
 
-        picture = $('div[class="cover"] > img').attr("src");
-        console.log("After Failure Here", picture, price);
+        picture = data.imageUrinpm run
         ///need to verify the obj id for cardSet
-        console.log(!!price, !!picture)
       } if (!!price && !!picture) {
         console.log("Made it to the final stage")
         let { _id, year } = await CardSet.findOne({ name: cardSet });
