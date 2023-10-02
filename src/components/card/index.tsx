@@ -46,7 +46,7 @@ const getBackgroundColor = (elementalType: string) => {
 }
 
 export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffix, price, elementType, cardNumber, notify }: pokemonObj) => {
-
+  
   const getNameLength = () => {
     if(suffix && prefix){
       return `${suffix} ${name} ${prefix}`.length
@@ -162,7 +162,8 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
           
         }
       </Flex>
-      <img className='mx-3' style={{ width: 'fit-content' }} src={picture} />
+      <img className='mx-3' style={{ width: 'fit-content' }} src={picture} alt="Image Didnt Load" onLoad={() => console.log("Load Successfully")}
+    onError={() => console.log(`DIDNT LOAD SUCCESSEFULLY ${name} ${picture}`)}/>
       <div className='bg-orange-200 w-full mt-2 rounded-b-xl'>
         <div className='font-extrabold text-lg text-center text-orange-600'>Value: ${price}</div>
         <QuantityController

@@ -5,7 +5,7 @@ const slugify = require("slugify");
 const { CardSet } = require("../models/CardSet");
 const { Card } = require("../models/Card");
 const { error } = require("console");
-const BASE_URL = "https://www.pricecharting.com/game/pokemon-";
+const BASE_URL = "http://webcache.googleusercontent.com/search?q=cache:https://www.pricecharting.com/game/pokemon-";
 module.exports = {
   createCard: async ({ body }, res) => {
     try {
@@ -94,22 +94,28 @@ module.exports = {
         );
         
         console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`);
-        let response = await axios.get(
-          `${BASE_URL}${cardSetSlug}/${slugifiedString}`
-        );
-
-        let data = response?.data;
-
-        let $ = cheerio.load(data);
-
-        price = parseFloat(data.price1
-        .slice(1))
+        try {
+          let response = await axios.get(
+            `${BASE_URL}${cardSetSlug}/${slugifiedString}`
+            
+            );
+            let data = response?.data;
+            
+            let $ = cheerio.load(data);
+            price = parseFloat(
+              $('td[id="used_price"] > span[class="price js-price"]')
+                .text()
+                .trim()
+                .slice(1)
+            );
+            
+            picture = $('div[class="cover"] > img').attr("src");
         
 
-        picture = data.imageUri
-        console.log("BEFORE", price, picture);
-      
-
+        } catch (e) {
+          console.log("An Error has occured", e)
+        }
+        console.log("PRICE AND PICTURE", price, picture)
       if (!price && !picture) {
         console.log(
           "Couldnt find on First Go Around",
@@ -215,4 +221,7 @@ module.exports = {
       res.send({ message: error.message }).status(500);
     }
   },
+  obtainUpdatedImage: async ({}) => {
+    
+  }
 };
