@@ -70,11 +70,11 @@ const CardVault = () => {
             filterCriteria.length > 0
               ?
               filteredCollection.map((card) => {
-                return <Card  getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags} notify={notify} />
+                return <Card  getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} cardSet={card.cardSet} tags={card?.tags} cardStyle={card.cardStyle} notify={notify} />
               })
               :
               userCollection.map((card) => {
-                return <Card getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} picture={card?.picture} price={card?.price} tags={card?.tags} notify={notify} />
+                return <Card cardStyle={card.cardStyle} getUserCollection={getUserCollection} elementType={card?.elementType} prefix={card?.prefix} suffix={card?.suffix} name={card?.name} cardType={card?.cardType} artist={card?.artist} cardNumber={card?.cardNumber} quantity={card?.quantity} cardSet={card.cardSet} picture={card?.picture} price={card?.price} tags={card?.tags} notify={notify} />
               })
           }
 

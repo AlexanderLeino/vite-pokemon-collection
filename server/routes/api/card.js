@@ -11,6 +11,10 @@ router.route('/findCard')
 router.route('/doesCardExistInDb')
     .post(CardController.cardExistInDb)
 
+router.route('/generateURL')
+    .post(CardController.generateURL)
 
+router.route("/getUpdatedImage")
+    .post(CardController.getUpdatedImage)
     
 module.exports = router

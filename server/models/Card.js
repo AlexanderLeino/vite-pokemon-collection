@@ -90,6 +90,10 @@ const CardSchema = new Schema({
         type: String,
         enum: ['Reverse-Holo', 'Full Art', 'Holo', 'Standard', 'Rainbow Full Art'],
         required: true,
+    },
+
+    URL: {
+        type: String,
     }
 
     

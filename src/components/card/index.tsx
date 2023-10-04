@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Flex from '../Flex'
 import { QuantityController } from '../QuantityController'
+import axios from 'axios'
+import { useAuthContext } from '../../context/AuthCtx'
 
 type pokemonObj = {
   name: string,
@@ -14,8 +16,10 @@ type pokemonObj = {
   tags: string[],
   picture: string,
   elementType?: string,
+  cardStyle: string,
   getUserCollection: () => void,
-  notify: () => void
+  notify: () => void, 
+  cardSet: string,
 }
 
 const getBackgroundColor = (elementalType: string) => {
@@ -45,8 +49,11 @@ const getBackgroundColor = (elementalType: string) => {
   }
 }
 
-export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffix, price, elementType, cardNumber, notify }: pokemonObj) => {
+export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffix, price, elementType, cardNumber, cardStyle, cardSet, notify }: pokemonObj) => {
   
+  const { currentUser } = useAuthContext()
+  console.log("CURRENT USER", currentUser.userId)
+
   const getNameLength = () => {
     if(suffix && prefix){
       return `${suffix} ${name} ${prefix}`.length
@@ -58,6 +65,29 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
       return `${name}`.length
     }
   }
+
+  const getURL = async () => {
+    let URLs = await axios.post("http://localhost:3001/api/card/generateURL", {data: {name, prefix, suffix, cardStyle, cardNumber, cardSet}})
+ 
+    return URLs
+  }
+
+
+  const getUpdatedImage = async () => {
+  
+    let {data: {URL, fallBackUrl}} =  await getURL()
+
+    let { data: {picture} }= await axios.post("http://localhost:3001/api/card/getUpdatedImage", {URL, fallBackUrl})
+    
+    console.log("PICTURE", picture)
+   
+   
+    let result = await axios.post("http://localhost:3001/api/user/updateCardImageOnUser", {cardData: {cardName: name, cardNumber, updatedPicture: picture}, userId:currentUser.userId})
+
+    console.log(result)
+  
+  }
+   
   useEffect(() => {
     if (elementType === undefined) {
       elementType = "trainer"
@@ -65,8 +95,6 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
     const returnedBackgroundColor = getBackgroundColor(elementType)
     setCardBorderColor(returnedBackgroundColor)
   },)
-
-  console
 
   const [cardBorderColor, setCardBorderColor] = useState('')
 
@@ -163,7 +191,7 @@ export const Card = ({ picture, getUserCollection, quantity, name, prefix, suffi
         }
       </Flex>
       <img className='mx-3' style={{ width: 'fit-content' }} src={picture} alt="Image Didnt Load" onLoad={() => console.log("Load Successfully")}
-    onError={() => console.log(`DIDNT LOAD SUCCESSEFULLY ${name} ${picture}`)}/>
+    onError={getUpdatedImage}/>
       <div className='bg-orange-200 w-full mt-2 rounded-b-xl'>
         <div className='font-extrabold text-lg text-center text-orange-600'>Value: ${price}</div>
         <QuantityController

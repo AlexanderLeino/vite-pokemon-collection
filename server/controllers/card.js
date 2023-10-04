@@ -23,7 +23,7 @@ module.exports = {
         year: enteredPromoYear,
         elementType,
       } = body.data
-      console.log("CARDSET", cardSet)
+
       let price 
       let picture
       let cardSetSlug
@@ -115,7 +115,7 @@ module.exports = {
         } catch (e) {
           console.log("An Error has occured", e)
         }
-        console.log("PRICE AND PICTURE", price, picture)
+      
       if (!price && !picture) {
         console.log(
           "Couldnt find on First Go Around",
@@ -128,11 +128,14 @@ module.exports = {
         console.log("DATA", data.price1, data.imageUri)
         $ = cheerio.load(data);
 
-        price = parseFloat(data.price1
-          .slice(1))
+        price = parseFloat(
+          $('td[id="used_price"] > span[class="price js-price"]')
+            .text()
+            .trim()
+            .slice(1)
+        );
         
-
-        picture = data.imageUri
+        picture = $('div[class="cover"] > img').attr("src");
         ///need to verify the obj id for cardSet
       } if (!!price && !!picture) {
         console.log("Made it to the final stage")
@@ -206,11 +209,10 @@ module.exports = {
     try {
       let result
       let { name, cardNumber, cardSet } = body.data;
-     
-     console.log("CARD SET", cardSet)
+
       let {_id} = await CardSet.findOne({name: cardSet})
       let response = await Card.findOne({ name, cardNumber, cardSet: _id });
-      console.log("RESULTS OF DB CHECK", response)
+  
       if (response) {
         result = {existInDb: true, card: response, message: "The Card Already Exists In Database!"}
       } else {
@@ -221,7 +223,110 @@ module.exports = {
       res.send({ message: error.message }).status(500);
     }
   },
-  obtainUpdatedImage: async ({}) => {
-    
+  getUpdatedImage: async ({ body }, res) => {
+    try {
+      console.log("HELLO", body.URL, body.fallBackUrl)
+
+      let data = await axios.get(body.URL)
+      let $ = cheerio.load(data.data)
+      
+      
+      let picture = $('div[class="cover"] > img').attr("src");
+      
+      if(!picture) {
+        data = await axios.get(fallBackUrl)
+        $ = cheerio.load(data)
+        picture = $('div[class="cover"] > img').attr("src");
+        
+      }
+      res.send({picture}).status(500)
+    } catch(e) {
+      res.send({message: e.message})
+    }
+   
+  },
+  generateURL: async ({body}, res) => {
+    let {
+      name,
+      prefix,
+      suffix,
+      cardStyle,
+      cardNumber,
+      cardSet,
+    } = body.data
+
+    let cardSetSlug
+    let fallbackSlugifiedString
+    let serializedPrefix = "";
+    let slugArray
+   
+    cardSet = await CardSet.findOne({_id: cardSet})
+    cardSet = cardSet.name
+   
+    if (prefix) {
+      let arrayedPrefix = prefix.split(" ");
+      let resultsArray = [];
+
+      arrayedPrefix.forEach((word) => {
+        let firstLetter = word[0].toUpperCase();
+        let restOfWord = word.slice(1).toLowerCase();
+
+        let newWord = `${firstLetter}${restOfWord}`;
+        resultsArray.push(newWord);
+        serializedPrefix = resultsArray.join(" ");
+      });
+    }
+      cardSetSlug = slugify(cardSet).toLowerCase();
+
+      if (cardSet.includes("&")) {
+        let newString = cardSet.replace(/ /g, "-").toLowerCase();
+        cardSetSlug = newString;
+      }
+
+      if (cardSet.includes("Pokemon")) {
+        cardSetSlug = cardSetSlug.split("-").slice(1).join("").toLowerCase();
+      }
+
+      slugArray = ["", "", "", "", ""];
+
+      for (const cardProperty in body.data) {
+        switch (cardProperty) {
+          case "name":
+            if (name.includes("&")) {
+              let nameSlug = name.trim().split(" ").join("-").toLowerCase();
+              slugArray[1] = nameSlug;
+            } else {
+              slugArray[1] = name;
+            }
+            break;
+          case "prefix":
+            slugArray[0] = prefix;
+            break;
+          case "suffix":
+            slugArray[2] = suffix;
+            break;
+          case "cardStyle":
+            if (cardStyle === "Reverse Holo" || cardStyle === "Holo") {
+              slugArray[4] = cardStyle;
+            }
+            break;
+          case "cardNumber":
+            slugArray[5] = cardNumber;
+            break;
+        }
+      }
+      let slugifiedString = slugify(slugArray.join(" ").toLowerCase());
+      //if A price and picture cant be found with original criteria then it will remove either word holo or reverse holo and try again
+      let valueToRemove = slugArray.splice(4, 1);
+      let array = [...slugArray, valueToRemove];
+      fallbackSlugifiedString = slugify(
+        slugArray.join(" ").toLowerCase()
+      );
+
+      res.send({URL: `${BASE_URL}${cardSetSlug}/${slugifiedString}`,
+      fallBackUrl: `${BASE_URL}${cardSetSlug}/${fallbackSlugifiedString}` })
+
+      console.log(`${BASE_URL}${cardSetSlug}/${slugifiedString}`)
+      
   }
 };

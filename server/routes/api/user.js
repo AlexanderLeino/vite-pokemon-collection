@@ -26,4 +26,8 @@ router.route("/incrementQuantity")
 router.route('/doesCardExistOnUser')
     .post(UserController.doesCardExistOnUser)
 
+// matches api/user/updateCardImageOnUser
+router.route("/updateCardImageOnUser")
+    .post(UserController.updateCardImageOnUser)
+
 module.exports = router

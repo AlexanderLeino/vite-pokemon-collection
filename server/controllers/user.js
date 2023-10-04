@@ -197,5 +197,46 @@ module.exports = {
   },
   addCardToUser: async({body}, res) => {
 
+  },
+  updateCardImageOnUser: async({ body }, res) => {
+    try {
+      
+      let result;
+      let { cardData: {cardName, cardNumber, updatedPicture  }, userId }= body
+      
+      User.findOne({ _id: userId })
+        .elemMatch("cards", {
+          name: cardName,
+          cardNumber: cardNumber,
+        })
+        .select("cards.$")
+        .exec(async function (err, doc) {
+          
+          if ("Doc", doc) {
+            console.log("Updated Picture", updatedPicture)
+            doc.cards[0].picture = updatedPicture;
+            let { cards } = await User.findOne({ _id: userId });
+
+            let cardIndexToBeUpdated = cards.findIndex(
+              (card) =>
+                card.name === cardName &&
+                card.cardNumber === cardNumber
+            );
+
+            let updatedList = cards;
+            updatedList[cardIndexToBeUpdated] = doc.cards[0];
+            console.log(`${cardName} ${doc.cards[0]}`)
+            result = await User.findOneAndUpdate(
+              { _id: userId },
+              {
+                cards: updatedList,
+              }
+            );
+          } 
+          res.send(result).status(200);
+        });
+    } catch (e) {
+      res.send({ message: e.message }).status(500);
+    }
   }
 };
